@@ -55,7 +55,7 @@ function Other() {
     async function logout() {
         action.logout();
         await removeStorageValue('token');
-        Toast.show({ text: '您已经退出登录' });
+        Toast.show({ text: 'Loged out' });
         socket.disconnect();
         socket.connect();
     }
@@ -98,7 +98,7 @@ function Other() {
                         }
                     >
                         <Body>
-                            <Text style={styles.listItemTitle}>源码</Text>
+                            <Text style={styles.listItemTitle}>Github</Text>
                         </Body>
                         <Right>
                             <Icon
@@ -115,7 +115,7 @@ function Other() {
                         }
                     >
                         <Body>
-                            <Text style={styles.listItemTitle}>作者</Text>
+                            <Text style={styles.listItemTitle}>Author</Text>
                         </Body>
                         <Right>
                             <Icon
@@ -153,11 +153,11 @@ function Other() {
                     style={styles.logoutButton}
                     onPress={logout}
                 >
-                    <Text>退出登录</Text>
+                    <Text>Log out</Text>
                 </Button>
             ) : (
                 <Button block style={styles.logoutButton} onPress={login}>
-                    <Text>登录 / 注册</Text>
+                    <Text>SignIn / SignUp</Text>
                 </Button>
             )}
             <View style={styles.copyrightContainer}>

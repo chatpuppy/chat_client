@@ -132,7 +132,7 @@ socket.emit(
 );
 ```
 
-### 修改头像
+### Update avatar
 
 ```js
 socket.emit(

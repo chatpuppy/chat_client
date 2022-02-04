@@ -183,12 +183,12 @@ function FunctionBar() {
                 renderTabBar={() => <ScrollableInkTabBar />}
                 renderTabContent={() => <TabContent />}
             >
-                <TabPane tab="全部" key="all">
+                <TabPane tab="All" key="all">
                     {searchResult.users.length === 0 &&
                     searchResult.groups.length === 0 ? (
                             // eslint-disable-next-line react/jsx-indent
                             <p className={Style.none}>
-                                没有搜索到内容, 换个关键字试试吧~
+                                No results found...
                             </p>
                         ) : (
                             <div className={Style.allList}>
@@ -200,7 +200,7 @@ function FunctionBar() {
                                             : 'none',
                                     }}
                                 >
-                                    <p>用户</p>
+                                    <p>User</p>
                                     <div className={Style.userList}>
                                         {renderSearchUsers(3)}
                                     </div>
@@ -219,7 +219,7 @@ function FunctionBar() {
                                             }
                                             role="button"
                                         >
-                                            查看更多
+                                            More...
                                         </span>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@ function FunctionBar() {
                                             : 'none',
                                     }}
                                 >
-                                    <p>群组</p>
+                                    <p>Group</p>
                                     <div className={Style.groupList}>
                                         {renderSearchGroups(3)}
                                     </div>
@@ -250,17 +250,17 @@ function FunctionBar() {
                                             }
                                             role="button"
                                         >
-                                            查看更多
+                                            More...
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         )}
                 </TabPane>
-                <TabPane tab="用户" key="user">
+                <TabPane tab="User" key="user">
                     {searchResult.users.length === 0 ? (
                         <p className={Style.none}>
-                            没有搜索到内容, 换个关键字试试吧~~
+                            No results found...
                         </p>
                     ) : (
                         <div className={`${Style.userList} ${Style.only}`}>
@@ -268,10 +268,10 @@ function FunctionBar() {
                         </div>
                     )}
                 </TabPane>
-                <TabPane tab="群组" key="group">
+                <TabPane tab="Group" key="group">
                     {searchResult.groups.length === 0 ? (
                         <p className={Style.none}>
-                            没有搜索到内容, 换个关键字试试吧~~
+                            No results found...
                         </p>
                     ) : (
                         <div className={`${Style.groupList} ${Style.only}`}>

@@ -62,7 +62,7 @@ function Sidebar() {
     function logout() {
         action.logout();
         window.localStorage.removeItem('token');
-        Message.success('您已经退出登录');
+        Message.success('Loged out successfully');
         socket.disconnect();
         socket.connect();
     }
@@ -103,7 +103,7 @@ function Sidebar() {
                     {isLogin &&
                         isAdmin &&
                         renderTooltip(
-                            '管理员',
+                            'Admin',
                             <IconButton
                                 width={40}
                                 height={40}
@@ -115,7 +115,7 @@ function Sidebar() {
                     <Tooltip
                         placement="right"
                         mouseEnterDelay={0.3}
-                        overlay={<span>源码</span>}
+                        overlay={<span>Github</span>}
                     >
                         <a
                             className={Style.linkButton}
@@ -132,7 +132,7 @@ function Sidebar() {
                         </a>
                     </Tooltip>
                     {renderTooltip(
-                        '下载APP',
+                        'Download APP',
                         <IconButton
                             width={40}
                             height={40}
@@ -142,7 +142,7 @@ function Sidebar() {
                         />,
                     )}
                     {renderTooltip(
-                        '打赏',
+                        'Grand',
                         <IconButton
                             width={40}
                             height={40}
@@ -152,7 +152,7 @@ function Sidebar() {
                         />,
                     )}
                     {renderTooltip(
-                        '关于',
+                        'About',
                         <IconButton
                             width={40}
                             height={40}
@@ -163,7 +163,7 @@ function Sidebar() {
                     )}
                     {isLogin &&
                         renderTooltip(
-                            '设置',
+                            'Setting',
                             <IconButton
                                 width={40}
                                 height={40}
@@ -174,7 +174,7 @@ function Sidebar() {
                         )}
                     {isLogin &&
                         renderTooltip(
-                            '退出登录',
+                            'Log out',
                             <IconButton
                                 width={40}
                                 height={40}
