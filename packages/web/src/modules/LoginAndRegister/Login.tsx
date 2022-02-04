@@ -54,14 +54,14 @@ function Login() {
 
     return (
         <div className={Style.loginRegister}>
-            <h3 className={Style.title}>用户名</h3>
+            <h3 className={Style.title}>Username</h3>
             <Input
                 className={Style.input}
                 value={username}
                 onChange={setUsername}
                 onEnter={handleLogin}
             />
-            <h3 className={Style.title}>密码</h3>
+            <h3 className={Style.title}>Password</h3>
             <Input
                 className={Style.input}
                 type="password"

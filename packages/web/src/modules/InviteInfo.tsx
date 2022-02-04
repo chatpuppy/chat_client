@@ -74,7 +74,7 @@ function InviteInfo() {
             className={Style.infoDialog}
             visible={visible}
             onClose={handleClose}
-            title="邀请您加入群组"
+            title="Invite you join the group"
         >
             {visible && group && (
                 <div className={Style.coantainer}>
@@ -90,7 +90,7 @@ function InviteInfo() {
                                 largerAvatar ? 'show' : 'hide'
                             }`}
                             src={group.avatar}
-                            alt="用户头像"
+                            alt="User avatar"
                         />
                         <p>{group.name}</p>
                     </div>
@@ -102,11 +102,11 @@ function InviteInfo() {
                         {selfId ? (
                             hasLinkman ? (
                                 <Button onClick={handleFocusGroup}>
-                                    发送消息
+                                    Send messages
                                 </Button>
                             ) : (
                                 <Button onClick={handleJoinGroup}>
-                                    加入群组
+                                    Join group
                                 </Button>
                             )
                         ) : (
@@ -118,7 +118,7 @@ function InviteInfo() {
                                     )
                                 }
                             >
-                                登录 / 注册
+                                SignIn / SignUp
                             </Button>
                         )}
                     </div>
