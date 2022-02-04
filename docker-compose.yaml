@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+  redis:
+    image: redis
+    restart: always
+  fiora:
+    build: .
+    restart: always
+    ports:
+      - "9200:9200"
+    environment:
+      - Database=mongodb://mongodb/fiora
+      - RedisHost=redis
