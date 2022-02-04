@@ -123,7 +123,7 @@ function MessageList() {
 
         let { tag } = message.from;
         if (!tag && isGroup && message.from._id === creator) {
-            tag = '群主';
+            tag = 'Creator';
         }
 
         return (

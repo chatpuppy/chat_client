@@ -35,7 +35,7 @@ function FunctionBar() {
     });
 
     const context = useContext(ShowUserOrGroupInfoContext);
-    const placeholder = '搜索群组/用户';
+    const placeholder = 'Search Group/User';
 
     function resetSearch() {
         toggleSearchResultVisible(false);

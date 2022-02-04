@@ -59,7 +59,7 @@ export default function ChatList() {
                     <Icon name="ios-search" style={styles.searchIcon} />
                     <Input
                         style={styles.searchText}
-                        placeholder="搜索群组/用户"
+                        placeholder="Search Group/User"
                         autoCapitalize="none"
                         autoCorrect={false}
                         returnKeyType="search"

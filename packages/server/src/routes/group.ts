@@ -12,7 +12,7 @@ const { isValid } = Types.ObjectId;
 
 /**
  * 获取指定群组的在线用户辅助方法
- * @param group 群组
+ * @param group 
  */
 async function getGroupOnlineMembersHelper(group: GroupDocument) {
     const sockets = await Socket.find(
@@ -40,19 +40,19 @@ async function getGroupOnlineMembersHelper(group: GroupDocument) {
  * @param ctx Context
  */
 export async function createGroup(ctx: Context<{ name: string }>) {
-    assert(!config.disableCreateGroup, '管理员已关闭创建群组功能');
+    assert(!config.disableCreateGroup, 'Creating group is closed');
 
     const ownGroupCount = await Group.count({ creator: ctx.socket.user });
     assert(
         ctx.socket.isAdmin || ownGroupCount < config.maxGroupsCount,
-        `创建群组失败, 你已经创建了${config.maxGroupsCount}个群组`,
+        `Create group fail, you have created ${config.maxGroupsCount} groups`,
     );
 
     const { name } = ctx.data;
-    assert(name, '群组名不能为空');
+    assert(name, 'Group name cannot be empty');
 
     const group = await Group.findOne({ name });
-    assert(!group, '该群组已存在');
+    assert(!group, 'Group is exist');
 
     let newGroup = null;
     try {
@@ -85,13 +85,13 @@ export async function createGroup(ctx: Context<{ name: string }>) {
  */
 export async function joinGroup(ctx: Context<{ groupId: string }>) {
     const { groupId } = ctx.data;
-    assert(isValid(groupId), '无效的群组ID');
+    assert(isValid(groupId), 'Invalid group ID');
 
     const group = await Group.findOne({ _id: groupId });
     if (!group) {
-        throw new AssertionError({ message: '加入群组失败, 群组不存在' });
+        throw new AssertionError({ message: 'Join group fail, group is not found' });
     }
-    assert(group.members.indexOf(ctx.socket.user) === -1, '你已经在群组中');
+    assert(group.members.indexOf(ctx.socket.user) === -1, 'You are in the group already');
 
     group.members.push(ctx.socket.user);
     await group.save();
@@ -121,28 +121,28 @@ export async function joinGroup(ctx: Context<{ groupId: string }>) {
 }
 
 /**
- * 退出群组
+ * Leave the group
  * @param ctx Context
  */
 export async function leaveGroup(ctx: Context<{ groupId: string }>) {
     const { groupId } = ctx.data;
-    assert(isValid(groupId), '无效的群组ID');
+    assert(isValid(groupId), 'Invalid group ID');
 
     const group = await Group.findOne({ _id: groupId });
     if (!group) {
-        throw new AssertionError({ message: '群组不存在' });
+        throw new AssertionError({ message: 'Group is not exist' });
     }
 
-    // 默认群组没有creator
+    // Default group don't has creator
     if (group.creator) {
         assert(
             group.creator.toString() !== ctx.socket.user.toString(),
-            '群主不可以退出自己创建的群',
+            'Creator can not leave this group',
         );
     }
 
     const index = group.members.indexOf(ctx.socket.user);
-    assert(index !== -1, '你不在群组中');
+    assert(index !== -1, 'You are not in the group');
 
     group.members.splice(index, 1);
     await group.save();
@@ -170,7 +170,7 @@ function getGroupOnlineMembersWrapperV2() {
         ctx: Context<{ groupId: string; cache?: string }>,
     ) {
         const { groupId, cache: cacheKey } = ctx.data;
-        assert(isValid(groupId), '无效的群组ID');
+        assert(isValid(groupId), 'Invalid group ID');
 
         if (
             cache[groupId] &&
@@ -182,7 +182,7 @@ function getGroupOnlineMembersWrapperV2() {
 
         const group = await Group.findOne({ _id: groupId });
         if (!group) {
-            throw new AssertionError({ message: '群组不存在' });
+            throw new AssertionError({ message: 'Group is not found' });
         }
         const result = await getGroupOnlineMembersHelper(group);
         const resultCacheKey = stringHash(
@@ -230,7 +230,7 @@ function getDefaultGroupOnlineMembersWrapper() {
 
         const group = await Group.findOne({ isDefault: true });
         if (!group) {
-            throw new AssertionError({ message: '群组不存在' });
+            throw new AssertionError({ message: 'Group is not found' });
         }
         cache = await getGroupOnlineMembersHelper(group);
         expireTime = Date.now() + GroupOnlineMembersCacheExpireTime;
@@ -247,16 +247,16 @@ export async function changeGroupAvatar(
     ctx: Context<{ groupId: string; avatar: string }>,
 ) {
     const { groupId, avatar } = ctx.data;
-    assert(isValid(groupId), '无效的群组ID');
-    assert(avatar, '头像地址不能为空');
+    assert(isValid(groupId), 'Invalid group ID');
+    assert(avatar, 'Avatar uri can not be empty');
 
     const group = await Group.findOne({ _id: groupId });
     if (!group) {
-        throw new AssertionError({ message: '群组不存在' });
+        throw new AssertionError({ message: 'Group is not found' });
     }
     assert(
         group.creator.toString() === ctx.socket.user.toString(),
-        '只有群主才能修改头像',
+        'Only creator can update the group avatar',
     );
 
     await Group.updateOne({ _id: groupId }, { avatar });
@@ -271,21 +271,21 @@ export async function changeGroupName(
     ctx: Context<{ groupId: string; name: string }>,
 ) {
     const { groupId, name } = ctx.data;
-    assert(isValid(groupId), '无效的群组ID');
-    assert(name, '群组名称不能为空');
+    assert(isValid(groupId), 'Invalid group ID');
+    assert(name, 'Group name cannot be empty');
 
     const group = await Group.findOne({ _id: groupId });
     if (!group) {
-        throw new AssertionError({ message: '群组不存在' });
+        throw new AssertionError({ message: 'Group is not found' });
     }
-    assert(group.name !== name, '新群组名不能和之前一致');
+    assert(group.name !== name, 'New group name cannot be same as before');
     assert(
         group.creator.toString() === ctx.socket.user.toString(),
-        '只有群主才能修改头像',
+        'Only creator can update the group avatar',
     );
 
     const targetGroup = await Group.findOne({ name });
-    assert(!targetGroup, '该群组名已存在');
+    assert(!targetGroup, 'The group name is exist');
 
     await Group.updateOne({ _id: groupId }, { name });
 
@@ -300,17 +300,17 @@ export async function changeGroupName(
  */
 export async function deleteGroup(ctx: Context<{ groupId: string }>) {
     const { groupId } = ctx.data;
-    assert(isValid(groupId), '无效的群组ID');
+    assert(isValid(groupId), 'Invalid group ID');
 
     const group = await Group.findOne({ _id: groupId });
     if (!group) {
-        throw new AssertionError({ message: '群组不存在' });
+        throw new AssertionError({ message: 'Group is not found' });
     }
     assert(
         group.creator.toString() === ctx.socket.user.toString(),
-        '只有群主才能解散群组',
+        'Only creator can dismiss the group',
     );
-    assert(group.isDefault !== true, '默认群组不允许解散');
+    assert(group.isDefault !== true, 'Default group can not be dismissed');
 
     await Group.deleteOne({ _id: group });
 
@@ -321,11 +321,11 @@ export async function deleteGroup(ctx: Context<{ groupId: string }>) {
 
 export async function getGroupBasicInfo(ctx: Context<{ groupId: string }>) {
     const { groupId } = ctx.data;
-    assert(isValid(groupId), '无效的群组ID');
+    assert(isValid(groupId), 'Invalid group ID');
 
     const group = await Group.findOne({ _id: groupId });
     if (!group) {
-        throw new AssertionError({ message: '群组不存在' });
+        throw new AssertionError({ message: 'Group is not found' });
     }
 
     return {

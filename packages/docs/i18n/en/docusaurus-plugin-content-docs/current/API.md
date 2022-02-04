@@ -46,12 +46,12 @@ socket.emit(event, data, callback);
 ```js
 {
     _id, // {string} id
-    name, // {string} 群组名
-    avatar, // {string} 头像
-    creator, // {User ID} 群主id
-    isDefault, // {boolean} 是否为默认群
-    members, // {[User]} 成员列表
-    messages, // {[Message]} 消息列表
+    name, // {string} Group Name
+    avatar, // {string} Avatar
+    creator, // {User ID} Creator id
+    isDefault, // {boolean} is Default group
+    members, // {[User]} members
+    messages, // {[Message]} Messages
 }
 ```
 

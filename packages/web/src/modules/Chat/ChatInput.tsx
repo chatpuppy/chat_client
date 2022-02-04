@@ -620,10 +620,10 @@ function ChatInput() {
                 overlay={
                     <div className={Style.featureDropdown}>
                         <Menu onClick={handleFeatureMenuClick}>
-                            <MenuItem key="huaji">发送滑稽</MenuItem>
-                            <MenuItem key="image">发送图片</MenuItem>
-                            <MenuItem key="code">发送代码</MenuItem>
-                            <MenuItem key="file">发送文件</MenuItem>
+                            <MenuItem key="huaji">Send randomly</MenuItem>
+                            <MenuItem key="image">Send picture</MenuItem>
+                            <MenuItem key="code">Send code</MenuItem>
+                            <MenuItem key="file">Send file</MenuItem>
                         </Menu>
                     </div>
                 }
@@ -646,7 +646,7 @@ function ChatInput() {
                 <input
                     className={Style.input}
                     type="text"
-                    placeholder="随便聊点啥吧, 不要无意义刷屏~~"
+                    placeholder="Say something..."
                     maxLength={2048}
                     ref={$input}
                     onKeyDown={handleInputKeyDown}

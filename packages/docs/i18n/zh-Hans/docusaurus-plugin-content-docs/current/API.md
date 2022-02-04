@@ -46,9 +46,9 @@ socket.emit(event, data, callback);
 ```js
 {
     _id, // {string} id
-    name, // {string} 群组名
-    avatar, // {string} 头像
-    creator, // {User ID} 群主id
+    name, // {string} Group name
+    avatar, // {string} avatar
+    creator, // {User ID} Creator id
     isDefault, // {boolean} 是否为默认群
     members, // {[User]} 成员列表
     messages, // {[Message]} 消息列表

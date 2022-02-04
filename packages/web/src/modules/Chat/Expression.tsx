@@ -127,10 +127,10 @@ function Expression(props: ExpressionProps) {
                 renderTabBar={() => <ScrollableInkTabBar />}
                 renderTabContent={() => <TabContent />}
             >
-                <TabPane tab="默认表情" key="default">
+                <TabPane tab="Emoji" key="default">
                     {renderDefaultExpression}
                 </TabPane>
-                <TabPane tab="搜索表情包" key="search">
+                <TabPane tab="Search Emoji" key="search">
                     {renderSearchExpression}
                 </TabPane>
             </Tabs>

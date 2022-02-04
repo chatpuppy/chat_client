@@ -229,7 +229,7 @@ export default function Input({ onHeightChange }: Props) {
                             // @ts-ignore
                             ref={$input}
                             style={styles.input}
-                            placeholder="随便聊点啥吧, 不要无意义刷屏~~"
+                            placeholder="Say something..."
                             onChangeText={handleChangeText}
                             onSubmitEditing={handleSubmit}
                             autoCapitalize="none"
