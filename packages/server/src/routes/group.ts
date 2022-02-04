@@ -36,7 +36,7 @@ async function getGroupOnlineMembersHelper(group: GroupDocument) {
 }
 
 /**
- * 创建群组
+ * Create group
  * @param ctx Context
  */
 export async function createGroup(ctx: Context<{ name: string }>) {

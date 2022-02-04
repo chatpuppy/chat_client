@@ -266,7 +266,7 @@ socket.emit(
 );
 ```
 
-### 创建群组
+### Create Group
 
 ```js
 socket.emit(
@@ -278,7 +278,7 @@ socket.emit(
 );
 ```
 
-### 加入群组
+### Join Group
 
 ```js
 socket.emit(
@@ -290,7 +290,7 @@ socket.emit(
 );
 ```
 
-### 退出群组
+### Quit Group
 
 ```js
 socket.emit(

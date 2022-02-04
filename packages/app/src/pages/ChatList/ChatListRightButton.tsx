@@ -38,8 +38,8 @@ function ChatListRightButton() {
                 </View>
             </TouchableOpacity>
             <Dialog.Container visible={showDialog}>
-                <Dialog.Title>创建群组</Dialog.Title>
-                <Dialog.Description>请输入群组名</Dialog.Description>
+                <Dialog.Title>Create group</Dialog.Title>
+                <Dialog.Description>Group name</Dialog.Description>
                 <Dialog.Input
                     value={groupName}
                     onChangeText={updateGroupName}

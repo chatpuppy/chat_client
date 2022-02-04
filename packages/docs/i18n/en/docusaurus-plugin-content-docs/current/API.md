@@ -266,7 +266,7 @@ socket.emit(
 );
 ```
 
-### 创建群组
+### Create group
 
 ```js
 socket.emit(
