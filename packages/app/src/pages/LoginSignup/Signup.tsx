@@ -45,7 +45,7 @@ export default function Signup() {
         <Container>
             <Base
                 buttonText="Register"
-                jumpText="Already register? Sign In"
+                jumpText="Already register? Login"
                 jumpPage="login"
                 onSubmit={handleSubmit}
             />

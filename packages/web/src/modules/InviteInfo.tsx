@@ -118,7 +118,7 @@ function InviteInfo() {
                                     )
                                 }
                             >
-                                SignIn / SignUp
+                                Login / Register
                             </Button>
                         )}
                     </div>

@@ -120,13 +120,13 @@ function App({ title, primaryColor, isLogin }: Props) {
                         <Scene
                             key="login"
                             component={Login}
-                            title="SignIn"
+                            title="Login"
                             {...sceneCommonProps}
                         />
                         <Scene
                             key="signup"
                             component={Signup}
-                            title="SignUp"
+                            title="Register"
                             {...sceneCommonProps}
                         />
                         <Scene

@@ -157,7 +157,7 @@ function Other() {
                 </Button>
             ) : (
                 <Button block style={styles.logoutButton} onPress={login}>
-                    <Text>SignIn / SignUp</Text>
+                    <Text>Login / Register</Text>
                 </Button>
             )}
             <View style={styles.copyrightContainer}>

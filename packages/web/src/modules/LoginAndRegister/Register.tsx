@@ -73,7 +73,7 @@ function Register() {
                 onClick={handleRegister}
                 type="button"
             >
-                Sign Up
+                Register
             </button>
         </div>
     );

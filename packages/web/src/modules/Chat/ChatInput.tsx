@@ -120,7 +120,7 @@ function ChatInput() {
                         }
                         role="button"
                     >
-                        SignIn
+                        Login
                     </b>
                     and chat
                 </p>
