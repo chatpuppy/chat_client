@@ -15,7 +15,7 @@
 
 import { Message } from '../types/redux';
 
-const WuZeiNiangImage = require('../assets/images/admin.jpg');
+const WuZeiNiangImage = require('../assets/images/admin.png');
 
 function convertSystemMessage(message: Message) {
     if (message.type === 'system') {
