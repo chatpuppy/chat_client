@@ -112,6 +112,94 @@ function Sidebar() {
                                 onClick={() => toggleAdminDialogVisible(true)}
                             />,
                         )}
+                    <Tooltip 
+                        placement="right"
+                        mouseEnterDelay={0.3}
+                        overlay={<span>Home</span>}
+                    >
+                        <a 
+                            className={Style.linkButton}
+                            href="https://www.chatpuppy.com"
+                            target="_black"
+                            rel="noopener noreferrer"
+                        >
+                            <IconButton
+                                width={40}
+                                height={40}
+                                icon="home"
+                                iconSize={26}
+                            />
+                        </a>
+                    </Tooltip>
+                    <Tooltip 
+                        placement="right"
+                        mouseEnterDelay={0.3}
+                        overlay={<span>Grand</span>}
+                    >
+                        <a 
+                            className={Style.linkButton}
+                            href="https://www.chatpuppy.com/grand"
+                            target="_black"
+                            rel="noopener noreferrer"
+                        >
+                            <IconButton
+                                width={40}
+                                height={40}
+                                icon="ethereum"
+                                iconSize={26}
+                            />
+                        </a>
+                    </Tooltip>
+
+                    <Tooltip 
+                        placement="right"
+                        mouseEnterDelay={0.3}
+                        overlay={<span>NFT Mystery box</span>}
+                    >
+                        <a 
+                            className={Style.linkButton}
+                            href="https://www.chatpuppy.com/box"
+                            target="_black"
+                            rel="noopener noreferrer"
+                        >
+                            <IconButton
+                                width={40}
+                                height={40}
+                                icon="box"
+                                iconSize={26}
+                            />
+                        </a>
+                    </Tooltip>
+
+                    <Tooltip 
+                        placement="right"
+                        mouseEnterDelay={0.3}
+                        overlay={<span>NFT Marketplace</span>}
+                    >
+                        <a 
+                            className={Style.linkButton}
+                            href="https://www.chatpuppy.com/marketplace"
+                            target="_black"
+                            rel="noopener noreferrer"
+                        >
+                            <IconButton
+                                width={40}
+                                height={40}
+                                icon="shop"
+                                iconSize={26}
+                            />
+                        </a>
+                    </Tooltip>
+                    {/* {renderTooltip(
+                        'About',
+                        <IconButton
+                            width={40}
+                            height={40}
+                            icon="about"
+                            iconSize={26}
+                            onClick={() => toggleAboutDialogVisible(true)}
+                        />,
+                    )} */}
                     <Tooltip
                         placement="right"
                         mouseEnterDelay={0.3}
@@ -119,7 +207,7 @@ function Sidebar() {
                     >
                         <a
                             className={Style.linkButton}
-                            href="https://github.com/yinxin630/fiora"
+                            href="https://github.com/chatpuppy"
                             target="_black"
                             rel="noopener noreferrer"
                         >
@@ -131,36 +219,6 @@ function Sidebar() {
                             />
                         </a>
                     </Tooltip>
-                    {renderTooltip(
-                        'Download APP',
-                        <IconButton
-                            width={40}
-                            height={40}
-                            icon="app"
-                            iconSize={28}
-                            onClick={() => toggleDownloadDialogVisible(true)}
-                        />,
-                    )}
-                    {renderTooltip(
-                        'Grand',
-                        <IconButton
-                            width={40}
-                            height={40}
-                            icon="dashang"
-                            iconSize={26}
-                            onClick={() => toggleRewardDialogVisible(true)}
-                        />,
-                    )}
-                    {renderTooltip(
-                        'About',
-                        <IconButton
-                            width={40}
-                            height={40}
-                            icon="about"
-                            iconSize={26}
-                            onClick={() => toggleAboutDialogVisible(true)}
-                        />,
-                    )}
                     {isLogin &&
                         renderTooltip(
                             'Setting',

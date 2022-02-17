@@ -306,7 +306,7 @@ export async function uploadFile(
                     url: `//${config.aliyunOSS.endpoint}/${result.name}`,
                 };
             }
-            throw Error('上传阿里云OSS失败');
+            throw Error('Upload ali-oss fail');
         }
 
         const [directory, fileName] = ctx.data.fileName.split('/');
@@ -325,7 +325,7 @@ export async function uploadFile(
     } catch (err) {
         const typedErr = err as Error;
         logger.error('[uploadFile]', typedErr.message);
-        return `上传文件失败:${typedErr.message}`;
+        return `Upload file fail: ${typedErr.message}`;
     }
 }
 

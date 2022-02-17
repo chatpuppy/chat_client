@@ -14,10 +14,12 @@ import getRandomAvatar from '../../utils/getRandomAvatar';
 
 export async function register(username: string, password: string) {
     if (!username) {
+        // eslint-disable-next-line no-console
         console.log(chalk.red('Wrong command, [username] is missing.'));
         return;
     }
     if (!password) {
+        // eslint-disable-next-line no-console
         console.log(chalk.red('Wrong command, [password] is missing.'));
         return;
     }
@@ -26,12 +28,14 @@ export async function register(username: string, password: string) {
 
     const user = await User.findOne({ username });
     if (user) {
+        // eslint-disable-next-line no-console
         console.log(chalk.red('The username already exists'));
         return;
     }
 
     const defaultGroup = await Group.findOne({ isDefault: true });
     if (!defaultGroup) {
+        // eslint-disable-next-line no-console
         console.log(chalk.red('Default group does not exist'));
         return;
     }

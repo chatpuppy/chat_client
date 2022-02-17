@@ -18,7 +18,7 @@ import app from './app';
     const group = await Group.findOne({ isDefault: true });
     if (!group) {
         const defaultGroup = await Group.create({
-            name: 'fiora',
+            name: 'PuppyWorld',
             avatar: getRandomAvatar(),
             isDefault: true,
         } as GroupDocument);

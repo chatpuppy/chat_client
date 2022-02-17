@@ -10,15 +10,16 @@ type Themes = {
     };
 };
 
+// ======
 const themes: Themes = {
     default: {
-        primaryColor: '74, 144, 226',
-        primaryTextColor: '247, 247, 247',
+        primaryColor: '32, 32, 32',
+        primaryTextColor: '255, 255, 255',
         backgroundImage: BackgroundImage,
         aero: false,
     },
     cool: {
-        primaryColor: '5,159,149',
+        primaryColor: '32,32,32',
         primaryTextColor: '255, 255, 255',
         backgroundImage: BackgroundCoolImage,
         aero: false,
