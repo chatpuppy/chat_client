@@ -137,9 +137,9 @@ socket.on('message', async (message: any) => {
             } as AddLinkmanMessagePayload,
         });
         if (linkman.type === 'group') {
-            title = `${message.from.username} 在 ${linkman.name} 对大家说:`;
+            title = `${message.from.username} talk to everyone in ${linkman.name}:`;
         } else {
-            title = `${message.from.username} 对你说:`;
+            title = `${message.from.username} talk to you:`;
         }
     } else {
         // 联系人不存在并且是自己发的消息, 不创建新联系人
@@ -210,7 +210,7 @@ socket.on('message', async (message: any) => {
                     ? `${message.from.username}${
                         linkman.name === prevName ? '' : `在${linkman.name}`
                     }说`
-                    : `${message.from.username}对你说`;
+                    : `${message.from.username} talk to you`;
             if (text) {
                 voice.push(
                     from !== prevFrom ? from + text : text,

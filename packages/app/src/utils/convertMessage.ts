@@ -15,13 +15,13 @@
 
 import { Message } from '../types/redux';
 
-const WuZeiNiangImage = require('../assets/images/wuzeiniang.gif');
+const WuZeiNiangImage = require('../assets/images/admin.jpg');
 
 function convertSystemMessage(message: Message) {
     if (message.type === 'system') {
         message.from._id = 'system';
         message.from.originUsername = message.from.username;
-        message.from.username = '乌贼娘殿下';
+        message.from.username = 'System';
         message.from.avatar = WuZeiNiangImage;
         message.from.tag = 'system';
 
@@ -50,10 +50,10 @@ function convertSystemMessage(message: Message) {
         message.type = 'system';
         message.from._id = 'system';
         message.from.originUsername = message.from.username;
-        message.from.username = '乌贼娘殿下';
+        message.from.username = 'System';
         message.from.avatar = WuZeiNiangImage;
         message.from.tag = 'system';
-        message.content = `撤回了消息`;
+        message.content = `Revoded message`;
     }
 
     return message;

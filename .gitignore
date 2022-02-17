@@ -11,7 +11,6 @@ yarn-error.log
 lerna-debug.log
 
 .env
-.env2
 
 packages/server/public/*
 !packages/server/public/avatar/

@@ -62,6 +62,7 @@ function App() {
     const backgroundImage = isReady
         ? getOSSFileUrl(backgroundImageUrl, `image/quality,q_95`)
         : '#';
+    console.log(`Background image url: ${  backgroundImage}`);
     const $app = useRef(null);
 
     // 计算窗口高度/宽度百分比
