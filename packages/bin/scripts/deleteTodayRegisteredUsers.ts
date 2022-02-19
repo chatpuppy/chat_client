@@ -4,8 +4,8 @@
 import chalk from 'chalk';
 
 import inquirer from 'inquirer';
-import initMongoDB from '@fiora/database/mongoose/initMongoDB';
-import User from '@fiora/database/mongoose/models/user';
+import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
+import User from '@chatpuppy/database/mongoose/models/user';
 import { deleteUser } from './deleteUser';
 
 export async function deleteTodayRegisteredUsers() {

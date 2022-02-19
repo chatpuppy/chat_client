@@ -1,7 +1,7 @@
 import redis from 'redis';
 import { promisify } from 'util';
-import config from '@fiora/config/server';
-import logger from '@fiora/utils/logger';
+import config from '@chatpuppy/config/server';
+import logger from '@chatpuppy/utils/logger';
 
 export default function initRedis() {
     const client = redis.createClient({

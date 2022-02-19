@@ -1,5 +1,5 @@
 {
-  "name": "@fiora/server",
+  "name": "@chatpuppy/server",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
@@ -8,10 +8,10 @@
     "dev:server": "cross-env NODE_ENV=development DOTENV_CONFIG_PATH=../../.env nodemon src/main.ts --exec \"ts-node --files -r dotenv/config\" --config .nodemonrc --watch ../"
   },
   "dependencies": {
-    "@fiora/bin": "^1.0.0",
-    "@fiora/config": "^1.0.0",
-    "@fiora/database": "^1.0.0",
-    "@fiora/utils": "^1.0.0",
+    "@chatpuppy/bin": "^1.0.0",
+    "@chatpuppy/config": "^1.0.0",
+    "@chatpuppy/database": "^1.0.0",
+    "@chatpuppy/utils": "^1.0.0",
     "ali-oss": "^6.16.0",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",

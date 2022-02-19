@@ -43,7 +43,7 @@ export default function Input({ onHeightChange }: Props) {
     const $input = useRef<TextInput>();
 
     function setInputText(text = '') {
-        // iossetNativeProps无效, 解决办法参考:https://github.com/facebook/react-native/issues/18272
+        // iossetNativeProps is invalid, refer to: https://github.com/facebook/react-native/issues/18272
         if (isiOS) {
             $input.current!.setNativeProps({ text: text || ' ' });
         }
@@ -245,7 +245,7 @@ export default function Input({ onHeightChange }: Props) {
                 ) : (
                     <Button block style={styles.button} onPress={Actions.login}>
                         <Text style={styles.buttonText}>
-                            登录 / 注册, 参与聊天
+                            Login / Register, Chat
                         </Text>
                     </Button>
                 )}
@@ -365,7 +365,6 @@ const styles = StyleSheet.create({
         color: '#666',
     },
 
-    // 表情框
     expressionContainer: {
         height: (isiOS ? 34 : 30) * 5 + 6,
         flexDirection: 'row',

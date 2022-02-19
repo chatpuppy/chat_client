@@ -1,14 +1,14 @@
 {
   "expo": {
     "privacy": "public",
-    "name": "fiora",
+    "name": "chatpuppy",
     "icon": "./icon.png",
     "version": "1.1.4",
-    "description": "App for fiora. An online chatroom",
-    "slug": "fiora",
-    "scheme": "fiora",
+    "description": "App for chatpuppy. An online chatroom",
+    "slug": "chatpuppy",
+    "scheme": "chatpuppy",
     "ios": {
-      "bundleIdentifier": "com.suisuijiang.fiora",
+      "bundleIdentifier": "com.chatpuppy.app",
       "buildNumber": "1.1.4",
       "infoPlist": {
         "LSApplicationQueriesSchemes": ["wxp"],
@@ -17,7 +17,7 @@
       }
     },
     "android": {
-      "package": "com.suisuijiang.fiora",
+      "package": "com.chatpuppy.app",
       "versionCode": 10,
       "useNextNotificationsApi": true
     },

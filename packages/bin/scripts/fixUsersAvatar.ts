@@ -1,18 +1,18 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import User from '@fiora/database/mongoose/models/user';
-import initMongoDB from '@fiora/database/mongoose/initMongoDB';
+import User from '@chatpuppy/database/mongoose/models/user';
+import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
 
 export async function fixUsersAvatar(
     searchValue: string,
     replaceValue: string,
 ) {
-    searchValue = searchValue || 'fioraavatar';
-    replaceValue = replaceValue || 'fiora/avatar';
+    searchValue = searchValue || 'chatpuppy';
+    replaceValue = replaceValue || 'chatpuppy/avatar';
 
     await initMongoDB();
 
-    const users = await User.find({ avatar: { $regex: 'fioraavatar' } });
+    const users = await User.find({ avatar: { $regex: 'chatpuppy' } });
     if (users.length) {
         console.log(chalk.red('Oh No!'), "Some user's avatar is wrong");
         users.forEach((user) => {

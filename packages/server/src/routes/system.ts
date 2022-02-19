@@ -6,12 +6,12 @@ import { promisify } from 'util';
 import RegexEscape from 'regex-escape';
 import OSS, { STS } from 'ali-oss';
 
-import config from '@fiora/config/server';
-import logger from '@fiora/utils/logger';
-import User from '@fiora/database/mongoose/models/user';
-import Group from '@fiora/database/mongoose/models/group';
+import config from '@chatpuppy/config/server';
+import logger from '@chatpuppy/utils/logger';
+import User from '@chatpuppy/database/mongoose/models/user';
+import Group from '@chatpuppy/database/mongoose/models/group';
 
-import Socket from '@fiora/database/mongoose/models/socket';
+import Socket from '@chatpuppy/database/mongoose/models/socket';
 import {
     getAllSealIp,
     getAllSealUser,
@@ -20,7 +20,7 @@ import {
     DisableSendMessageKey,
     DisableNewUserSendMessageKey,
     Redis,
-} from '@fiora/database/redis/initRedis';
+} from '@chatpuppy/database/redis/initRedis';
 
 /** 百度语言合成token */
 let baiduToken = '';
@@ -266,7 +266,7 @@ export async function getSTS(): Promise<STSResult> {
             config.aliyunOSS.roleArn,
             undefined,
             undefined,
-            'fiora-uploader',
+            'chatpuppy-uploader',
         );
         // @ts-ignore
         return {
@@ -278,7 +278,7 @@ export async function getSTS(): Promise<STSResult> {
         };
     } catch (err) {
         const typedErr = err as Error;
-        assert.fail(`获取 STS 失败 - ${typedErr.message}`);
+        assert.fail(`Get STS Fail - ${typedErr.message}`);
     }
 }
 

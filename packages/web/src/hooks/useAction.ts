@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import convertMessage from '@fiora/utils/convertMessage';
+import convertMessage from '@chatpuppy/utils/convertMessage';
 import { User, Linkman, Message } from '../state/reducer';
 import { ActionTypes } from '../state/action';
 

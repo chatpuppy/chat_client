@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, MouseEvent } from 'react';
 import loadable from '@loadable/component';
 
-import { isMobile } from '@fiora/utils/ua';
+import { isMobile } from '@chatpuppy/utils/ua';
 import { getOSSFileUrl } from '../../../utils/uploadFile';
 import Style from './Message.less';
 import { CircleProgress } from '../../../components/Progress';

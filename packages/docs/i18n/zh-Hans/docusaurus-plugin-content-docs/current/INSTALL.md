@@ -6,7 +6,7 @@ sidebar_label: 安装
 
 ## 环境准备
 
-要运行 Fiora, 你需要 Node.js(推荐 v14 LTS 版本), MongoDB 和 redis
+要运行 ChatPuppy, 你需要 Node.js(推荐 v14 LTS 版本), MongoDB 和 redis
 
 -   安装 Node.js
     -   官网 <http://nodejs.cn/download/>
@@ -22,7 +22,7 @@ sidebar_label: 安装
 
 ## 如何运行
 
-1. 克隆项目到本地 `git clone https://github.com/yinxin630/fiora.git -b master`
+1. 克隆项目到本地 `git clone https://github.com/chatpuppy/chat_client.git -b master`
 2. 确保安装了 [yarn](https://www.npmjs.com/package/yarn), 如果没有安装请执行 `npm install -g yarn`
 3. 安装项目依赖 `yarn install`
 4. 构建客户端代码 `yarn build:web`
@@ -38,14 +38,14 @@ sidebar_label: 安装
 # 安装 pm2
 npm install -g pm2
 
-# 使用 pm2 运行 fiora
-pm2 start yarn --name fiora -- start
+# 使用 pm2 运行 chatpuppy
+pm2 start yarn --name chatpuppy -- start
 
 # 查看 pm2 应用状态
 pm2 ls
 
-# 查看 pm2 fiora 日志
-pm2 logs fiora
+# 查看 pm2 chatpuppy 日志
+pm2 logs chatpuppy
 ```
 
 ### 运行开发模式
@@ -58,33 +58,9 @@ pm2 logs fiora
 
 首先安装 docker <https://docs.docker.com/install/>
 
-#### 直接从 DockerHub 镜像运行
-
-```bash
-# 拉取 mongo
-docker pull mongo
-
-# 拉取 redis
-docker pull redis
-
-# 拉取 fiora
-docker pull suisuijiang/fiora
-
-# 创建虚拟网络
-docker network create fiora-network
-
-# 启动 mongodB
-docker run --name fioradb -p 27017:27017 --network fiora-network mongo
-
-# 启动 redis
-docker run --name fioraredis -p 6379:6379 --network fiora-network redis
-
-# 启动 fiora
-docker run --name fiora -p 9200:9200 --network fiora-network -e Database=mongodb://fioradb:27017/fiora -e RedisHost=fioraredis suisuijiang/fiora
-```
 
 #### 本地构建镜像运行
 
-1. 克隆项目到本地 `git clone https://github.com/yinxin630/fiora.git -b master`
+1. 克隆项目到本地 `git clone https://github.com/chatpuppy/chat_client.git -b master`
 2. 构建镜像 `docker-compose build --no-cache --force-rm`
 3. 运行 `docker-compose up`

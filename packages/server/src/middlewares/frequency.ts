@@ -3,7 +3,7 @@ import {
     getNewUserKey,
     getSealUserKey,
     Redis,
-} from '@fiora/database/redis/initRedis';
+} from '@chatpuppy/database/redis/initRedis';
 
 export const CALL_SERVICE_FREQUENTLY = '发消息过于频繁, 请冷静一会再试';
 export const NEW_USER_CALL_SERVICE_FREQUENTLY =

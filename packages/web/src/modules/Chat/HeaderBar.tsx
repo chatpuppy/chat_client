@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { css } from 'linaria';
 
-import { isMobile } from '@fiora/utils/ua';
+import { isMobile } from '@chatpuppy/utils/ua';
 import { State } from '../../state/reducer';
 import useIsLogin from '../../hooks/useIsLogin';
 import useAction from '../../hooks/useAction';

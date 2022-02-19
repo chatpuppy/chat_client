@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { Provider } from 'react-redux';
 
-import config from '@fiora/config/client';
+import config from '@chatpuppy/config/client';
 import setCssVariable from './utils/setCssVariable';
 import App from './App';
 import store from './state/store';
@@ -54,7 +54,7 @@ if (
 
 if (window.location.pathname !== '/') {
     const { pathname } = window.location;
-    window.history.pushState({}, 'fiora', '/');
+    window.history.pushState({}, 'chatpuppy', '/');
     if (pathname.startsWith('/invite/group/')) {
         const groupId = pathname.replace(`/invite/group/`, '');
         window.sessionStorage.setItem('inviteGroupId', groupId);

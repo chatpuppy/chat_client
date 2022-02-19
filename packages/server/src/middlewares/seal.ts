@@ -1,11 +1,11 @@
-import { SEAL_TEXT } from '@fiora/utils/const';
-import { getSocketIp } from '@fiora/utils/socket';
+import { SEAL_TEXT } from '@chatpuppy/utils/const';
+import { getSocketIp } from '@chatpuppy/utils/socket';
 import { Socket } from 'socket.io';
 import {
     getSealIpKey,
     getSealUserKey,
     Redis,
-} from '@fiora/database/redis/initRedis';
+} from '@chatpuppy/database/redis/initRedis';
 
 /**
  * 拦截被封禁用户的请求

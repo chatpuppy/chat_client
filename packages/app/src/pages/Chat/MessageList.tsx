@@ -119,7 +119,7 @@ function MessageList({ $scrollView }: Props) {
             if (result.length > 0) {
                 action.addLinkmanHistoryMessages(focus, result);
             } else {
-                Toast.warning('没有更多消息了');
+                Toast.warning('No more messages');
             }
         }
 
@@ -128,7 +128,7 @@ function MessageList({ $scrollView }: Props) {
         }, 1000);
     }
     /**
-     * 加载历史消息后, 自动滚动到合适位置
+     * Rolling down the page to latest
      */
     function handleContentSizeChange(
         contentWidth: number,

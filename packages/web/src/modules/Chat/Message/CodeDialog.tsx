@@ -1,7 +1,7 @@
 import React from 'react';
 import Prism from 'prismjs';
 
-import xss from '@fiora/utils/xss';
+import xss from '@chatpuppy/utils/xss';
 import Style from './CodeMessage.less';
 import Dialog from '../../../components/Dialog';
 

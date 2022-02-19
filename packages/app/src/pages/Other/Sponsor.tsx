@@ -12,19 +12,19 @@ type Props = {
 function Sponsor({ visible, onClose, onOK }: Props) {
     return (
         <Dialog.Container visible={visible}>
-            <Dialog.Title>赞助</Dialog.Title>
+            <Dialog.Title>Grand</Dialog.Title>
             <Dialog.Description>
                 <View>
                     <Text style={styles.text}>
-                        如果你觉得这个聊天室还不错的话, 希望能赞助一下~~
+                        Please grand
                     </Text>
                     <Text style={styles.tip}>
-                        请在转账备注中填写您的 fiora 账号
+                        Input your account id
                     </Text>
                 </View>
             </Dialog.Description>
-            <Dialog.Button label="关闭" onPress={onClose} />
-            <Dialog.Button label="赞助" onPress={onOK} />
+            <Dialog.Button label="Close" onPress={onClose} />
+            <Dialog.Button label="Grand" onPress={onOK} />
         </Dialog.Container>
     );
 }

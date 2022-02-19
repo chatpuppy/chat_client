@@ -6,7 +6,7 @@ sidebar_label: Install
 
 ## Environmental Preparation
 
-To run Fiora, you need Node.js(recommend v14 LTS version), MongoDB and redis
+To run ChatPuppy, you need Node.js(recommend v14 LTS version), MongoDB and redis
 
 -   Install Node.js
     -   Official website <https://nodejs.org/en/download/>
@@ -22,7 +22,7 @@ Recommended to running on Linux or MacOS systems
 
 ## How to run
 
-1. Clone the project `git clone https://github.com/yinxin630/fiora.git -b master`
+1. Clone the project `git clone https://github.com/chatpuppy/chat_client.git -b master`
 2. Ensure you have install [yarn](https://www.npmjs.com/package/yarn) before, if not please run `npm install -g yarn`
 3. Install project dependencies `yarn install`
 4. Build client `yarn build:web`
@@ -38,14 +38,14 @@ Using `yarn start` to run the server will stop running after disconnecting the s
 # install pm2
 npm install -g pm2
 
-# use pm2 to run fiora
-pm2 start yarn --name fiora -- start
+# use pm2 to run chatpuppy
+pm2 start yarn --name chatpuppy -- start
 
 # view pm2 apps status
 pm2 ls
 
-# view pm2 fiora logging
-pm2 logs fiora
+# view pm2 chatpuppy logging
+pm2 logs chatpuppy
 ```
 
 ### Run With Develop Mode
@@ -58,33 +58,8 @@ pm2 logs fiora
 
 First install docker <https://docs.docker.com/install/>
 
-#### Run directly from the DockerHub image
-
-```bash
-# Pull mongo
-docker pull mongo
-
-# Pull redis
-docker pull redis
-
-# Pull fiora
-docker pull suisuijiang/fiora
-
-# Create a virtual network
-docker network create fiora-network
-
-# Run mongodB
-docker run --name fioradb -p 27017:27017 --network fiora-network mongo
-
-# Run redis
-docker run --name fioraredis -p 6379:6379 --network fiora-network redis
-
-# Run fiora
-docker run --name fiora -p 9200:9200 --network fiora-network -e Database=mongodb://fioradb:27017/fiora -e RedisHost=fioraredis suisuijiang/fiora
-```
-
 #### Local build image and run
 
-1. Clone the project to the local `git clone https://github.com/yinxin630/fiora.git -b master`
+1. Clone the project to the local `git clone https://github.com/chatpuppy/chat_client.git -b master`
 2. Build the image `docker-compose build --no-cache --force-rm`
 3. Run it `docker-compose up`

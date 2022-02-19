@@ -5,7 +5,7 @@
 import bcrypt from 'bcryptjs';
 import chalk from 'chalk';
 
-import initMongoDB from '@fiora/database/mongoose/initMongoDB';
+import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
 import User, { UserDocument } from '../../database/mongoose/models/user';
 import Group from '../../database/mongoose/models/group';
 

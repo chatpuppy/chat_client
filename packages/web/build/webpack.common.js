@@ -11,7 +11,7 @@ module.exports = {
     },
     output: {
         filename: 'js/[name].[chunkhash:8].js',
-        path: path.resolve(__dirname, '../dist/fiora'),
+        path: path.resolve(__dirname, '../dist/chatpuppy'),
     },
     resolve: {
         extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],

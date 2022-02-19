@@ -80,12 +80,12 @@ function Other() {
                         src={
                             isNight
                                 ? require('../../../icon.png')
-                                : require('../../assets/images/wuzeiniang.gif')
+                                : require('../../assets/images/admin.png')
                         }
                         size={100}
                     />
                     <Text style={styles.name}>
-                        fiora v{appInfo.expo.version}
+                        ChatPuppy v{appInfo.expo.version}
                     </Text>
                 </View>
                 <List style={styles.list}>
@@ -93,7 +93,7 @@ function Other() {
                         icon
                         onPress={() =>
                             Linking.openURL(
-                                'https://github.com/yinxin630/fiora-app',
+                                'https://github.com/chatpuppy/app',
                             )
                         }
                     >
@@ -111,7 +111,7 @@ function Other() {
                     <ListItem
                         icon
                         onPress={() =>
-                            Linking.openURL('https://www.suisuijiang.com')
+                            Linking.openURL('https://www.chatpuppy.com')
                         }
                     >
                         <Body>
@@ -128,12 +128,12 @@ function Other() {
                     <ListItem
                         icon
                         onPress={() =>
-                            Linking.openURL('https://fiora.suisuijiang.com')
+                            Linking.openURL('https://app.chatpuppy.com')
                         }
                     >
                         <Body>
                             <Text style={styles.listItemTitle}>
-                                fiora 网页版
+                                ChatPuppy web
                             </Text>
                         </Body>
                         <Right>

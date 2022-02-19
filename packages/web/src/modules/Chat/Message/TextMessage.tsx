@@ -1,7 +1,7 @@
 import React from 'react';
 
-import expressions from '@fiora/utils/expressions';
-import { TRANSPARENT_IMAGE } from '@fiora/utils/const';
+import expressions from '@chatpuppy/utils/expressions';
+import { TRANSPARENT_IMAGE } from '@chatpuppy/utils/const';
 import Style from './Message.less';
 
 interface TextMessageProps {

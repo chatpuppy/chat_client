@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import getFriendId from '@fiora/utils/getFriendId';
+import getFriendId from '@chatpuppy/utils/getFriendId';
 import { getOSSFileUrl } from '../utils/uploadFile';
 import Style from './InfoDialog.less';
 import Dialog from '../components/Dialog';

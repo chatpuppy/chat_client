@@ -1,25 +1,25 @@
 {
     "Title": {
-        "message": "fiora"
+        "message": "chatpuppy"
     },
     "TagLine": {
         "message": "一个有趣的开源聊天应用"
     },
     "Keywords": {
-        "message": "fiora, fiora 文档, node.js, 聊天室"
+        "message": "chatpuppy, 文档, node.js, 聊天室"
     },
     "Description": {
-        "message": "这是 fiora 文档网站, fiora 是一个有趣的开源聊天室应用"
+        "message": "这是 chatpuppy 文档网站, chatpuppy 是一个有趣的开源聊天室应用"
     },
 
     "Richness": {
-        "message": "fiora 包括后端、前端、安卓和 iOS App"
+        "message": "chatpuppy 包括后端、前端、安卓和 iOS App"
     },
     "Cross Platform": {
-        "message": "fiora 基于 node.js 开发, 支持 Windows / Linux / macOS 等操作系统"
+        "message": "chatpuppy 基于 node.js 开发, 支持 Windows / Linux / macOS 等操作系统"
     },
     "Open Source": {
-        "message": "fiora 遵循 MIT 开源许可"
+        "message": "chatpuppy 遵循 MIT 开源许可"
     },
 
     "Join Chat Title": {
@@ -38,7 +38,7 @@
         "message": "自己部署"
     },
     "Deploy By Yourself Content": {
-        "message": "fiora 是一个开源项目, 你可以克隆源码并部署到自己的服务器, 支持 windows / Linux and macOS 操作系统, 但是推荐您部署到 Linux 服务器上"
+        "message": "chatpuppy 是一个开源项目, 你可以克隆源码并部署到自己的服务器, 支持 windows / Linux and macOS 操作系统, 但是推荐您部署到 Linux 服务器上"
     },
 
     "Interested": {
@@ -56,6 +56,6 @@
         "message": "查看文档"
     },
     "DocsUrl": {
-        "message": "/fiora/zh-Hans/docs/getting-start/"
+        "message": "/chatpuppy/zh-Hans/docs/getting-start/"
     }
 }

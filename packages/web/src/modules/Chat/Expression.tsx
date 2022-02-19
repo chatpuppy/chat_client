@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Loading from 'react-loading';
 
-import expressions from '@fiora/utils/expressions';
-import { addParam } from '@fiora/utils/url';
-import BaiduImage from '@fiora/assets/images/baidu.png';
+import expressions from '@chatpuppy/utils/expressions';
+import { addParam } from '@chatpuppy/utils/url';
+import BaiduImage from '@chatpuppy/assets/images/baidu.png';
 import Style from './Expression.less';
 import {
     Tabs,

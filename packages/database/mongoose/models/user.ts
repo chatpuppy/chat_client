@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { NAME_REGEXP } from '@fiora/utils/const';
+import { NAME_REGEXP } from '@chatpuppy/utils/const';
 
 const UserSchema = new Schema({
     createTime: { type: Date, default: Date.now },

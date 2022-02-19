@@ -44,7 +44,7 @@ export function getOSSFileUrl(url = '', process = '') {
             extraPrams ? `&${extraPrams}` : ''
         }`;
     }
-    if (/\/\/cdn\.suisuijiang\.com/.test(rawUrl)) {
+    if (/\/\/cdn\.chatpuppy\.com/.test(rawUrl)) {
         return `${rawUrl}?x-oss-process=${process}${
             extraPrams ? `&${extraPrams}` : ''
         }`;
@@ -62,9 +62,7 @@ export default async function uploadFile(
     fileName: string,
 ): Promise<string> {
     // 阿里云 OSS 不可用, 上传文件到服务端
-    console.log('====== uploadFile');
     if (!ossClient) {
-        console.log('====== uploadFile to local server');
         const [uploadErr, result] = await fetch('uploadFile', {
             file: blob,
             fileName,

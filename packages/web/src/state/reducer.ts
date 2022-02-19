@@ -1,6 +1,6 @@
-import { isMobile } from '@fiora/utils/ua';
-import getFriendId from '@fiora/utils/getFriendId';
-import convertMessage from '@fiora/utils/convertMessage';
+import { isMobile } from '@chatpuppy/utils/ua';
+import getFriendId from '@chatpuppy/utils/getFriendId';
+import convertMessage from '@chatpuppy/utils/convertMessage';
 import getData from '../localStorage';
 import {
     Action,

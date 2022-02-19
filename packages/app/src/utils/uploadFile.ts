@@ -26,7 +26,7 @@ export function getOSSFileUrl(url: string | number = '', process = '') {
         return url;
     }
     const [rawUrl = '', extraPrams = ''] = url.split('?');
-    if (/^\/\/cdn\.suisuijiang\.com/.test(rawUrl)) {
+    if (/^\/\/cdn\.chatpuppy\.com/.test(rawUrl)) {
         return `https:${rawUrl}?x-oss-process=${process}${
             extraPrams ? `&${extraPrams}` : ''
         }`;
@@ -35,7 +35,7 @@ export function getOSSFileUrl(url: string | number = '', process = '') {
         return `https:${url}`;
     }
     if (url.startsWith('/')) {
-        return `https://fiora.suisuijiang.com${url}`;
+        return `https://app.chatpuppy.com${url}`;
     }
     return `${url}`;
 }

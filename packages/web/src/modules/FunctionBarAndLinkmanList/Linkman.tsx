@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import Time from '@fiora/utils/time';
-import { isMobile } from '@fiora/utils/ua';
+import Time from '@chatpuppy/utils/time';
+import { isMobile } from '@chatpuppy/utils/ua';
 import Avatar from '../../components/Avatar';
 import { State } from '../../state/reducer';
 import useAction from '../../hooks/useAction';

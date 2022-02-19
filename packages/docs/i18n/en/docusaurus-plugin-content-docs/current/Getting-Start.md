@@ -6,12 +6,12 @@ sidebar_label: Getting Start
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-fiora is an interesting chat application. It is developed based on node.js, mongodb, react and socket.io technologies
+ChatPuppy is an interesting chat application. It is developed based on node.js, mongodb, react and socket.io technologies
 
-The project started at [2015-11-04](https://github.com/yinxin630/chatroom-with-sails/commit/0a032372727550b8b4087f24ac299de03b677b9f)
+The project started at [2015-11-04](https://github.com/chatpuppy/chatroom-with-sails/commit/0a032372727550b8b4087f24ac299de03b677b9f)
 
-Online address: [https://fiora.suisuijiang.com/](https://fiora.suisuijiang.com/)  
-Android / iOS app: [https://github.com/yinxin630/fiora-app](https://github.com/yinxin630/fiora-app)
+Online address: [https://app.chatpuppy.com/](https://app.chatpuppy.com/)  
+Android / iOS app: [https://github.com/chatpuppy/chat_client-app](https://github.com/chatpuppy/chat_client-app)
 
 ## Functions
 
@@ -50,7 +50,7 @@ Android / iOS app: [https://github.com/yinxin630/fiora-app](https://github.com/y
     |-- .nodemonrc                // nodemon config
     |-- .prettierrc               // prettier config
     |-- Dockerfile                // docker file
-    |-- LICENSE                   // fiora license
+    |-- LICENSE                   // ChatPuppy license
     |-- docker-compose.yaml       // docker compose config
     |-- jest.*.sj                 // jest config
     |-- package.json              // npm

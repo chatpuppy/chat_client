@@ -1,5 +1,5 @@
-import BackgroundImage from '@fiora/assets/images/background.jpg';
-import BackgroundCoolImage from '@fiora/assets/images/background-cool.jpg';
+import BackgroundImage from '@chatpuppy/assets/images/background.jpg';
+import BackgroundCoolImage from '@chatpuppy/assets/images/background-cool.jpg';
 
 type Themes = {
     [theme: string]: {

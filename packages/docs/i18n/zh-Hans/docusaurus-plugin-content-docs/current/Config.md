@@ -8,7 +8,7 @@ sidebar_label: 配置
 客户端配置 `config/client.ts`
 
 相比于直接修改配置文件, 推荐用环境变量来修改配置  
-在 fiora 根目录创建 `.env` 文件, 在里面填写 `key=value` 键值对(每行一个), 即可修改相应配置. 比如修改端口号 `Port=8888`
+在 chatpuppy 根目录创建 `.env` 文件, 在里面填写 `key=value` 键值对(每行一个), 即可修改相应配置. 比如修改端口号 `Port=8888`
 
 ## 服务端配置
 
@@ -18,7 +18,7 @@ sidebar_label: 配置
 | ------------------ | ------- | ---------------------------------- | ---------------------------------------------------------------------------------- |
 | Host               | string  | your ip                            | 服务端 host                                                                        |
 | Port               | number  | 9200                               | 服务端端口号                                                                       |
-| Database           | string  | mongodb://localhost:27017/fiora    | mongoDB 数据库地址                                                                 |
+| Database           | string  | mongodb://localhost:27017/chatpuppy    | mongoDB 数据库地址                                                                 |
 | RedisHost          | string  | localhost                          | redis 地址主机名                                                                   |
 | RedisPort          | number  | 6379                               | redis 端口                                                                         |
 | JwtSecret          | string  | jwtSecret (推荐修改它来保证安全性) | jwt token 加密 secret                                                              |
@@ -34,7 +34,7 @@ sidebar_label: 配置
 | ROLE_ARN           | string  | ''                                 | 阿里云 OSS RoleARN. 参考: https://help.aliyun.com/document_detail/28649.html       |
 | REGION             | string  | ''                                 | 阿里云 OSS 地域. 例如: `oss-cn-zhangjiakou`                                        |
 | BUCKET             | string  | ''                                 | 阿里云 OSS bucket 名称                                                             |
-| ENDPOINT           | string  | ''                                 | 阿里云 OSS 域名. 例如: `cdn.suisuijiang.com`                                       |
+| ENDPOINT           | string  | ''                                 | 阿里云 OSS 域名. 例如: `cdn.chatpuppy.com`                                       |
 
 ## 客户端配置
 

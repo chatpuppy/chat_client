@@ -3,12 +3,12 @@ import cp from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import detect from 'detect-port';
-import server from '@fiora/config/server';
-import initRedis from '@fiora/database/redis/initRedis';
-import initMongoDB from '@fiora/database/mongoose/initMongoDB';
+import server from '@chatpuppy/config/server';
+import initRedis from '@chatpuppy/database/redis/initRedis';
+import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
 
 export async function doctor() {
-    console.log(chalk.yellow('===== Run Fiora Doctor ====='));
+    console.log(chalk.yellow('===== Run ChatPuppy Doctor ====='));
 
     const nodeVersion = cp.execSync('node --version').toString();
     console.log(

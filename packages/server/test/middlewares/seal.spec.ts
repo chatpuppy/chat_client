@@ -1,11 +1,11 @@
 import { mocked } from 'ts-jest/utils';
-import { SEAL_TEXT } from '@fiora/utils/const';
+import { SEAL_TEXT } from '@chatpuppy/utils/const';
 import { Socket } from 'socket.io';
-import { Redis } from '@fiora/database/redis/initRedis';
+import { Redis } from '@chatpuppy/database/redis/initRedis';
 import seal from '../../src/middlewares/seal';
 import { getMiddlewareParams } from '../helpers/middleware';
 
-jest.mock('@fiora/database/redis/initRedis');
+jest.mock('@chatpuppy/database/redis/initRedis');
 
 describe('server/middlewares/seal', () => {
     it('should call service success', async () => {

@@ -88,7 +88,7 @@ function App({ title, primaryColor, isLogin }: Props) {
                                     key="other"
                                     component={Other}
                                     hideNavBar
-                                    title="其它"
+                                    title="Other"
                                     icon={({ focused }) => (
                                         <Icon
                                             name="aperture-outline"
@@ -106,7 +106,7 @@ function App({ title, primaryColor, isLogin }: Props) {
                         <Scene
                             key="chat"
                             component={Chat}
-                            title="聊天"
+                            title="Chat"
                             getTitle={title}
                             hideNavBar={false}
                             navigationBarStyle={{

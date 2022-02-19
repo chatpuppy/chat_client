@@ -1,10 +1,10 @@
 {
-  "name": "@fiora/utils",
+  "name": "@chatpuppy/utils",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@fiora/assets": "^1.0.0",
+    "@chatpuppy/assets": "^1.0.0",
     "ali-oss": "^6.16.0",
     "axios": "^0.21.1",
     "log4js": "^6.3.0",

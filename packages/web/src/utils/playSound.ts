@@ -1,9 +1,9 @@
-import DefaultSound from '@fiora/assets/audios/default.mp3';
-import AppleSound from '@fiora/assets/audios/apple.mp3';
-import PcQQSound from '@fiora/assets/audios/pcqq.mp3';
-import MobileQQSound from '@fiora/assets/audios/mobileqq.mp3';
-import MoMoSound from '@fiora/assets/audios/momo.mp3';
-import HuaJiSound from '@fiora/assets/audios/huaji.mp3';
+import DefaultSound from '@chatpuppy/assets/audios/default.mp3';
+import AppleSound from '@chatpuppy/assets/audios/apple.mp3';
+import PcQQSound from '@chatpuppy/assets/audios/pcqq.mp3';
+import MobileQQSound from '@chatpuppy/assets/audios/mobileqq.mp3';
+import MoMoSound from '@chatpuppy/assets/audios/momo.mp3';
+import HuaJiSound from '@chatpuppy/assets/audios/huaji.mp3';
 
 type Sounds = {
     [key: string]: string;

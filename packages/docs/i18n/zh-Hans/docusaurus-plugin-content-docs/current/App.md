@@ -1,10 +1,10 @@
 ---
 id: app
-title: Fiora App
-sidebar_label: Fiora App
+title: ChatPuppy App
+sidebar_label: ChatPuppy App
 ---
 
-fiora app 是基于 [expo](https://expo.io/) he  [react-native](https://reactnative.dev/) 开发的, 支持 Android 和 iOS 系统
+chatpuppy app 是基于 [expo](https://expo.io/) he  [react-native](https://reactnative.dev/) 开发的, 支持 Android 和 iOS 系统
 
 ## 下载 App
 
@@ -12,7 +12,7 @@ fiora app 是基于 [expo](https://expo.io/) he  [react-native](https://reactnat
 
 点击链接或者扫描二维码下载 APK
 
-[https://cdn.suisuijiang.com/fiora.apk](https://cdn.suisuijiang.com/fiora.apk)
+[https://cdn.chatpuppy.com/chatpuppy.apk](https://cdn.chatpuppy.com/chatpuppy.apk)
 
 ![](/img/android-download-qrcode.png)
 

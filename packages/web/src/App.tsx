@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import './styles/normalize.less';
 import './styles/iconfont.less';
 
-import { isMobile } from '@fiora/utils/ua';
+import { isMobile } from '@chatpuppy/utils/ua';
 import inobounce from './utils/inobounce';
 import { getOSSFileUrl } from './utils/uploadFile';
 

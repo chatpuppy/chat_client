@@ -1,11 +1,11 @@
 {
-  "name": "@fiora/database",
+  "name": "@chatpuppy/database",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@fiora/config": "^1.0.0",
-    "@fiora/utils": "^1.0.0",
+    "@chatpuppy/config": "^1.0.0",
+    "@chatpuppy/utils": "^1.0.0",
     "mongoose": "^5.13.3",
     "redis": "^3.1.2"
   },

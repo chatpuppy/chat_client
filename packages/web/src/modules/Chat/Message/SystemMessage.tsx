@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPerRandomColor } from '@fiora/utils/getRandomColor';
+import { getPerRandomColor } from '@chatpuppy/utils/getRandomColor';
 
 interface SystemMessageProps {
     message: string;

@@ -4,7 +4,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
 import { useSelector } from 'react-redux';
-import config from '@fiora/config/client';
+import config from '@chatpuppy/config/client';
 import readDiskFile from '../../utils/readDiskFile';
 import uploadFile, { getOSSFileUrl } from '../../utils/uploadFile';
 import Dialog from '../../components/Dialog';

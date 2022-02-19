@@ -1,5 +1,5 @@
 {
-  "name": "fiora",
+  "name": "chatpuppy",
   "version": "1.0.0",
   "description": "An interesting chat application power by socket.io, koa, mongodb and react",
   "license": "MIT",
@@ -25,12 +25,12 @@
     "node": ">= 14"
   },
   "author": {
-    "name": "碎碎酱",
-    "email": "yinxin630@gmail.com"
+    "name": "ChatPuppy",
+    "email": "support@chatpuppy.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yinxin630/fiora"
+    "url": "https://github.com/chatpuppy"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",

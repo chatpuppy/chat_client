@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 
 import { css } from 'linaria';
-import xss from '@fiora/utils/xss';
-import compressImage from '@fiora/utils/compressImage';
-import config from '@fiora/config/client';
-import { isMobile } from '@fiora/utils/ua';
+import xss from '@chatpuppy/utils/xss';
+import compressImage from '@chatpuppy/utils/compressImage';
+import config from '@chatpuppy/config/client';
+import { isMobile } from '@chatpuppy/utils/ua';
 import fetch from '../../utils/fetch';
 import voice from '../../utils/voice';
 import readDiskFile, { ReadFileResult } from '../../utils/readDiskFile';

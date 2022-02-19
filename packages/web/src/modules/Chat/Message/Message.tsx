@@ -2,9 +2,9 @@ import React, { Component, createRef } from 'react';
 import pureRender from 'pure-render-decorator';
 import { connect } from 'react-redux';
 
-import Time from '@fiora/utils/time';
-import { getRandomColor, getPerRandomColor } from '@fiora/utils/getRandomColor';
-import client from '@fiora/config/client';
+import Time from '@chatpuppy/utils/time';
+import { getRandomColor, getPerRandomColor } from '@chatpuppy/utils/getRandomColor';
+import client from '@chatpuppy/config/client';
 import Style from './Message.less';
 import Avatar from '../../../components/Avatar';
 import TextMessage from './TextMessage';

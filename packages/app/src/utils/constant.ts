@@ -1,1 +1,1 @@
-export const referer = 'https://fiora.suisuijiang.com/';
+export const referer = 'https://app.chatpuppy.com/';

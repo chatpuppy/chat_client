@@ -1,9 +1,9 @@
 import IO from 'socket.io-client';
 import platform from 'platform';
 
-import convertMessage from '@fiora/utils/convertMessage';
-import getFriendId from '@fiora/utils/getFriendId';
-import config from '@fiora/config/client';
+import convertMessage from '@chatpuppy/utils/convertMessage';
+import getFriendId from '@chatpuppy/utils/getFriendId';
+import config from '@chatpuppy/config/client';
 import notification from './utils/notification';
 import voice from './utils/voice';
 import { initOSS } from './utils/uploadFile';

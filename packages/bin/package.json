@@ -1,5 +1,5 @@
 {
-  "name": "@fiora/bin",
+  "name": "@chatpuppy/bin",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
@@ -7,8 +7,8 @@
     "script": "ts-node --transpile-only index.ts"
   },
   "dependencies": {
-    "@fiora/config": "^1.0.0",
-    "@fiora/database": "^1.0.0",
+    "@chatpuppy/config": "^1.0.0",
+    "@chatpuppy/database": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "chalk": "^4.1.1",
     "detect-port": "^1.3.0",

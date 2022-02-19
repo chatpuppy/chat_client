@@ -10,7 +10,7 @@ export default {
     port: env.Port ? parseInt(env.Port, 10) : 9200,
 
     // mongodb address
-    database: env.Database || 'mongodb://localhost:27017/fiora',
+    database: env.Database || 'mongodb://localhost:27017/chatpuppy',
 
     redis: {
         host: env.RedisHost || 'localhost',

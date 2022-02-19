@@ -1,10 +1,10 @@
-import config from '@fiora/config/server';
-import getRandomAvatar from '@fiora/utils/getRandomAvatar';
-import { doctor } from '@fiora/bin/scripts/doctor';
-import logger from '@fiora/utils/logger';
-import initMongoDB from '@fiora/database/mongoose/initMongoDB';
-import Socket from '@fiora/database/mongoose/models/socket';
-import Group, { GroupDocument } from '@fiora/database/mongoose/models/group';
+import config from '@chatpuppy/config/server';
+import getRandomAvatar from '@chatpuppy/utils/getRandomAvatar';
+import { doctor } from '@chatpuppy/bin/scripts/doctor';
+import logger from '@chatpuppy/utils/logger';
+import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
+import Socket from '@chatpuppy/database/mongoose/models/socket';
+import Group, { GroupDocument } from '@chatpuppy/database/mongoose/models/group';
 import app from './app';
 
 (async () => {

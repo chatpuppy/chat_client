@@ -2,7 +2,7 @@ import { addParam } from '../url';
 
 describe('utils/url.ts', () => {
     it('should add ?key=value into url', () => {
-        const url = 'https://fiora.suisuijiang.com';
+        const url = 'https://app.chatpuppy.com';
         const key = 'key';
         const value = 'value';
         const params = {
@@ -12,7 +12,7 @@ describe('utils/url.ts', () => {
     });
 
     it('should add &key=value into url', () => {
-        const url = 'https://fiora.suisuijiang.com?a=a';
+        const url = 'https://app.chatpuppy.com?a=a';
         const key = 'key';
         const value = 'value';
         const params = {

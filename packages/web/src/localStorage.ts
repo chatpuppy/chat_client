@@ -1,4 +1,4 @@
-import config from '@fiora/config/client';
+import config from '@chatpuppy/config/client';
 import themes from './themes';
 
 /** LocalStorage存储的键值 */

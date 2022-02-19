@@ -1,25 +1,25 @@
 {
     "Title": {
-        "message": "fiora"
+        "message": "ChatPuppy"
     },
     "TagLine": {
         "message": "An interesting open source chat application"
     },
     "Keywords": {
-        "message": "fiora, fiora docs, node.js, chatroom"
+        "message": "chatpuppy, docs, node.js, chatroom"
     },
     "Description": {
-        "message": "This site is for fiora doc. Fiora is an interesting open source chat application"
+        "message": "This site is for chatpuppy doc. ChatPuppy is an NFT-based wallet to wallet chat application"
     },
 
     "Richness": {
-        "message": "Fiora contains backend, frontend, Android and iOS apps"
+        "message": "Chatpuppy contains backend, frontend, Android and iOS apps"
     },
     "Cross Platform": {
-        "message": "Fiora is developed with node.js. Supports Windows / Linux / macOS systems"
+        "message": "Chatpuppy is developed with node.js. Supports Windows / Linux / macOS systems"
     },
     "Open Source": {
-        "message": "Fiora follows the MIT open source license"
+        "message": "Chatpuppy follows the MIT open source license"
     },
 
     "Join Chat Title": {
@@ -38,7 +38,7 @@
         "message": "Deploy By Yourself"
     },
     "Deploy By Yourself Content": {
-        "message": "Fiora is an open source project. You can clone the source code and deploy to your own server. It supports windows / Linux and macOS systems. But recommended that you deploy on a linux server"
+        "message": "ChatPuppy is an open source project. You can clone the source code and deploy to your own server. It supports windows / Linux and macOS systems. But recommended that you deploy on a linux server"
     },
 
     "Interested": {
@@ -56,6 +56,6 @@
         "message": "View Docs"
     },
     "DocsUrl": {
-        "message": "/fiora/docs/getting-start/"
+        "message": "/chatpuppy/docs/getting-start/"
     }
 }

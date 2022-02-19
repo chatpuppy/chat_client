@@ -1,6 +1,6 @@
 import assert from 'assert';
-import logger from '@fiora/utils/logger';
-import { getSocketIp } from '@fiora/utils/socket';
+import logger from '@chatpuppy/utils/logger';
+import { getSocketIp } from '@chatpuppy/utils/socket';
 import { Socket } from 'socket.io';
 
 function defaultCallback() {

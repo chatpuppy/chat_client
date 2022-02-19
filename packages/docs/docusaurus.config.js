@@ -1,16 +1,16 @@
 module.exports = {
-    title: 'fiora docs',
+    title: 'chatpuppy docs',
     tagline: 'An interesting open source chat application',
-    url: 'https://fiora.suisuijiang.com',
-    baseUrl: '/fiora/',
+    url: 'https://app.chatpuppy.com',
+    baseUrl: '/chatpuppy/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     favicon: 'img/favicon.png',
     organizationName: 'yinxin630', // Usually your GitHub org/user name.
-    projectName: 'fiora', // Usually your repo name.
+    projectName: 'chatpuppy', // Usually your repo name.
     themeConfig: {
         navbar: {
-            title: 'fiora',
+            title: 'ChatPuppy',
             logo: {
                 alt: 'Logo',
                 src: 'img/favicon.png',
@@ -23,7 +23,7 @@ module.exports = {
                     position: 'right',
                 },
                 {
-                    href: 'https://github.com/yinxin630/fiora',
+                    href: 'https://github.com/chatpuppy',
                     label: 'GitHub',
                     position: 'right',
                 },
@@ -59,11 +59,11 @@ module.exports = {
                         {
                             label: 'Feedback',
                             href:
-                                'https://fiora.suisuijiang.com/invite/group/5adacdcfa109ce59da3e83d3',
+                                'https://app.chatpuppy.com/invite/group/5adacdcfa109ce59da3e83d3',
                         },
                         {
                             label: 'Issues',
-                            href: 'https://github.com/yinxin630/fiora/issues',
+                            href: 'https://github.com/chatpuppy/chat_client/issues',
                         },
                     ],
                 },
@@ -72,11 +72,11 @@ module.exports = {
                     items: [
                         {
                             label: 'Author',
-                            href: 'https://suisuijiang.com',
+                            href: 'https://chatpuppy.com',
                         },
                         {
                             label: 'GitHub',
-                            href: 'https://github.com/yinxin630/fiora',
+                            href: 'https://github.com/chatpuppy/chat_client',
                         },
                     ],
                 },
@@ -94,7 +94,7 @@ module.exports = {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
                     // Please change this to your repo.
-                    editUrl: 'https://github.com/yinxin630/fiora/edit/master/docs/',
+                    editUrl: 'https://github.com/chatpuppy/chat_client/edit/master/docs/',
                 },
                 theme: {
                     customCss: require.resolve('./src/css/custom.css'),

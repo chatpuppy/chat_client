@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import platform from 'platform';
 import { useDispatch } from 'react-redux';
 
-import getFriendId from '@fiora/utils/getFriendId';
-import convertMessage from '@fiora/utils/convertMessage';
+import getFriendId from '@chatpuppy/utils/getFriendId';
+import convertMessage from '@chatpuppy/utils/convertMessage';
 import Style from './LoginRegister.less';
 import Input from '../../components/Input';
 import useAction from '../../hooks/useAction';

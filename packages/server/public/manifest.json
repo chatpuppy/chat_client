@@ -1,6 +1,6 @@
 {
-    "name": "fiora",
-    "short_name": "fiora",
+    "name": "ChatPuppy",
+    "short_name": "chatpuppy",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#FAFAFA",

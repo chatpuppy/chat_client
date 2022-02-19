@@ -8,7 +8,7 @@ Server configuration `config/server.ts`
 Client configuration `config/client.ts`
 
 Compared to directly modifying the configuration file, it is recommended to use environment variables to modify the configuration  
-Create a `.env` file in the fiora root directory and enter `key=value` key-value pair (one per line) to modify the configuration. For example, modify the port number `Port=8888`
+Create a `.env` file in the chatpuppy root directory and enter `key=value` key-value pair (one per line) to modify the configuration. For example, modify the port number `Port=8888`
 
 ## Server Config
 
@@ -18,7 +18,7 @@ Create a `.env` file in the fiora root directory and enter `key=value` key-value
 | ------------------ | ------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | Host               | string  | your ip                                | backend server host                                                                                      |
 | Port               | number  | 9200                                   | backend server port                                                                                      |
-| Database           | string  | mongodb://localhost:27017/fiora        | mongodbb address                                                                                         |
+| Database           | string  | mongodb://localhost:27017/chatpuppy        | mongodbb address                                                                                         |
 | RedisHost          | string  | localhost                              | redis host                                                                                               |
 | RedisPort          | number  | 6379                                   | redis port                                                                                               |
 | JwtSecret          | string  | jwtSecret (Modify it to ensure safety) | jwt token encryption secret                                                                              |
@@ -34,7 +34,7 @@ Create a `.env` file in the fiora root directory and enter `key=value` key-value
 | ROLE_ARN           | string  | ''                                     | aliyun OSS RoleARN. reference: https://help.aliyun.com/document_detail/28649.html                        |
 | REGION             | string  | ''                                     | aliyun OSS region. example: `oss-cn-zhangjiakou`                                                         |
 | BUCKET             | string  | ''                                     | aliyun OSS bucket name                                                                                   |
-| ENDPOINT           | string  | ''                                     | aliyun OSS domain. example: `cdn.suisuijiang.com`                                                        |
+| ENDPOINT           | string  | ''                                     | aliyun OSS domain. example: `cdn.chatpuppy.com`                                                        |
 
 ## Client Config
 

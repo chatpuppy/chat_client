@@ -1,9 +1,9 @@
-import { isValidObjectId, Types } from '@fiora/database/mongoose';
+import { isValidObjectId, Types } from '@chatpuppy/database/mongoose';
 import assert from 'assert';
-import User from '@fiora/database/mongoose/models/user';
-import Group from '@fiora/database/mongoose/models/group';
-import Message from '@fiora/database/mongoose/models/message';
-import { createOrUpdateHistory } from '@fiora/database/mongoose/models/history';
+import User from '@chatpuppy/database/mongoose/models/user';
+import Group from '@chatpuppy/database/mongoose/models/group';
+import Message from '@chatpuppy/database/mongoose/models/message';
+import { createOrUpdateHistory } from '@chatpuppy/database/mongoose/models/history';
 
 export async function updateHistory(
     ctx: Context<{ userId: string; linkmanId: string; messageId: string }>,

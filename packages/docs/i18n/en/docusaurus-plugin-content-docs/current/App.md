@@ -1,10 +1,10 @@
 ---
 id: app
-title: Fiora App
-sidebar_label: Fiora App
+title: ChatPuppy App
+sidebar_label: ChatPuppy App
 ---
 
-Fiora app is developed with [expo](https://expo.io/) and [react-native](https://reactnative.dev/). Support Android and iOS systems
+ChatPuppy app is developed with [expo](https://expo.io/) and [react-native](https://reactnative.dev/). Support Android and iOS systems
 
 ## Download App
 
@@ -12,7 +12,7 @@ Fiora app is developed with [expo](https://expo.io/) and [react-native](https://
 
 Click link or scan qrcode to download APK
 
-[https://cdn.suisuijiang.com/fiora.apk](https://cdn.suisuijiang.com/fiora.apk)
+[https://cdn.chatpuppy.com/chatpuppy.apk](https://cdn.chatpuppy.com/chatpuppy.apk)
 
 ![](/img/android-download-qrcode.png)
 

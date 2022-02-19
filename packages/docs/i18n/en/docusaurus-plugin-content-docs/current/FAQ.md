@@ -24,7 +24,7 @@ Example config, **Please modify the configuration of the comment item**
 server {
    listen 80;
    # Change to your domain name
-   server_name fiora.suisuijiang.com;
+   server_name app.chatpuppy.com;
 
    location / {
       proxy_set_header   X-Real-IP        $remote_addr;
@@ -45,18 +45,18 @@ HTTPS + HTTP 2.0 config
 server {
    listen 80;
    # Change to your domain name
-   server_name fiora.suisuijiang.com;
-   return 301 https://fiora.suisuijiang.com$request_uri;
+   server_name app.chatpuppy.com;
+   return 301 https://app.chatpuppy.com$request_uri;
 }
 server {
    listen 443 ssl http2;
    # Change to your domain name
-   server_name  fiora.suisuijiang.com;
+   server_name  app.chatpuppy.com;
 
    ssl on;
    # Modify to your ssl certificate location
-   ssl_certificate ./ssl/fiora.suisuijiang.com.crt;
-   ssl_certificate_key ./ssl/fiora.suisuijiang.com.key;
+   ssl_certificate ./ssl/app.chatpuppy.com.crt;
+   ssl_certificate_key ./ssl/app.chatpuppy.com.key;
    ssl_session_timeout 5m;
    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;
@@ -91,7 +91,7 @@ In order to prevent newly registered users from sending messages randomly, users
 
 ## An error is throwed when executing the command. "Couldn't find a package.json file in xxx"
 
-First cd to the fiora root directory, and then execute the corresponding command
+First cd to the chatpuppy root directory, and then execute the corresponding command
 
 ## Why the modified configuration does not take effect
 

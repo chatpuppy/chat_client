@@ -1,5 +1,5 @@
 import { mocked } from 'ts-jest/utils';
-import { Redis } from '@fiora/database/redis/initRedis';
+import { Redis } from '@chatpuppy/database/redis/initRedis';
 import { Socket } from 'socket.io';
 import frequency, {
     CALL_SERVICE_FREQUENTLY,
@@ -7,7 +7,7 @@ import frequency, {
 } from '../../src/middlewares/frequency';
 import { getMiddlewareParams } from '../helpers/middleware';
 
-jest.mock('@fiora/database/redis/initRedis');
+jest.mock('@chatpuppy/database/redis/initRedis');
 jest.useFakeTimers();
 
 describe('server/middlewares/frequency', () => {

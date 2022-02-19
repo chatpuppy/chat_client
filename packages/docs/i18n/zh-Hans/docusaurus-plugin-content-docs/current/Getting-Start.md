@@ -6,12 +6,12 @@ sidebar_label: 入门指南
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-fiora 是一款有趣的聊天应用. 基于 node.js, mongodb, react 和 socket.io 等技术开发
+ChatPuppy 是一款有趣的聊天应用. 基于 node.js, mongodb, react 和 socket.io 等技术开发
 
-该项目起始于 [2015-11-04](https://github.com/yinxin630/chatroom-with-sails/commit/0a032372727550b8b4087f24ac299de03b677b9f)
+该项目起始于 [2015-11-04](https://github.com/chatpuppy/chatroom-with-sails/commit/0a032372727550b8b4087f24ac299de03b677b9f)
 
-在线地址: [https://fiora.suisuijiang.com/](https://fiora.suisuijiang.com/)  
-安卓/iOS app: [https://github.com/yinxin630/fiora-app](https://github.com/yinxin630/fiora-app)
+在线地址: [https://app.chatpuppy.com/](https://app.chatpuppy.com/)  
+安卓/iOS app: [https://github.com/chatpuppy/chat_client-app](https://github.com/chatpuppy/chat_client-app)
 
 ## 功能
 
@@ -50,7 +50,7 @@ fiora 是一款有趣的聊天应用. 基于 node.js, mongodb, react 和 socket.
     |-- .nodemonrc                // nodemon 配置
     |-- .prettierrc               // prettier 配置
     |-- Dockerfile                // docker 文件
-    |-- LICENSE                   // fiora 许可
+    |-- LICENSE                   // chatpuppy 许可
     |-- docker-compose.yaml       // docker compose 配置
     |-- jest.*.sj                 // jest 配置
     |-- package.json              // npm

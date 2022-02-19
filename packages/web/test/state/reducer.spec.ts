@@ -1,4 +1,4 @@
-import getFriendId from '@fiora/utils/getFriendId';
+import getFriendId from '@chatpuppy/utils/getFriendId';
 import reducer, { State, initialState } from '../../src/state/reducer';
 import { Action, ActionTypes } from '../../src/state/action';
 

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import User from '@fiora/database/mongoose/models/user';
-import initMongoDB from '@fiora/database/mongoose/initMongoDB';
+import User from '@chatpuppy/database/mongoose/models/user';
+import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
 
 export async function getUserId(username: string) {
     if (!username) {

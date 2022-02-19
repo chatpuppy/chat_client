@@ -6,7 +6,7 @@ sidebar_label: 接口
 
 ## 如何调用接口
 
-fiora 后端基于 socket.io, 首先需要与后端建立连接
+chatpuppy 后端基于 socket.io, 首先需要与后端建立连接
 
 ```js
 import IO from 'socket.io-client';

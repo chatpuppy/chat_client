@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 
-import { isMobile } from '@fiora/utils/ua';
+import { isMobile } from '@chatpuppy/utils/ua';
 import { State } from '../../state/reducer';
 import useIsLogin from '../../hooks/useIsLogin';
 import Avatar from '../../components/Avatar';
@@ -14,9 +14,6 @@ import socket from '../../socket';
 import Message from '../../components/Message';
 
 import Admin from './Admin';
-import Download from './Download';
-import Reward from './Reward';
-import About from './About';
 
 import Style from './Sidebar.less';
 import useAero from '../../hooks/useAero';
@@ -190,16 +187,6 @@ function Sidebar() {
                             />
                         </a>
                     </Tooltip>
-                    {/* {renderTooltip(
-                        'About',
-                        <IconButton
-                            width={40}
-                            height={40}
-                            icon="about"
-                            iconSize={26}
-                            onClick={() => toggleAboutDialogVisible(true)}
-                        />,
-                    )} */}
                     <Tooltip
                         placement="right"
                         mouseEnterDelay={0.3}
@@ -256,18 +243,6 @@ function Sidebar() {
                         onClose={() => toggleAdminDialogVisible(false)}
                     />
                 )}
-                <Download
-                    visible={downloadDialogVisible}
-                    onClose={() => toggleDownloadDialogVisible(false)}
-                />
-                <Reward
-                    visible={rewardDialogVisible}
-                    onClose={() => toggleRewardDialogVisible(false)}
-                />
-                <About
-                    visible={aboutDialogVisible}
-                    onClose={() => toggleAboutDialogVisible(false)}
-                />
                 {isLogin && settingDialogVisible && (
                     <SettingAsync
                         visible={settingDialogVisible}

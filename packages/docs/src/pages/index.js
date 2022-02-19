@@ -121,7 +121,7 @@ function Home() {
                     <div>
                         <iframe
                             className={styles.starIframe}
-                            src="https://ghbtns.com/github-btn.html?user=yinxin630&repo=fiora&type=star&count=true&size=large"
+                            src="https://ghbtns.com/github-btn.html?user=yinxin630&repo=chatpuppy&type=star&count=true&size=large"
                             width={160}
                             height={30}
                             title="GitHub Stars"

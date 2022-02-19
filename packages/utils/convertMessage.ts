@@ -1,4 +1,4 @@
-import WuZeiNiangImage from '@fiora/assets/images/admin.png';
+import WuZeiNiangImage from '@chatpuppy/assets/images/admin.png';
 
 // function convertRobot10Message(message) {
 //     if (message.from._id === '5adad39555703565e7903f79') {

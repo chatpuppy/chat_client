@@ -25,7 +25,6 @@ function TextMessage({ message, isSelf }: Props) {
         );
     }
 
-    // 处理文本消息中的表情和链接
     let offset = 0;
     while (copy.length > 0) {
         const regex = /#\(([\u4e00-\u9fa5a-z]+)\)|https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
@@ -35,10 +34,9 @@ function TextMessage({ message, isSelf }: Props) {
             const e = matchResult[1];
             const i = copy.indexOf(r);
             if (r[0] === '#') {
-                // 表情消息
+                // memes
                 const index = expressions.default.indexOf(e);
                 if (index !== -1) {
-                    // 处理从开头到匹配位置的文本
                     if (i > 0) {
                         push(copy.substring(0, i));
                     }
@@ -53,7 +51,6 @@ function TextMessage({ message, isSelf }: Props) {
                     offset += i + r.length;
                 }
             } else {
-                // 链接消息
                 if (i > 0) {
                     push(copy.substring(0, i));
                 }
@@ -80,7 +77,6 @@ function TextMessage({ message, isSelf }: Props) {
         }
     }
 
-    // 处理剩余文本
     if (offset < message.content.length) {
         push(message.content.substring(offset, message.content.length));
     }

@@ -59,14 +59,14 @@ function Message({
     }, []);
 
     async function handleDeleteMessage() {
-        const options = ['撤回', '取消'];
+        const options = ['Revoke', 'Cancel'];
         ActionSheet.show(
             {
-                options: ['确定', '取消'],
+                options: ['Confirm', 'Cancel'],
                 cancelButtonIndex: options.findIndex(
-                    (option) => option === '取消',
+                    (option) => option === 'Cancel',
                 ),
-                title: '是否撤回消息?',
+                title: 'Revoke message?',
             },
             async (buttonIndex) => {
                 switch (buttonIndex) {
@@ -92,7 +92,7 @@ function Message({
             return Time.getHourMinute(createTime);
         }
         if (Time.isYesterday(nowTime, createTime)) {
-            return `昨天 ${Time.getHourMinute(createTime)}`;
+            return `Yesterday ${Time.getHourMinute(createTime)}`;
         }
         if (Time.isSameYear(nowTime, createTime)) {
             return `${Time.getMonthDate(createTime)} ${Time.getHourMinute(
@@ -133,16 +133,16 @@ function Message({
             case 'code': {
                 return (
                     <Text style={{ color: isSelf ? 'white' : '#666' }}>
-                        暂未支持的消息类型[
+                        Unsupported file type[
                         {message.type}
-                        ], 请在Web端查看
+                        ], go to web page
                     </Text>
                 );
             }
             default:
                 return (
                     <Text style={{ color: isSelf ? 'white' : '#666' }}>
-                        不支持的消息类型
+                        Unsupported file type
                     </Text>
                 );
         }

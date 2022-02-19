@@ -1,12 +1,12 @@
 import assert, { AssertionError } from 'assert';
-import { Types } from '@fiora/database/mongoose';
+import { Types } from '@chatpuppy/database/mongoose';
 import stringHash from 'string-hash';
 
-import config from '@fiora/config/server';
-import getRandomAvatar from '@fiora/utils/getRandomAvatar';
-import Group, { GroupDocument } from '@fiora/database/mongoose/models/group';
-import Socket from '@fiora/database/mongoose/models/socket';
-import Message from '@fiora/database/mongoose/models/message';
+import config from '@chatpuppy/config/server';
+import getRandomAvatar from '@chatpuppy/utils/getRandomAvatar';
+import Group, { GroupDocument } from '@chatpuppy/database/mongoose/models/group';
+import Socket from '@chatpuppy/database/mongoose/models/socket';
+import Message from '@chatpuppy/database/mongoose/models/message';
 
 const { isValid } = Types.ObjectId;
 

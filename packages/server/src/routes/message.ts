@@ -1,29 +1,29 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import assert, { AssertionError } from 'assert';
-import { Types } from '@fiora/database/mongoose';
+import { Types } from '@chatpuppy/database/mongoose';
 import { Expo, ExpoPushErrorTicket } from 'expo-server-sdk';
 
-import xss from '@fiora/utils/xss';
-import logger from '@fiora/utils/logger';
-import User, { UserDocument } from '@fiora/database/mongoose/models/user';
-import Group, { GroupDocument } from '@fiora/database/mongoose/models/group';
+import xss from '@chatpuppy/utils/xss';
+import logger from '@chatpuppy/utils/logger';
+import User, { UserDocument } from '@chatpuppy/database/mongoose/models/user';
+import Group, { GroupDocument } from '@chatpuppy/database/mongoose/models/group';
 import Message, {
     handleInviteV2Message,
     handleInviteV2Messages,
     MessageDocument,
-} from '@fiora/database/mongoose/models/message';
-import Notification from '@fiora/database/mongoose/models/notification';
+} from '@chatpuppy/database/mongoose/models/message';
+import Notification from '@chatpuppy/database/mongoose/models/notification';
 import History, {
     createOrUpdateHistory,
-} from '@fiora/database/mongoose/models/history';
-import Socket from '@fiora/database/mongoose/models/socket';
+} from '@chatpuppy/database/mongoose/models/history';
+import Socket from '@chatpuppy/database/mongoose/models/socket';
 
 import {
     DisableSendMessageKey,
     DisableNewUserSendMessageKey,
     Redis,
-} from '@fiora/database/redis/initRedis';
+} from '@chatpuppy/database/redis/initRedis';
 import client from '../../../config/client';
 
 const { isValid } = Types.ObjectId;
@@ -82,7 +82,7 @@ async function pushNotification(
  */
 export async function sendMessage(ctx: Context<SendMessageData>) {
     const disableSendMessage = await Redis.get(DisableSendMessageKey);
-    assert(disableSendMessage !== 'true' || ctx.socket.isAdmin, '全员禁言中');
+    assert(disableSendMessage !== 'true' || ctx.socket.isAdmin, 'Forbidden to send messages');
 
     const disableNewUserSendMessage = await Redis.get(
         DisableNewUserSendMessageKey,
@@ -93,7 +93,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
             user && user.createTime.getTime() > Date.now() - OneYear;
         assert(
             ctx.socket.isAdmin || !isNewUser,
-            '新用户禁言中! 主群禁止闲聊, 多交流fiora和开发技术, 自发维护交流环境',
+            'New user are forbidden to send messages',
         );
     }
 

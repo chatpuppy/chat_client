@@ -4,8 +4,8 @@
 
 import mongoose from 'mongoose';
 
-import config from '@fiora/config/server';
-import logger from '@fiora/utils/logger';
+import config from '@chatpuppy/config/server';
+import logger from '@chatpuppy/utils/logger';
 
 mongoose.Promise = Promise;
 mongoose.set('useCreateIndex', true);
