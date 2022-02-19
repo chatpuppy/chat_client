@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { State } from '../state/reducer';
 
 /**
- * 获取登录态
+ * Get is user login
  */
 export default function useIsLogin() {
     const isLogin = useSelector(

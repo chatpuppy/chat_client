@@ -11,7 +11,6 @@ import { register, getLinkmansLastMessagesV2 } from '../../service';
 import { Message } from '../../state/reducer';
 import { ActionTypes } from '../../state/action';
 
-/** 登录框 */
 function Register() {
     const action = useAction();
     const dispatch = useDispatch();
@@ -53,14 +52,14 @@ function Register() {
 
     return (
         <div className={Style.loginRegister}>
-            <h3 className={Style.title}>用户名</h3>
+            <h3 className={Style.title}>Username</h3>
             <Input
                 className={Style.input}
                 value={username}
                 onChange={setUsername}
                 onEnter={handleRegister}
             />
-            <h3 className={Style.title}>密码</h3>
+            <h3 className={Style.title}>Password</h3>
             <Input
                 className={Style.input}
                 type="password"

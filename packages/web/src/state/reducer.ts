@@ -17,7 +17,6 @@ import {
     DeleteMessagePayload,
 } from './action';
 
-/** 聊天消息 */
 export interface Message {
     _id: string;
     type: string;
@@ -50,7 +49,6 @@ export interface GroupMember {
     environment: string;
 }
 
-/** 群组 */
 export interface Group {
     _id: string;
     name: string;
@@ -60,7 +58,6 @@ export interface Group {
     onlineMembers: GroupMember[];
 }
 
-/** 好友 */
 export interface Friend {
     _id: string;
     name: string;
@@ -68,7 +65,6 @@ export interface Friend {
     createTime: string;
 }
 
-/** 联系人 */
 export interface Linkman extends Group, User {
     type: string;
     unread: number;
@@ -79,7 +75,6 @@ export interface LinkmansMap {
     [linkmanId: string]: Linkman;
 }
 
-/** 用户信息 */
 export interface User {
     _id: string;
     username: string;
@@ -89,7 +84,6 @@ export interface User {
 
 /** redux store state */
 export interface State {
-    /** 用户信息 */
     user: {
         _id: string;
         username: string;
@@ -97,55 +91,37 @@ export interface State {
         tag: string;
         isAdmin: boolean;
     } | null;
-    linkmans: LinkmansMap;
-    /** 聚焦的联系人 */
-    focus: string;
-    /** 客户端连接状态 */
-    connect: boolean;
-    /** 客户端的一些状态值 */
+    linkmans: LinkmansMap; // contacts map
+    focus: string; // is focused
+    connect: boolean; // connect status
     status: {
         ready: boolean;
-        /** 是否显示登陆注册框 */
         loginRegisterDialogVisible: boolean;
-        /** 主题 */
         theme: string;
-        /** 主题主色调 */
         primaryColor: string;
-        /** 主题文字主色调 */
         primaryTextColor: string;
-        /** 背景图 */
         backgroundImage: string;
-        /** 启用毛玻璃效果 */
-        aero: boolean;
-        /** 新消息声音提示开关 */
+        aero: boolean; // gause blur
         soundSwitch: boolean;
-        /** 声音类型 */
         sound: string;
-        /** 新消息桌面提醒开关 */
         notificationSwitch: boolean;
-        /** 新消息语言朗读开关 */
         voiceSwitch: boolean;
-        /** 是否朗读个人发送的消息开关 */
         selfVoiceSwitch: boolean;
         /**
-         * 用户标签颜色模式
-         * singleColor: 固定颜色
-         * fixedColor: 同一词始终同一颜色
-         * randomColor: 同一词在每次渲染中保持同一颜色
+         * User tag color
+         * singleColor: one color
+         * fixedColor: one color for same words
+         * randomColor: random color for same words
          */
         tagColorMode: string;
-        /** 是否展示侧边栏 */
         sidebarVisible: boolean;
-        /** 是否展示搜索+联系人列表栏 */
         functionBarAndLinkmanListVisible: boolean;
-        /** enable search expression when input some phrase */
         enableSearchExpression: boolean;
     };
 }
 
 /**
- * 将联系人以_id为键转为对象结构
- * @param linkmans 联系人数组
+ * @param linkmans 
  */
 function getLinkmansMap(linkmans: Linkman[]) {
     return linkmans.reduce((map: LinkmansMap, linkman) => {
@@ -155,8 +131,7 @@ function getLinkmansMap(linkmans: Linkman[]) {
 }
 
 /**
- * 将消息以_id为键转为对象结构
- * @param messages 消息数组
+ * @param messages 
  */
 function getMessagesMap(messages: Message[]) {
     return messages.reduce((map: MessagesMap, message) => {
@@ -166,9 +141,8 @@ function getMessagesMap(messages: Message[]) {
 }
 
 /**
- * 删除对象中的对个键值
- * @param obj 目标对象
- * @param keys 要删除的键列表
+ * @param obj 
+ * @param keys 
  */
 function deleteObjectKeys<T>(obj: T, keys: string[]): T {
     let entries = Object.entries(obj);
@@ -182,19 +156,17 @@ function deleteObjectKeys<T>(obj: T, keys: string[]): T {
 }
 
 /**
- * 删除对象中的某个键值
- * 直接调用delete删除键值据说性能差(我没验证)
- * @param obj 目标对象
- * @param key 要删除的键
+ * @param obj 
+ * @param key 
  */
 function deleteObjectKey<T>(obj: T, key: string): T {
     return deleteObjectKeys(obj, [key]);
 }
 
 /**
- * 初始化联系人部分公共字段
- * @param linkman 联系人
- * @param type 联系人类型
+ * Initialize contact's fields
+ * @param linkman 
+ * @param type 
  */
 function initLinkmanFields(linkman: Linkman, type: string) {
     linkman.type = type;
@@ -203,8 +175,7 @@ function initLinkmanFields(linkman: Linkman, type: string) {
 }
 
 /**
- * 转换群组数据结构
- * @param group 群组
+ * @param group 
  */
 function transformGroup(group: Linkman): Linkman {
     initLinkmanFields(group, 'group');
@@ -214,8 +185,7 @@ function transformGroup(group: Linkman): Linkman {
 }
 
 /**
- * 转换好友数据结构
- * @param friend 好友
+ * @param friend 
  */
 function transformFriend(friend: Linkman): Linkman {
     // @ts-ignore
@@ -316,7 +286,7 @@ function reducer(state: State = initialState, action: Action): State {
                 ...friends.map(transformFriend),
             ];
 
-            // 如果没登录过, 则将聚焦联系人设置为第一个联系人
+            // If have not login, set the first focus contact as default
             let { focus } = state;
             /* istanbul ignore next */
             if (!state.user && linkmans.length > 0) {
@@ -375,15 +345,14 @@ function reducer(state: State = initialState, action: Action): State {
                 /* istanbul ignore next */
                 if (!__TEST__) {
                     console.warn(
-                        `ActionTypes.SetFocus Error: 联系人 ${focus} 不存在`,
+                        `ActionTypes.SetFocus Error: contact ${focus} is not exist`,
                     );
                 }
                 return state;
             }
 
             /**
-             * 为了优化性能
-             * 如果目标联系人的旧消息个数超过50条, 仅保留50条
+             * If history messages are more than 50, only keep 50 messages
              */
             const { messages } = state.linkmans[focus];
             const messageKeys = Object.keys(messages);
@@ -529,7 +498,7 @@ function reducer(state: State = initialState, action: Action): State {
                 /* istanbul ignore next */
                 if (!__TEST__) {
                     console.warn(
-                        `ActionTypes.DeleteMessage Error: 联系人 ${linkmanId} 不存在`,
+                        `ActionTypes.DeleteMessage Error: contact ${linkmanId} is not exist`,
                     );
                 }
                 return state;

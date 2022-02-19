@@ -53,7 +53,7 @@ function SearchResult({ groups, users }: Props) {
                                                 {group.name}
                                             </Text>
                                             <Text style={styles.groupMembers}>
-                                                {group.members}人
+                                                {group.members}
                                             </Text>
                                         </View>
                                     </View>

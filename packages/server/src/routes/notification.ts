@@ -7,7 +7,7 @@ export async function setNotificationToken(ctx: Context<{ token: string }>) {
 
     const user = await User.findOne({ _id: ctx.socket.user });
     if (!user) {
-        throw new AssertionError({ message: '用户不存在' });
+        throw new AssertionError({ message: 'User not found' });
     }
 
     const notification = await Notification.findOne({ token: ctx.data.token });

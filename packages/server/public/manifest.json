@@ -4,7 +4,7 @@
     "start_url": "/",
     "display": "standalone",
     "background_color": "#FAFAFA",
-    "description": "一个神奇的聊天室",
+    "description": "ChatPuppy",
     "orientation": "portrait-primary",
     "theme_color": "#4a90e2",
     "icons": [

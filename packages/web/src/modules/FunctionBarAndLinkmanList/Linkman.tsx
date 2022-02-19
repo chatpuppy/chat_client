@@ -16,7 +16,6 @@ interface LinkmanProps {
     id: string;
     name: string;
     avatar: string;
-    /** 消息预览 */
     preview: string;
     unread: number;
     time: Date;
@@ -36,7 +35,7 @@ function Linkman(props: LinkmanProps) {
             return Time.getHourMinute(time);
         }
         if (Time.isYesterday(nowTime, time)) {
-            return '昨天';
+            return 'Yesterday';
         }
         return Time.getMonthDate(time);
     }

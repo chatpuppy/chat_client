@@ -3,7 +3,7 @@ import React from 'react';
 import Style from './OnlineStatus.less';
 
 interface OnlineStatusProps {
-    /** 状态, online / offline */
+    /** status, online / offline */
     status: string;
     className?: string;
 }

@@ -85,7 +85,6 @@ function ChatInput() {
         { image: string; width: number; height: number }[]
     >([]);
 
-    /** 全局输入框聚焦快捷键 */
     function focusInput(e: KeyboardEvent) {
         const $target: HTMLElement = e.target as HTMLElement;
         if (
@@ -129,8 +128,7 @@ function ChatInput() {
     }
 
     /**
-     * 插入文本到输入框光标处
-     * @param value 要插入的文本
+     * @param value 
      */
     function insertAtCursor(value: string) {
         const input = $input.current as unknown as HTMLInputElement;
@@ -224,7 +222,7 @@ function ChatInput() {
         }
 
         if (image.length > config.maxImageSize) {
-            Message.warning('要发送的图片过大', 3);
+            Message.warning('Image size too big', 3);
             return;
         }
 
@@ -251,7 +249,7 @@ function ChatInput() {
                 );
             } catch (err) {
                 console.error(err);
-                Message.error('上传图片失败');
+                Message.error(`Upload image failed`);
             }
         };
         img.src = url;
@@ -259,7 +257,7 @@ function ChatInput() {
 
     async function sendFileMessage(file: ReadFileResult) {
         if (file.length > config.maxFileSize) {
-            Message.warning('要发送的文件过大', 3);
+            Message.warning('File size is too large', 3);
             return;
         }
 
@@ -289,13 +287,13 @@ function ChatInput() {
             );
         } catch (err) {
             console.error(err);
-            Message.error('上传文件失败');
+            Message.error('Upload file failed');
         }
     }
 
     async function handleSendImage() {
         if (!connect) {
-            return Message.error('发送消息失败, 您当前处于离线状态');
+            return Message.error('You are offline, send message failed');
         }
         const image = await readDiskFile(
             'blob',
@@ -314,7 +312,7 @@ function ChatInput() {
     }
     async function handleSendFile() {
         if (!connect) {
-            Message.error('发送消息失败, 您当前处于离线状态');
+            Message.error('You are offline, send message failed');
             return;
         }
         const file = await readDiskFile('blob');
@@ -361,12 +359,12 @@ function ChatInput() {
         // eslint-disable-next-line react/destructuring-assignment
         if (!connect) {
             e.preventDefault();
-            return Message.error('发送消息失败, 您当前处于离线状态');
+            return Message.error('You are offline, send message failed');
         }
         const { items, types } =
             e.clipboardData || e.originalEvent.clipboardData;
 
-        // 如果包含文件内容
+        // If has content
         if (types.indexOf('Files') > -1) {
             for (let index = 0; index < items.length; index++) {
                 const item = items[index];
@@ -405,7 +403,7 @@ function ChatInput() {
 
     function sendTextMessage() {
         if (!connect) {
-            return Message.error('发送消息失败, 您当前处于离线状态');
+            return Message.error('You are offline, send message failed');
         }
 
         // @ts-ignore
@@ -479,7 +477,7 @@ function ChatInput() {
             toggleExpressionDialog(true);
             e.preventDefault();
         } else if (e.key === '@') {
-            // 如果按下@建, 则进入@计算模式
+            // Press @
             // @ts-ignore
             if (!/@/.test($input.current.value)) {
                 setAt({
@@ -489,27 +487,20 @@ function ChatInput() {
             }
             // eslint-disable-next-line react/destructuring-assignment
         } else if (at.enable) {
-            // 如果处于@计算模式
             const { key } = e;
-            // 延时, 以便拿到新的value和ime状态
             setTimeout(() => {
-                // 如果@已经被删掉了, 退出@计算模式
                 // @ts-ignore
                 if (!/@/.test($input.current.value)) {
                     setAt({ enable: false, content: '' });
                     return;
                 }
-                // 如果是输入中文, 并且不是空格键, 忽略输入
                 if (inputIME && key !== ' ') {
                     return;
                 }
-                // 如果是不是输入中文, 并且是空格键, 则@计算模式结束
                 if (!inputIME && key === ' ') {
                     setAt({ enable: false, content: '' });
                     return;
                 }
-
-                // 如果是正在输入中文, 则直接返回, 避免取到拼音字母
                 if (inputIME) {
                     return;
                 }
@@ -564,11 +555,11 @@ function ChatInput() {
 
     function handleSendCode(language: string, rawCode: string) {
         if (!connect) {
-            return Message.error('发送消息失败, 您当前处于离线状态');
+            return Message.error('You are offline, send message failed');
         }
 
         if (rawCode === '') {
-            return Message.warning('请输入内容');
+            return Message.warning('Please input message');
         }
 
         const code = `@language=${language}@${rawCode}`;
@@ -667,9 +658,9 @@ function ChatInput() {
                         mouseEnterDelay={0.5}
                         overlay={
                             <span>
-                                支持粘贴图片发图
+                                Sending pasted image supported
                                 <br />
-                                全局按 i 键聚焦
+                                Press i to focus the input box
                             </span>
                         }
                     >
@@ -719,7 +710,7 @@ function ChatInput() {
                                 className={expressionImage}
                                 src={image}
                                 key={image}
-                                alt="表情图"
+                                alt="Meme"
                                 onClick={() =>
                                     handleClickExpressionImage(
                                         image,

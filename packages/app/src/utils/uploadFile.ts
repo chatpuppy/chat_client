@@ -1,9 +1,8 @@
 import fetch from './fetch';
 
 /**
- * 上传文件
- * @param blob 文件blob数据
- * @param fileName 文件名
+ * @param blob 
+ * @param fileName 
  */
 export default async function uploadFile(
     blob: Blob | string,
@@ -16,7 +15,7 @@ export default async function uploadFile(
         isBase64,
     });
     if (uploadErr) {
-        throw Error(`上传图片失败::${uploadErr}`);
+        throw Error(`Upload image failed::${uploadErr}`);
     }
     return result.url;
 }

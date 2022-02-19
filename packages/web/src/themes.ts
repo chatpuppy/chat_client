@@ -10,7 +10,6 @@ type Themes = {
     };
 };
 
-// ======
 const themes: Themes = {
     default: {
         primaryColor: '32, 32, 32',

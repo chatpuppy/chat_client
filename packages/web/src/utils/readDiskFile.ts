@@ -1,20 +1,15 @@
 export interface ReadFileResult {
-    /** 文件名 */
     filename: string;
-    /** 文件拓展名 */
     ext: string;
-    /** 文件类型 */
     type: string;
-    /** 文件内容 */
     result: Blob | ArrayBuffer | string;
-    /** 文件长度 */
     length: number;
 }
 
 /**
- * 读取本地文件
- * @param {string} resultType 数据类型, {blob|base64}, 默认blob
- * @param {string} accept 可选文件类型, 默认 * / *
+ * Read local file
+ * @param {string} resultType {blob|base64}, default blob
+ * @param {string} accept acceptable file type, default * / *
  */
 export default async function readDiskFIle(
     resultType = 'blob',
@@ -25,12 +20,11 @@ export default async function readDiskFIle(
         $input.style.display = 'none';
         $input.setAttribute('type', 'file');
         $input.setAttribute('accept', accept);
-        // 判断用户是否点击取消, 原生没有提供专门事件, 用hack的方法实现
+
         $input.onclick = () => {
             // @ts-ignore
             $input.value = null;
             document.body.onfocus = () => {
-                // onfocus事件会比$input.onchange事件先触发, 因此需要延迟一段时间
                 setTimeout(() => {
                     if ($input.value.length === 0) {
                         resolve(null);

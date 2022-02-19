@@ -12,7 +12,6 @@ import { login, getLinkmansLastMessagesV2 } from '../../service';
 import { Message } from '../../state/reducer';
 import { ActionTypes } from '../../state/action';
 
-/** 登录框 */
 function Login() {
     const action = useAction();
     const dispatch = useDispatch();
@@ -74,7 +73,7 @@ function Login() {
                 onClick={handleLogin}
                 type="button"
             >
-                登录
+                Login
             </button>
         </div>
     );

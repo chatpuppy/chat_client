@@ -3,7 +3,7 @@ import ip from 'ip';
 const { env } = process;
 
 export default {
-    /** 服务端host, 默认为本机ip地址(可能会是局域网地址) */
+    /** Server host */
     host: env.Host || ip.address(),
 
     // service port
@@ -33,7 +33,7 @@ export default {
     // administrator user id
     administrator: env.Administrator ? env.Administrator.split(',') : [],
 
-    /** 禁用注册功能 */
+    /** Forbidden register */
     disableRegister: env.DisableRegister
         ? env.DisableRegister === 'true'
         : false,

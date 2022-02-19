@@ -36,7 +36,7 @@ async function play() {
         try {
             await $audio.play();
         } catch (err) {
-            console.warn('播放新消息提示音失败', err.message);
+            console.warn('Play alert failed', err.message);
         } finally {
             isPlaying = false;
         }

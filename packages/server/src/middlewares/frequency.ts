@@ -5,9 +5,9 @@ import {
     Redis,
 } from '@chatpuppy/database/redis/initRedis';
 
-export const CALL_SERVICE_FREQUENTLY = '发消息过于频繁, 请冷静一会再试';
+export const CALL_SERVICE_FREQUENTLY = 'Sending messages too frequently';
 export const NEW_USER_CALL_SERVICE_FREQUENTLY =
-    '发消息过于频繁, 你还处于萌新期, 不要恶意刷屏, 先冷静一会再试';
+    'Sending messages too frequently, wait a moment and try again';
 
 const MaxCallPerMinutes = 20;
 const NewUserMaxCallPerMinutes = 5;
@@ -22,8 +22,8 @@ type Options = {
 };
 
 /**
- * 限制接口调用频率
- * 新用户限制每分钟5次, 老用户限制每分钟20次
+ * API call frequency
+ * new user 5 times per minute, old user 20 times per minute
  */
 export default function frequency(
     socket: Socket,
@@ -35,7 +35,6 @@ export default function frequency(
 ) {
     let callTimes: Record<string, number> = {};
 
-    // 每60s清空一次次数统计
     setInterval(() => {
         callTimes = {};
     }, clearDataInterval);

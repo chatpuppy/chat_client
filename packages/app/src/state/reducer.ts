@@ -70,7 +70,7 @@ const initialState = {
     connect: true,
     ui: {
         ready: false,
-        loading: '', // 全局loading文本内容, 为空则不展示
+        loading: '', 
         primaryColor: '5,159,149',
         primaryTextColor: '255, 255, 255',
     },

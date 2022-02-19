@@ -14,7 +14,7 @@ import app from './app';
 
     await initMongoDB();
 
-    // 判断默认群是否存在, 不存在就创建一个
+    // If default group not exist, create one
     const group = await Group.findOne({ isDefault: true });
     if (!group) {
         const defaultGroup = await Group.create({
@@ -30,7 +30,7 @@ import app from './app';
     }
 
     app.listen(config.port, async () => {
-        await Socket.deleteMany({}); // 删除Socket表所有历史数据
+        await Socket.deleteMany({}); // Delete Socket history table
         logger.info(`>>> server listen on http://localhost:${config.port}`);
     });
 

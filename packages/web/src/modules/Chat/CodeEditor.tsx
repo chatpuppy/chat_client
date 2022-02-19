@@ -51,13 +51,7 @@ function CodeEditor(props: CodeEditorProps) {
 
     useEffect(() => {
         (async () => {
-            // 动态加载语言包
             if (visible && !loadedLanguage[language]) {
-                /**
-                 * 为了减小打包产物体积, 这里是逐个引入所需的语音包
-                 * 如果直接用变量路径, 会将该目录下的文件全部打包
-                 * 另外不单个引入也不好设置 webpackChunkName
-                 */
                 switch (language) {
                     case 'javascript': {
                         // @ts-ignore
@@ -158,7 +152,7 @@ function CodeEditor(props: CodeEditorProps) {
                         break;
                     }
                     default: {
-                        console.warn('不支持的语言包', language);
+                        console.warn('Language package is unsupported', language);
                     }
                 }
                 loadedLanguage[language] = true;

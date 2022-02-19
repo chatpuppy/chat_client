@@ -1,5 +1,5 @@
 /**
- * 连接 MongoDB
+ * connect MongoDB
  */
 
 import mongoose from 'mongoose';

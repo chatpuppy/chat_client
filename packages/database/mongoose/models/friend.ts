@@ -15,18 +15,13 @@ const FriendSchema = new Schema({
 });
 
 export interface FriendDocument extends Document {
-    /** 源用户id */
     from: string;
-    /** 目标用户id */
     to: string;
-    /** 创建时间 */
     createTime: Date;
 }
 
 /**
  * Friend Model
- * 好友信息
- * 好友关系是单向的
  */
 const Friend = model<FriendDocument>('Friend', FriendSchema);
 

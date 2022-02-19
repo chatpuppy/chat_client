@@ -53,15 +53,15 @@ export function getOSSFileUrl(url = '', process = '') {
 }
 
 /**
- * 上传文件
- * @param blob 文件blob数据
- * @param fileName 文件名
+ * Upload file
+ * @param blob 
+ * @param fileName 
  */
 export default async function uploadFile(
     blob: Blob,
     fileName: string,
 ): Promise<string> {
-    // 阿里云 OSS 不可用, 上传文件到服务端
+    // Aliyun oss is not available, use server
     if (!ossClient) {
         const [uploadErr, result] = await fetch('uploadFile', {
             file: blob,
@@ -73,10 +73,10 @@ export default async function uploadFile(
         return result.url;
     }
 
-    // 上传到阿里OSS
+    // upload to ali oss
     const result = await ossClient.put(fileName, blob);
     if (result.res.status === 200) {
         return endpoint + result.name;
     }
-    return Promise.reject('上传文件失败');
+    return Promise.reject('Upload fail');
 }

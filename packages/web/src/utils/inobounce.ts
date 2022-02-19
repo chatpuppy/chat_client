@@ -1,6 +1,5 @@
 /**
- * 阻止目标元素下不必要的滚动事件. 解决ios橡皮筋效果问题
- * @param {HTMLElement} targetElement 目标元素
+ * @param {HTMLElement} targetElement 
  */
 export default function inobounce(targetElement: HTMLElement) {
     let startX = 0;

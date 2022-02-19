@@ -163,7 +163,7 @@ function Other() {
             <View style={styles.copyrightContainer}>
                 <Text style={styles.copyright}>
                     Copyright© 2015-
-                    {new Date().getFullYear()} 碎碎酱
+                    {new Date().getFullYear()} ChatPuppy
                 </Text>
             </View>
             <PrivacyPolicy

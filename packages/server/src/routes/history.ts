@@ -24,9 +24,9 @@ export async function updateHistory(
             : User.findOne({ _id: linkmanId.replace(self, '') }),
         Message.findOne({ _id: messageId }),
     ]);
-    assert(user, '用户不存在');
-    assert(linkman, '联系人不存在');
-    assert(message, '消息不存在');
+    assert(user, 'User not found');
+    assert(linkman, 'Contract not found');
+    assert(message, 'Message not found');
 
     await createOrUpdateHistory(self, linkmanId, messageId);
 

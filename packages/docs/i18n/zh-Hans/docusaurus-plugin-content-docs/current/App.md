@@ -18,7 +18,7 @@ chatpuppy app 是基于 [expo](https://expo.io/) he  [react-native](https://reac
 
 ### iOS
 
-iOS app 已经提交给 App Store 审核了, 现在可以通过 testflight 来安装. 请联系碎碎酱或者发送邮件给 <yinxinmac@icloud.com>, 附上你的 Apple ID
+iOS app 已经提交给 App Store 审核了, 现在可以通过 testflight 来安装. 请联系ChatPuppy或者发送邮件给 <support@chatpuppy.com>, 附上你的 Apple ID
 
 ## 如何运行
 

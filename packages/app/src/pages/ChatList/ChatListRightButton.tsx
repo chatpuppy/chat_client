@@ -47,8 +47,8 @@ function ChatListRightButton() {
                     autoFocus
                     autoCorrect={false}
                 />
-                <Dialog.Button label="取消" onPress={handleCloseDialog} />
-                <Dialog.Button label="创建" onPress={handleCreateGroup} />
+                <Dialog.Button label="Cancel" onPress={handleCloseDialog} />
+                <Dialog.Button label="Create" onPress={handleCreateGroup} />
             </Dialog.Container>
         </>
     );

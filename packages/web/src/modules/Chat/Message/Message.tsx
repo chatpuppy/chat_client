@@ -90,7 +90,7 @@ class Message extends Component<MessageProps, MessageState> {
     };
 
     /**
-     * 管理员撤回消息
+     * Revoke message by admin
      */
     handleDeleteMessage = async () => {
         const { id, linkmanId, loading, isAdmin } = this.props;
@@ -139,7 +139,7 @@ class Message extends Component<MessageProps, MessageState> {
             return Time.getHourMinute(messageTime);
         }
         if (Time.isYesterday(nowTime, messageTime)) {
-            return `昨天 ${Time.getHourMinute(messageTime)}`;
+            return `Yesterday ${Time.getHourMinute(messageTime)}`;
         }
         return `${Time.getMonthDate(messageTime)} ${Time.getHourMinute(
             messageTime,
@@ -182,7 +182,7 @@ class Message extends Component<MessageProps, MessageState> {
                 );
             }
             default:
-                return <div className="unknown">不支持的消息类型</div>;
+                return <div className="unknown">Unsupported message type</div>;
         }
     }
 
@@ -241,7 +241,7 @@ class Message extends Component<MessageProps, MessageState> {
                                 <Tooltip
                                     placement={isSelf ? 'left' : 'right'}
                                     mouseEnterDelay={0.3}
-                                    overlay={<span>撤回消息</span>}
+                                    overlay={<span>Revoke</span>}
                                 >
                                     <div>
                                         <IconButton

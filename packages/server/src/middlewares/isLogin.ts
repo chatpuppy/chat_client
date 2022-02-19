@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 
-export const PLEASE_LOGIN = '请登录后再试';
+export const PLEASE_LOGIN = 'Please login first';
 
 /**
- * 拦截未登录用户请求需要登录态的接口
+ * Stop un-login user to use functions must loged
  */
 export default function isLogin(socket: Socket) {
     const noRequireLoginEvent = new Set([

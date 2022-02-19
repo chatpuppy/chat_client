@@ -40,7 +40,7 @@ function CodeMessage(props: CodeMessageProps) {
 
     const parseResult = /@language=([_a-z]+)@/.exec(code);
     if (!parseResult) {
-        return <pre className="code">不支持的编程语言</pre>;
+        return <pre className="code">Language not supported</pre>;
     }
 
     const language = languagesMap[parseResult[1]] || 'text';
@@ -66,7 +66,7 @@ function CodeMessage(props: CodeMessageProps) {
                         <span className={Style.codeSize}>{size}</span>
                     </div>
                 </div>
-                <p className={Style.codeViewButton}>查看</p>
+                <p className={Style.codeViewButton}>See</p>
             </div>
             {codeDialog && (
                 <CodeDialogAsync

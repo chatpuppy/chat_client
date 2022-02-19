@@ -21,7 +21,7 @@ import globalStyles from './globalStyles';
 import InviteInfo from './modules/InviteInfo';
 
 /**
- * 获取窗口宽度百分比
+ * Get window innerWidth
  */
 function getWidthPercent() {
     let width = 0.6;
@@ -40,7 +40,7 @@ function getWidthPercent() {
 }
 
 /**
- * 获取窗口高度百分比
+ * Get window innerHeight
  */
 function getHeightPercent() {
     let height = 0.8;
@@ -65,7 +65,7 @@ function App() {
     console.log(`Background image url: ${  backgroundImage}`);
     const $app = useRef(null);
 
-    // 计算窗口高度/宽度百分比
+    // window height/width
     const [width, setWidth] = useState(getWidthPercent());
     const [height, setHeight] = useState(getHeightPercent());
     useEffect(() => {
@@ -78,7 +78,7 @@ function App() {
         inobounce($app.current);
     }, []);
 
-    // 获取底图尺寸
+    // Get size of background image
     const [backgroundWidth, setBackgroundWidth] = useState(window.innerWidth);
     const [backgroundHeight, setBackgroundHeight] = useState(
         window.innerHeight,
@@ -92,7 +92,6 @@ function App() {
         img.src = backgroundImage;
     }, [backgroundImage]);
 
-    // 主体样式
     const style = useMemo(
         () => ({
             backgroundImage: `url(${backgroundImage})`,
@@ -102,7 +101,7 @@ function App() {
         [backgroundImage, backgroundWidth, backgroundHeight],
     );
 
-    // 聊天窗口样式
+    // Chat box theme
     const childStyle = useMemo(
         () => ({
             width: `${width * 100}%`,
@@ -113,7 +112,7 @@ function App() {
         [width, height],
     );
 
-    // 模糊背景样式
+    // Background blur
     const blurStyle = useMemo(
         () => ({
             backgroundPosition: `${(-(1 - width) * window.innerWidth) /

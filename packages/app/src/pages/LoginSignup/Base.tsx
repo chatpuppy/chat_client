@@ -34,7 +34,7 @@ export default function Base({
         if (Actions[jumpPage]) {
             Actions.replace(jumpPage);
         } else {
-            Alert.alert(`跳转 ${jumpPage} 失败`);
+            Alert.alert(`Goto ${jumpPage} fail`);
         }
     }
     return (

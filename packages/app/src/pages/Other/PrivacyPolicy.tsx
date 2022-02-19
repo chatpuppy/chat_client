@@ -36,8 +36,8 @@ function PrivacyPolicy({ visible, onClose }: Props) {
                 </TouchableOpacity>
 
             </Dialog.Description>
-            <Dialog.Button label="不同意" onPress={handleDisagree} />
-            <Dialog.Button label="同意" onPress={handleAgree} />
+            <Dialog.Button label="Disagree" onPress={handleDisagree} />
+            <Dialog.Button label="Agree" onPress={handleAgree} />
         </Dialog.Container>
     );
 }

@@ -83,7 +83,7 @@ function FunctionBar() {
                 if (result?.users?.length || result?.groups?.length) {
                     setSearchResult(result);
                 } else {
-                    Message.warning('没有搜索到内容, 换个关键字试试吧~');
+                    Message.warning('No matching, change another key word');
                     setSearchResult({ users: [], groups: [] });
                 }
             }
@@ -137,7 +137,7 @@ function FunctionBar() {
                     <Avatar size={40} src={groups[i].avatar} />
                     <div>
                         <p>{groups[i].name}</p>
-                        <p>{groups[i].members}人</p>
+                        <p>{groups[i].members}</p>
                     </div>
                 </div>,
             );

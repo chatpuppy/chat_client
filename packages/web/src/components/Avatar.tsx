@@ -4,13 +4,10 @@ import { getOSSFileUrl } from '../utils/uploadFile';
 export const avatarFailback = '/avatar/0.jpg';
 
 type Props = {
-    /** 头像链接 */
-    src: string;
-    /** 展示大小 */
-    size?: number;
-    /** 额外类名 */
+    src: string; // avatar url
+    size?: number; // size
     className?: string;
-    /** 点击事件 */
+
     onClick?: () => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;

@@ -26,7 +26,7 @@ export default function ChatList() {
             messages.length > 0 ? messages[messages.length - 1] : null;
 
         let time = new Date(createTime);
-        let preview = '暂无消息';
+        let preview = 'No messages';
         if (lastMessage) {
             time = new Date(lastMessage.createTime);
             preview =

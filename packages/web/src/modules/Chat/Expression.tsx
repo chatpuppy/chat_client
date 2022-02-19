@@ -37,7 +37,7 @@ function Expression(props: ExpressionProps) {
                 if (result.length !== 0) {
                     setSearchResults(result);
                 } else {
-                    Message.info('没有相关表情, 换个关键字试试吧');
+                    Message.info('Meme not find');
                 }
             }
             toggleSearchLoading(false);
@@ -90,7 +90,7 @@ function Expression(props: ExpressionProps) {
                     className={Style.searchExpressionButton}
                     onClick={handleSearchExpression}
                 >
-                    搜索
+                    Search
                 </Button>
             </div>
             <div
@@ -110,7 +110,7 @@ function Expression(props: ExpressionProps) {
                     <div className={Style.searchImage}>
                         <img
                             src={image}
-                            alt="表情"
+                            alt="meme"
                             key={image}
                             onClick={handleClickExpression}
                         />

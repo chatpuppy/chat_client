@@ -8,7 +8,7 @@ import {
 } from '@chatpuppy/database/redis/initRedis';
 
 /**
- * 拦截被封禁用户的请求
+ * Stop banned users
  */
 export default function seal(socket: Socket) {
     return async ([, , cb]: MiddlewareArgs, next: MiddlewareNext) => {

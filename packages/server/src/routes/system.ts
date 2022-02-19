@@ -22,13 +22,13 @@ import {
     Redis,
 } from '@chatpuppy/database/redis/initRedis';
 
-/** 百度语言合成token */
+/** Baidu void token */
 let baiduToken = '';
-/** 最后一次获取token的时间 */
+
 let lastBaiduTokenTime = Date.now();
 
 /**
- * 搜索用户和群组
+ * Search group and user
  * @param ctx Context
  */
 export async function search(ctx: Context<{ keywords: string }>) {
@@ -62,7 +62,7 @@ export async function search(ctx: Context<{ keywords: string }>) {
 }
 
 /**
- * 搜索表情包, 爬其它站资源
+ * Search memes
  * @param ctx Context
  */
 export async function searchExpression(
@@ -76,7 +76,7 @@ export async function searchExpression(
     const res = await axios({
         method: 'get',
         url: `https://pic.sogou.com/pics/json.jsp?query=${encodeURIComponent(
-            `${keywords} 表情`,
+            `${keywords} meme`,
         )}&st=5&start=0&xml_len=60&callback=callback&reqFrom=wap_result&`,
         headers: {
             accept: '*/*',
@@ -93,7 +93,7 @@ export async function searchExpression(
                 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
         },
     });
-    assert(res.status === 200, '搜索表情包失败, 请重试');
+    assert(res.status === 200, 'Search memes failed');
 
     try {
         const parseDataResult = res.data.match(/callback\((.+)\)/);
@@ -115,14 +115,14 @@ export async function searchExpression(
                 limit === Infinity ? true : index < limit,
             );
     } catch (err) {
-        assert(false, '搜索表情包失败, 数据解析异常');
+        assert(false, 'Search memes failed, data parsing error');
     }
 
     return [];
 }
 
 /**
- * 获取百度语言合成token
+ * Getting baidu voice token
  */
 export async function getBaiduToken() {
     if (baiduToken && Date.now() < lastBaiduTokenTime) {
@@ -132,7 +132,7 @@ export async function getBaiduToken() {
     const res = await axios.get(
         'https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=pw152BzvaSZVwrUf3Z2OHXM6&client_secret=fa273cc704b080e85ad61719abbf7794',
     );
-    assert(res.status === 200, '请求百度token失败');
+    assert(res.status === 200, 'Request baidu token failed');
 
     baiduToken = res.data.access_token;
     lastBaiduTokenTime =
@@ -141,21 +141,21 @@ export async function getBaiduToken() {
 }
 
 /**
- * 封禁用户, 需要管理员权限
+ * Forbidden user, only administrator
  * @param ctx Context
  */
 export async function sealUser(ctx: Context<{ username: string }>) {
     const { username } = ctx.data;
-    assert(username !== '', 'username不能为空');
+    assert(username !== '', 'Usernamce can not be empty');
 
     const user = await User.findOne({ username });
     if (!user) {
-        throw new AssertionError({ message: '用户不存在' });
+        throw new AssertionError({ message: 'User not found' });
     }
 
     const userId = user._id.toString();
     const isSealUser = await Redis.has(getSealUserKey(userId));
-    assert(!isSealUser, '用户已在封禁名单');
+    assert(!isSealUser, 'User is forbidden');
 
     await Redis.set(getSealUserKey(userId), userId, Redis.Minute * 10);
 
@@ -165,7 +165,7 @@ export async function sealUser(ctx: Context<{ username: string }>) {
 }
 
 /**
- * 获取封禁列表, 包含用户封禁和ip封禁, 需要管理员权限
+ * Get banned list, including banned user and banned IP, only administrator
  */
 export async function getSealList() {
     const sealUserList = await getAllSealUser();
@@ -179,12 +179,12 @@ export async function getSealList() {
     return result;
 }
 
-const CantSealLocalIp = '不能封禁内网ip';
-const CantSealSelf = '闲的没事封自己干啥';
-const IpInSealList = 'ip已在封禁名单';
+const CantSealLocalIp = 'Can not ban innter IP address';
+const CantSealSelf = 'Can not ban yourself';
+const IpInSealList = 'IP is banned already';
 
 /**
- * 封禁 ip 地址, 需要管理员权限
+ * Ban IP address, only administrator
  */
 export async function sealIp(ctx: Context<{ ip: string }>) {
     const { ip } = ctx.data;
@@ -202,13 +202,13 @@ export async function sealIp(ctx: Context<{ ip: string }>) {
 }
 
 /**
- * 封禁指定用户的所有在线 ip 地址, 需要管理员权限
+ * Ban all IPs of user, only administrator
  */
 export async function sealUserOnlineIp(ctx: Context<{ userId: string }>) {
     const { userId } = ctx.data;
 
     const user = await User.findOne({ _id: userId });
-    assert(user, '用户不存在');
+    assert(user, 'User not found');
     const sockets = await Socket.find({ user: userId });
     const ipList = [
         ...sockets.map((socket) => socket.ip),
@@ -221,7 +221,6 @@ export async function sealUserOnlineIp(ctx: Context<{ userId: string }>) {
             ip !== ctx.socket.ip,
     );
 
-    // 如果全部 ip 都已经封禁过了, 则直接提示
     const isSealIpList = await Promise.all(
         ipList.map((ip) => Redis.has(getSealIpKey(ip))),
     );

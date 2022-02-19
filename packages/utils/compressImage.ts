@@ -1,8 +1,8 @@
 /**
- * 压缩图片
- * @param image 要压缩的图片
- * @param mimeType mime类型
- * @param quality 质量
+ * Compress image
+ * @param image 
+ * @param mimeType 
+ * @param quality 
  */
 export default function compressImage(
     image: HTMLImageElement,

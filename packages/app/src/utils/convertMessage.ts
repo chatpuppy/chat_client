@@ -8,7 +8,7 @@
 //             message.type = parseMessage.type;
 //             message.content = parseMessage.content;
 //         } catch (err) {
-//             console.warn('解析robot10消息失败', err);
+//             console.warn('parse robot10 failed', err);
 //         }
 //     }
 // }
@@ -43,7 +43,7 @@ function convertSystemMessage(message: Message) {
                 break;
             }
             default: {
-                message.content = '不支持的指令';
+                message.content = 'Unsupported command';
             }
         }
     } else if (message.deleted) {
@@ -60,8 +60,7 @@ function convertSystemMessage(message: Message) {
 }
 
 /**
- * 处理文本消息的html转义字符
- * @param {Object} message 消息
+ * @param {Object} message 
  */
 function convertMessageHtml(message: Message) {
     if (message.type === 'text') {

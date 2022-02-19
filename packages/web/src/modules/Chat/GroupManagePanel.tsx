@@ -74,7 +74,7 @@ function GroupManagePanel(props: GroupManagePanelProps) {
                     'avatar',
                     URL.createObjectURL(image.result),
                 );
-                Message.success('修改群头像成功');
+                Message.success('Update avatar successfully');
             }
         } catch (err) {
             console.error(err);

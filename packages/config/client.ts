@@ -24,13 +24,10 @@ export default {
     tagColorMode: process.env.TagColorMode || 'fixedColor',
 
     /**
-     * 前端监控: https://yueying.effirst.com/index
-     * 值为监控应用id, 为空则不启用监控
+     * front end monitor: https://yueying.effirst.com/index
      */
     frontendMonitorAppId: process.env.FrontendMonitorAppId || '',
 
-    // 禁止用户撤回消息, 不包括管理员, 管理员始终能撤回任何消息
-    // 默认是禁止的
     disableDeleteMessage: process.env.DisableDeleteMessage
         ? process.env.DisableDeleteMessage === 'true'
         : false,

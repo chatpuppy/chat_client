@@ -4,7 +4,7 @@ import { User, Linkman, Message } from '../state/reducer';
 import { ActionTypes } from '../state/action';
 
 /**
- * 获取 redux action
+ * redux action
  */
 export default function useAction() {
     const dispatch = useDispatch();

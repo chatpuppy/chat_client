@@ -24,13 +24,11 @@ const styles = {
 
 type Props = {
     id: string;
-    /** 联系人名称, 没有联系人时会传空 */
     name: string;
-    /** 联系人类型, 没有联系人时会传空 */
     type: string;
     onlineMembersCount?: number;
     isOnline?: boolean;
-    /** 功能按钮点击事件 */
+
     onClickFunction: () => void;
 };
 

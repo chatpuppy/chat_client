@@ -230,7 +230,6 @@ function Sidebar() {
                         )}
                 </div>
 
-                {/* 弹窗 */}
                 {isLogin && selfInfoDialogVisible && (
                     <SelfInfoAsync
                         visible={selfInfoDialogVisible}

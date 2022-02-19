@@ -1,10 +1,10 @@
 import config from '@chatpuppy/config/server';
 import { Socket } from 'socket.io';
 
-export const YOU_ARE_NOT_ADMINISTRATOR = '你不是管理员';
+export const YOU_ARE_NOT_ADMINISTRATOR = 'You are not administrator';
 
 /**
- * 拦截非管理员用户请求需要管理员权限的接口
+ * Ban non-admin user
  */
 export default function isAdmin(socket: Socket) {
     const requireAdminEvent = new Set([

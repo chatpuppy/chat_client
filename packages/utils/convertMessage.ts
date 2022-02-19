@@ -10,7 +10,7 @@ import WuZeiNiangImage from '@chatpuppy/assets/images/admin.png';
 //             message.type = parseMessage.type;
 //             message.content = parseMessage.content;
 //         } catch (err) {
-//             console.warn('解析robot10消息失败', err);
+//             console.warn('parse robot10 failed', err);
 //         }
 //     }
 // }
@@ -34,7 +34,7 @@ function convertSystemMessage(message: any) {
                 break;
             }
             default: {
-                message.content = '不支持的指令';
+                message.content = 'Unsupported command';
             }
         }
     } else if (message.deleted) {

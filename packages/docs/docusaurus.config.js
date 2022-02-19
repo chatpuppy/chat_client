@@ -6,7 +6,7 @@ module.exports = {
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     favicon: 'img/favicon.png',
-    organizationName: 'yinxin630', // Usually your GitHub org/user name.
+    organizationName: 'chatpuppy', // Usually your GitHub org/user name.
     projectName: 'chatpuppy', // Usually your repo name.
     themeConfig: {
         navbar: {
@@ -81,7 +81,7 @@ module.exports = {
                     ],
                 },
             ],
-            copyright: `Copyright © 2015 - ${new Date().getFullYear()} developed by 碎碎酱`,
+            copyright: `Copyright © 2021 - ${new Date().getFullYear()} developed by ChatPuppy`,
         },
         colorMode: {
             disableSwitch: true,

@@ -17,12 +17,12 @@ const button = css`
 `;
 
 type Props = {
-    /** 类型: primary / danger */
+    /** type: primary / danger */
     type?: string;
-    /** 按钮文本 */
+    /** Button text */
     children: string;
     className?: string;
-    /** 点击事件 */
+    /** click event */
     onClick?: () => void;
 };
 

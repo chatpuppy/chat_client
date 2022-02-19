@@ -11,7 +11,7 @@ export function formatLinkmanName(linkman: Linkman) {
         (linkman as Friend).isOnline !== undefined
     ) {
         return `${(linkman as Friend).name} (${
-            (linkman as Friend).isOnline ? '在线' : '离线'
+            (linkman as Friend).isOnline ? 'online' : 'offline'
         })`;
     }
     return linkman.name;

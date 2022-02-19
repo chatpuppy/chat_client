@@ -39,7 +39,7 @@ export async function doctor() {
     const indexFile = fs.readFileSync(indexFilePath);
     if (!indexFile) {
         console.log(chalk.red('Homepage not exists'));
-    } else if (indexFile.toString().includes('默认首页')) {
+    } else if (indexFile.toString().includes('Default homepage')) {
         console.log(
             chalk.red(
                 'Homepage is default. Please build web client by [yarn build:web]',

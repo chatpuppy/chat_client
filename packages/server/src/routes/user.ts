@@ -22,22 +22,19 @@ import {
 
 const { isValid } = Types.ObjectId;
 
-/** 一天时间 */
+/** a day */
 const OneDay = 1000 * 60 * 60 * 24;
 
 interface Environment {
-    /** 客户端系统 */
     os: string;
-    /** 客户端浏览器 */
     browser: string;
-    /** 客户端环境信息 */
     environment: string;
 }
 
 /**
- * 生成jwt token
- * @param user 用户
- * @param environment 客户端环境信息
+ * generate jwt token
+ * @param user 
+ * @param environment 
  */
 function generateToken(user: string, environment: string) {
     return jwt.encode(
@@ -51,11 +48,11 @@ function generateToken(user: string, environment: string) {
 }
 
 /**
- * 处理注册时间不满24小时的用户
- * @param user 用户
+ * Handle new user(less than 24hours)
+ * @param user 
  */
 async function handleNewUser(user: UserDocument, ip = '') {
-    // 将用户添加到新用户列表, 24小时后删除
+    // Add user into new user list, delete 24 hours later
     if (Date.now() - user.createTime.getTime() < OneDay) {
         const userId = user._id.toString();
         await Redis.set(getNewUserKey(userId), userId, Redis.Day);
@@ -79,7 +76,7 @@ async function getUserNotificationTokens(user: UserDocument) {
 }
 
 /**
- * 注册新用户
+ * Register
  * @param ctx Context
  */
 export async function register(
@@ -168,7 +165,6 @@ export async function register(
 }
 
 /**
- * 账密登录
  * @param ctx Context
  */
 export async function login(
@@ -241,7 +237,6 @@ export async function login(
 }
 
 /**
- * token登录
  * @param ctx Context
  */
 export async function loginByToken(
@@ -325,7 +320,6 @@ export async function loginByToken(
 }
 
 /**
- * 游客登录, 只能获取默认群组信息
  * @param ctx Context
  */
 export async function guest(ctx: Context<Environment>) {
@@ -373,7 +367,6 @@ export async function guest(ctx: Context<Environment>) {
 }
 
 /**
- * 修改用户头像
  * @param ctx Context
  */
 export async function changeAvatar(ctx: Context<{ avatar: string }>) {
@@ -391,7 +384,6 @@ export async function changeAvatar(ctx: Context<{ avatar: string }>) {
 }
 
 /**
- * 添加好友, 单向添加
  * @param ctx Context
  */
 export async function addFriend(ctx: Context<{ userId: string }>) {
@@ -422,7 +414,6 @@ export async function addFriend(ctx: Context<{ userId: string }>) {
 }
 
 /**
- * 删除好友, 单向删除
  * @param ctx Context
  */
 export async function deleteFriend(ctx: Context<{ userId: string }>) {
@@ -439,7 +430,6 @@ export async function deleteFriend(ctx: Context<{ userId: string }>) {
 }
 
 /**
- * 修改用户密码
  * @param ctx Context
  */
 export async function changePassword(
@@ -468,7 +458,6 @@ export async function changePassword(
 }
 
 /**
- * 修改用户名
  * @param ctx Context
  */
 export async function changeUsername(ctx: Context<{ username: string }>) {
@@ -492,7 +481,6 @@ export async function changeUsername(ctx: Context<{ username: string }>) {
 }
 
 /**
- * 重置用户密码, 需要管理员权限
  * @param ctx Context
  */
 export async function resetUserPassword(ctx: Context<{ username: string }>) {
@@ -518,7 +506,6 @@ export async function resetUserPassword(ctx: Context<{ username: string }>) {
 }
 
 /**
- * 更新用户标签, 需要管理员权限
  * @param ctx Context
  */
 export async function setUserTag(
@@ -551,9 +538,6 @@ export async function setUserTag(
     };
 }
 
-/**
- * 获取指定在线用户 ip
- */
 export async function getUserIps(
     ctx: Context<{ userId: string }>,
 ): Promise<string[]> {

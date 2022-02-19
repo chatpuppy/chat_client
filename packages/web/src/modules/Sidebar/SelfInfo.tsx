@@ -76,11 +76,9 @@ function SelfInfo(props: SelfInfoProps) {
             return Message.error('Update avatar failed, max 1.5M');
         }
 
-        // gif头像不需要裁剪
         if (file.ext === 'gif') {
             uploadAvatar(file.result as Blob, file.ext);
         } else {
-            // 显示头像裁剪
             const reader = new FileReader();
             reader.readAsDataURL(file.result as Blob);
             reader.onloadend = () => {
@@ -122,7 +120,7 @@ function SelfInfo(props: SelfInfoProps) {
     const [username, setUsername] = useState('');
 
     /**
-     * 修改用户名
+     * Change username
      */
     async function handleChangeUsername() {
         const isSuccess = await changeUsername(username);
@@ -133,9 +131,6 @@ function SelfInfo(props: SelfInfoProps) {
     }
 
     function handleCloseDialog(event: any) {
-        /**
-         * 点击关闭按钮, 或者在非图片裁剪时点击蒙层, 才能关闭弹窗
-         */
         if (event.target.className === 'rc-dialog-close-x' || !cropper.enable) {
             onClose();
         }

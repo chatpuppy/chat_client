@@ -19,7 +19,7 @@ function GroupProfile() {
     }
 
     function ShowEnvironment(environment: string) {
-        Alert.alert('设备信息', environment);
+        Alert.alert('Device', environment);
     }
 
     async function handleLeaveGroup() {
@@ -42,13 +42,13 @@ function GroupProfile() {
         <PageContainer>
             <ScrollView style={styles.container}>
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>功能</Text>
+                    <Text style={styles.sectionTitle}>Function</Text>
                     <Button danger onPress={handleLeaveGroup}>
-                        <Text>{isGroupCreator ? '解散群组' : '退出群组'}</Text>
+                        <Text>{isGroupCreator ? 'Dismiss group' : 'Leave group'}</Text>
                     </Button>
                 </View>
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>在线成员</Text>
+                    <Text style={styles.sectionTitle}>Online</Text>
                     {linkman.members.map((member) => (
                         <View key={member._id} style={styles.member}>
                             <Avatar src={member.user.avatar} size={24} />

@@ -142,7 +142,6 @@ socket.on('message', async (message: any) => {
             title = `${message.from.username} talk to you:`;
         }
     } else {
-        // 联系人不存在并且是自己发的消息, 不创建新联系人
         if (isSelfMessage) {
             return;
         }
@@ -162,7 +161,7 @@ socket.on('message', async (message: any) => {
                 focus: false,
             },
         });
-        title = `${message.from.username} 对你说:`;
+        title = `${message.from.username}:`;
 
         const messages = await getLinkmanHistoryMessages(newLinkman._id, 0);
         if (messages) {
@@ -208,8 +207,8 @@ socket.on('message', async (message: any) => {
             const from =
                 linkman && linkman.type === 'group'
                     ? `${message.from.username}${
-                        linkman.name === prevName ? '' : `在${linkman.name}`
-                    }说`
+                        linkman.name === prevName ? '' : `${linkman.name}`
+                    } say `
                     : `${message.from.username} talk to you`;
             if (text) {
                 voice.push(

@@ -2,8 +2,8 @@ const AvatarCount = 22;
 const publicPath = process.env.PublicPath || '/';
 
 /**
- * 获取随机头像
- * ======
+ * Random avatar
+ * ######
  */
 export default function getRandomAvatar() {
     const number = Math.floor(Math.random() * (AvatarCount + 1));
@@ -11,7 +11,7 @@ export default function getRandomAvatar() {
 }
 
 /**
- * 获取默认头像
+ * Default avatar
  */
 export function getDefaultAvatar() {
     return `${publicPath}avatar/0.jpg`;

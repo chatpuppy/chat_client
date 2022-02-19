@@ -1,17 +1,12 @@
-/** 封禁后提示文案 */
-export const SEAL_TEXT = '你已经被关进小黑屋中, 请反思后再试';
+export const SEAL_TEXT = 'You have been banned';
 
-/** 封禁用户释放时间 */
-export const SEAL_USER_TIMEOUT = 1000 * 60 * 10; // 10分钟
+export const SEAL_USER_TIMEOUT = 1000 * 60 * 10; // Ban user timeout, 10 minutes
 
-/** 封禁ip释放时间 */
-export const SEAL_IP_TIMEOUT = 1000 * 60 * 60 * 6; // 6小时
+export const SEAL_IP_TIMEOUT = 1000 * 60 * 60 * 6; // Ban IP timeout, 6 hours
 
-/** 透明图 */
 export const TRANSPARENT_IMAGE =
     'data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==';
 
-/** 加密salt位数 */
 export const SALT_ROUNDS = 10;
 
 export const MB = 1024 * 1024;

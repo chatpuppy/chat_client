@@ -11,7 +11,7 @@ import Message from '@chatpuppy/database/mongoose/models/message';
 const { isValid } = Types.ObjectId;
 
 /**
- * 获取指定群组的在线用户辅助方法
+ * Get group online users helper
  * @param group 
  */
 async function getGroupOnlineMembersHelper(group: GroupDocument) {
@@ -64,7 +64,7 @@ export async function createGroup(ctx: Context<{ name: string }>) {
         } as GroupDocument);
     } catch (err) {
         if (err.name === 'ValidationError') {
-            return '群组名包含不支持的字符或者长度超过限制';
+            return 'Group name includes unsupported characters, or too long';
         }
         throw err;
     }
@@ -80,7 +80,7 @@ export async function createGroup(ctx: Context<{ name: string }>) {
 }
 
 /**
- * 加入群组
+ * Join group
  * @param ctx Context
  */
 export async function joinGroup(ctx: Context<{ groupId: string }>) {
@@ -155,7 +155,7 @@ export async function leaveGroup(ctx: Context<{ groupId: string }>) {
 const GroupOnlineMembersCacheExpireTime = 1000 * 60;
 
 /**
- * 获取群组在线成员
+ * Get group online members
  */
 function getGroupOnlineMembersWrapperV2() {
     const cache: Record<
@@ -217,8 +217,8 @@ export async function getGroupOnlineMembers(
 }
 
 /**
- * 获取默认群组的在线成员
- * 无需登录态
+ * Get default group online members
+ * No need login
  */
 function getDefaultGroupOnlineMembersWrapper() {
     let cache: any = null;
@@ -240,7 +240,7 @@ function getDefaultGroupOnlineMembersWrapper() {
 export const getDefaultGroupOnlineMembers = getDefaultGroupOnlineMembersWrapper();
 
 /**
- * 修改群头像, 只有群创建者有权限
+ * Update group avatar, only group creater can update it
  * @param ctx Context
  */
 export async function changeGroupAvatar(
@@ -264,7 +264,7 @@ export async function changeGroupAvatar(
 }
 
 /**
- * 修改群组头像, 只有群创建者有权限
+ * Update group name, only group creater can update it
  * @param ctx Context
  */
 export async function changeGroupName(
@@ -295,7 +295,7 @@ export async function changeGroupName(
 }
 
 /**
- * 删除群组, 只有群创建者有权限
+ * Delete group, only group creater can update it
  * @param ctx Context
  */
 export async function deleteGroup(ctx: Context<{ groupId: string }>) {

@@ -1,7 +1,7 @@
 import config from '@chatpuppy/config/client';
 import themes from './themes';
 
-/** LocalStorage存储的键值 */
+/** LocalStorage key format */
 export enum LocalStorageKey {
     Theme = 'theme',
     PrimaryColor = 'primaryColor',
@@ -18,9 +18,9 @@ export enum LocalStorageKey {
 }
 
 /**
- * 获取LocalStorage中的文本值
- * @param key 键值
- * @param defaultValue 默认值
+ * Get LocalStorage value by key
+ * @param key 
+ * @param defaultValue 
  */
 function getTextValue(key: string, defaultValue: string) {
     const value = window.localStorage.getItem(key);
@@ -28,9 +28,9 @@ function getTextValue(key: string, defaultValue: string) {
 }
 
 /**
- * 获取LocalStorage中的boolean值
- * @param key 键值
- * @param defaultValue 默认值
+ * Get LocalStorage value of boolean type
+ * @param key 
+ * @param defaultValue 
  */
 function getSwitchValue(key: string, defaultValue: boolean = true) {
     const value = window.localStorage.getItem(key);
@@ -38,7 +38,7 @@ function getSwitchValue(key: string, defaultValue: boolean = true) {
 }
 
 /**
- * 获取LocalStorage值
+ * Get LocalStorage data
  */
 export default function getData() {
     const theme = getTextValue(LocalStorageKey.Theme, config.defaultTheme);

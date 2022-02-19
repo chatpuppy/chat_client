@@ -12,14 +12,13 @@ import App from './App';
 import store from './state/store';
 import getData from './localStorage';
 
-// 注册 Service Worker
+// Register Service Worker
 if (window.location.protocol === 'https:' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register(`/service-worker.js`);
     });
 }
 
-// 如果配置了前端监控, 动态加载并启动监控
 if (config.frontendMonitorAppId) {
     // @ts-ignore
     import(/* webpackChunkName: "frontend-monitor" */ 'wpk-reporter').then(
@@ -39,11 +38,11 @@ if (config.frontendMonitorAppId) {
     );
 }
 
-// 更新 css variable
+// update css variable
 const { primaryColor, primaryTextColor } = getData();
 setCssVariable(primaryColor, primaryTextColor);
 
-// 请求 Notification 授权
+// Get Notification auth
 if (
     window.Notification &&
     (window.Notification.permission === 'default' ||

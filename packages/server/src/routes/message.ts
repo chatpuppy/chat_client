@@ -28,15 +28,12 @@ import client from '../../../config/client';
 
 const { isValid } = Types.ObjectId;
 
-/** 初次获取历史消息数 */
 const FirstTimeMessagesCount = 15;
-/** 每次调用接口获取的历史消息数 */
 const EachFetchMessagesCount = 30;
 
 const OneYear = 365 * 24 * 3600 * 1000;
 
-/** 石头剪刀布, 用于随机生成结果 */
-const RPS = ['石头', '剪刀', '布'];
+const RPS = ['rock', 'scissors', 'paper'];
 
 async function pushNotification(
     notificationTokens: string[],
@@ -75,9 +72,9 @@ async function pushNotification(
 }
 
 /**
- * 发送消息
- * 如果是发送给群组, to是群组id
- * 如果是发送给个人, to是俩人id按大小序拼接后的值
+ * Sending messages
+ * If sending to group, to is group id
+ * If sending to user, to is combination of 2 sorted userIds
  * @param ctx Context
  */
 export async function sendMessage(ctx: Context<SendMessageData>) {
@@ -99,23 +96,23 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
 
     const { to, content } = ctx.data;
     let { type } = ctx.data;
-    assert(to, 'to不能为空');
+    assert(to, 'to cannot be empty');
 
     let toGroup: GroupDocument | null = null;
     let toUser: UserDocument | null = null;
     if (isValid(to)) {
         toGroup = await Group.findOne({ _id: to });
-        assert(toGroup, '群组不存在');
+        assert(toGroup, 'Group not found');
     } else {
         const userId = to.replace(ctx.socket.user.toString(), '');
-        assert(isValid(userId), '无效的用户ID');
+        assert(isValid(userId), 'Invalid user id');
         toUser = await User.findOne({ _id: userId });
-        assert(toUser, '用户不存在');
+        assert(toUser, 'User not found');
     }
 
     let messageContent = content;
     if (type === 'text') {
-        assert(messageContent.length <= 2048, '消息长度过长');
+        assert(messageContent.length <= 2048, 'Message length too long');
 
         const rollRegex = /^-roll( ([0-9]*))?$/;
         if (rollRegex.test(messageContent)) {
@@ -143,16 +140,16 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
         messageContent = xss(messageContent);
     } else if (type === 'file') {
         const file: { size: number } = JSON.parse(content);
-        assert(file.size < client.maxFileSize, '要发送的文件过大');
+        assert(file.size < client.maxFileSize, `File size too big, max: ${  client.maxFileSize}`);
         messageContent = content;
     } else if (type === 'inviteV2') {
         const shareTargetGroup = await Group.findOne({ _id: content });
         if (!shareTargetGroup) {
-            throw new AssertionError({ message: '目标群组不存在' });
+            throw new AssertionError({ message: 'Target group not found' });
         }
         const user = await User.findOne({ _id: ctx.socket.user });
         if (!user) {
-            throw new AssertionError({ message: '用户不存在' });
+            throw new AssertionError({ message: 'User not found' });
         }
         messageContent = JSON.stringify({
             inviter: user._id,
@@ -165,7 +162,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
         { username: 1, avatar: 1, tag: 1 },
     );
     if (!user) {
-        throw new AssertionError({ message: '用户不存在' });
+        throw new AssertionError({ message: 'User not found' });
     }
 
     const message = await Message.create({
@@ -241,14 +238,14 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
 }
 
 /**
- * 获取一组联系人的最后历史消息
+ * Get latest history message
  * @param ctx Context
  */
 export async function getLinkmansLastMessages(
     ctx: Context<{ linkmans: string[] }>,
 ) {
     const { linkmans } = ctx.data;
-    assert(Array.isArray(linkmans), '参数linkmans应该是Array');
+    assert(Array.isArray(linkmans), 'linkmans should be Array');
 
     const promises = linkmans.map(async (linkmanId) => {
         const messages = await Message.find(
@@ -348,7 +345,7 @@ export async function getLinkmansLastMessagesV2(
 }
 
 /**
- * 获取联系人的历史消息
+ * Get contract's history messages
  * @param ctx Context
  */
 export async function getLinkmanHistoryMessages(
@@ -376,7 +373,7 @@ export async function getLinkmanHistoryMessages(
 }
 
 /**
- * 获取默认群组的历史消息
+ * Get default group history messages
  * @param ctx Context
  */
 export async function getDefaultGroupHistoryMessages(
@@ -386,7 +383,7 @@ export async function getDefaultGroupHistoryMessages(
 
     const group = await Group.findOne({ isDefault: true });
     if (!group) {
-        throw new AssertionError({ message: '默认群组不存在' });
+        throw new AssertionError({ message: 'Default group not found' });
     }
     const messages = await Message.find(
         { to: group._id },
@@ -408,25 +405,25 @@ export async function getDefaultGroupHistoryMessages(
 }
 
 /**
- * 删除消息, 需要管理员权限
+ * Delete messages, only administrator
  */
 export async function deleteMessage(ctx: Context<{ messageId: string }>) {
     assert(
         !client.disableDeleteMessage || ctx.socket.isAdmin,
-        '已禁止撤回消息',
+        'Delete messages forbidden',
     );
 
     const { messageId } = ctx.data;
-    assert(messageId, 'messageId不能为空');
+    assert(messageId, 'messageId can not be empty');
 
     const message = await Message.findOne({ _id: messageId });
     if (!message) {
-        throw new AssertionError({ message: '消息不存在' });
+        throw new AssertionError({ message: 'Message not found' });
     }
     assert(
         ctx.socket.isAdmin ||
             message.from.toString() === ctx.socket.user.toString(),
-        '只能撤回本人的消息',
+        'Only revoke owners messages',
     );
 
     if (ctx.socket.isAdmin) {
@@ -437,7 +434,7 @@ export async function deleteMessage(ctx: Context<{ messageId: string }>) {
     }
 
     /**
-     * 广播删除消息通知, 区分群消息和私聊消息
+     * Broadcasting deleting message
      */
     const messageName = 'deleteMessage';
     const messageData = {
@@ -446,10 +443,10 @@ export async function deleteMessage(ctx: Context<{ messageId: string }>) {
         isAdmin: ctx.socket.isAdmin,
     };
     if (isValid(message.to)) {
-        // 群消息
+        // Group messages
         ctx.socket.emit(message.to.toString(), messageName, messageData);
     } else {
-        // 私聊消息
+        // Private messages
         const targetUserId = message.to.replace(ctx.socket.user.toString(), '');
         const targetSockets = await Socket.find({ user: targetUserId });
         const targetSocketIdList =
