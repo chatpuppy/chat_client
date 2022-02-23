@@ -155,7 +155,7 @@ function Sidebar() {
                     >
                         <a 
                             className={Style.linkButton}
-                            href="https://www.chatpuppy.com/box"
+                            href="https://www.chatpuppy.com/mint"
                             target="_black"
                             rel="noopener noreferrer"
                         >
