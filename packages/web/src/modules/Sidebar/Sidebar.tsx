@@ -128,7 +128,8 @@ function Sidebar() {
                             />
                         </a>
                     </Tooltip>
-                    <Tooltip 
+                    {/* ###### */}
+                    {/* <Tooltip 
                         placement="right"
                         mouseEnterDelay={0.3}
                         overlay={<span>Grand</span>}
@@ -186,7 +187,7 @@ function Sidebar() {
                                 iconSize={26}
                             />
                         </a>
-                    </Tooltip>
+                    </Tooltip> */}
                     <Tooltip
                         placement="right"
                         mouseEnterDelay={0.3}
