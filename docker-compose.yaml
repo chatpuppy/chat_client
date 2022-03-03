@@ -7,11 +7,11 @@ services:
   redis:
     image: redis
     restart: always
-  chatpuppy:
+  fiora:
     build: .
     restart: always
     ports:
       - "9200:9200"
     environment:
-      - Database=mongodb://mongodb/chatpuppy
+      - Database=mongodb://mongodb/fiora
       - RedisHost=redis

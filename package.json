@@ -1,5 +1,5 @@
 {
-  "name": "chatpuppy",
+  "name": "fiora",
   "version": "1.0.0",
   "description": "An interesting chat application power by socket.io, koa, mongodb and react",
   "license": "MIT",
@@ -8,6 +8,7 @@
     "start": "npx lerna run start --stream",
     "dev:server": "npx lerna run dev:server --stream",
     "dev:web": "npx lerna run dev:web --stream",
+    "dev:gun": "npx lerna run dev:gun --stream",
     "build:web": "npx lerna run build:web --stream",
     "dev:app": "cd packages/app && yarn dev:app && cd ../../",
     "build:android": "cd packages/app && yarn build:android && cd ../../",
@@ -25,12 +26,12 @@
     "node": ">= 14"
   },
   "author": {
-    "name": "ChatPuppy",
-    "email": "support@chatpuppy.com"
+    "name": "碎碎酱",
+    "email": "yinxin630@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/chatpuppy"
+    "url": "https://github.com/yinxin630/fiora"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -55,6 +56,8 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
-    "commander": "^8.0.0"
+    "commander": "^8.0.0",
+    "gun": "^0.2020.1235",
+    "gun-schema": "^0.1.0"
   }
 }

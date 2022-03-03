@@ -1,6 +1,6 @@
 FROM node:14
 
-WORKDIR /usr/app/chatpuppy
+WORKDIR /usr/app/fiora
 
 COPY packages ./packages
 COPY package.json tsconfig.json yarn.lock lerna.json ./
