@@ -8,12 +8,13 @@ import { Server } from 'socket.io';
 import logger from '@chatpuppy/utils/logger';
 import config from '@chatpuppy/config/server';
 import { getSocketIp } from '@chatpuppy/utils/socket';
-import SocketModel, {
-    SocketDocument,
-} from '@chatpuppy/database/mongoose/models/socket';
+// import SocketModel, {
+//     SocketDocument,
+// } from '@chatpuppy/database/mongoose/models/socket';
+import SocketModel, { SocketDocument } from '@chatpuppy/database/gundb/models/socket'
 
-import seal from './middlewares/seal';
-import frequency from './middlewares/frequency';
+// import seal from './middlewares/seal';
+// import frequency from './middlewares/frequency';
 import isLogin from './middlewares/isLogin';
 import isAdmin from './middlewares/isAdmin';
 
@@ -62,6 +63,7 @@ app.use(
     }),
 );
 
+
 const routes: Routes = {
     ...userRoutes,
     ...groupRoutes,
@@ -79,22 +81,27 @@ Object.keys(routes).forEach((key) => {
 io.on('connection', async (socket) => {
     const ip = getSocketIp(socket);
     logger.trace(`connection ${socket.id} ${ip}`);
+    // await SocketModel.create({
+    //     id: socket.id,
+    //     ip,
+    // } as SocketDocument);
     await SocketModel.create({
         id: socket.id,
-        ip,
-    } as SocketDocument);
+        ip
+    } as SocketDocument)
 
     socket.on('disconnect', async () => {
         logger.trace(`disconnect ${socket.id}`);
-        await SocketModel.deleteOne({
-            id: socket.id,
-        });
+        await SocketModel.deleteOne(socket.id)
+        // await SocketModel.deleteOne({
+        //     id: socket.id,
+        // });
     });
 
-    socket.use(seal(socket));
+    // socket.use(seal(socket));
     socket.use(isLogin(socket));
     socket.use(isAdmin(socket));
-    socket.use(frequency(socket));
+    // socket.use(frequency(socket));
     socket.use(registerRoutes(socket, routes));
 });
 

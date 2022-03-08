@@ -15,13 +15,18 @@ const FriendSchema = new Schema({
 });
 
 export interface FriendDocument extends Document {
+    /** Source user id */
     from: string;
+    /** Target user id */
     to: string;
+    /** createTime */
     createTime: Date;
 }
 
 /**
  * Friend Model
+ * Friend information
+ * Friendship is one-way.
  */
 const Friend = model<FriendDocument>('Friend', FriendSchema);
 

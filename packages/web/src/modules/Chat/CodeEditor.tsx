@@ -51,7 +51,9 @@ function CodeEditor(props: CodeEditorProps) {
 
     useEffect(() => {
         (async () => {
+            // Dynamic load language pack
             if (visible && !loadedLanguage[language]) {
+            
                 switch (language) {
                     case 'javascript': {
                         // @ts-ignore

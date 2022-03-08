@@ -4,8 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import detect from 'detect-port';
 import server from '@chatpuppy/config/server';
-import initRedis from '@chatpuppy/database/redis/initRedis';
-import initMongoDB from '@chatpuppy/database/mongoose/initMongoDB';
+// import initRedis from '@fiora/database/redis/initRedis';
 
 export async function doctor() {
     console.log(chalk.yellow('===== Run ChatPuppy Doctor ====='));
@@ -15,15 +14,13 @@ export async function doctor() {
         chalk.green(`node ${nodeVersion.slice(0, nodeVersion.length - 1)}`),
     );
 
-    await initMongoDB();
-    console.log(chalk.green('MongoDB is OK'));
 
-    await (async () =>
-        new Promise((resolve) => {
-            const redis = initRedis();
-            redis.on('connect', resolve);
-        }))();
-    console.log(chalk.green('Redis is OK'));
+    // await (async () =>
+    //     new Promise((resolve) => {
+    //         const redis = initRedis();
+    //         redis.on('connect', resolve);
+    //     }))();
+    // console.log(chalk.green('Redis is OK'));
 
     const avaliablePort = await detect(server.port);
     if (avaliablePort === server.port) {

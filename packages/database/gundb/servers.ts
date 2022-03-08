@@ -1,0 +1,1 @@
+export const gunServers = ['http://localhost:9200/gun'] as const

@@ -12,13 +12,13 @@ type Themes = {
 
 const themes: Themes = {
     default: {
-        primaryColor: '32, 32, 32',
-        primaryTextColor: '255, 255, 255',
+        primaryColor: '74, 144, 226',
+        primaryTextColor: '247, 247, 247',
         backgroundImage: BackgroundImage,
         aero: false,
     },
     cool: {
-        primaryColor: '32,32,32',
+        primaryColor: '5,159,149',
         primaryTextColor: '255, 255, 255',
         backgroundImage: BackgroundCoolImage,
         aero: false,

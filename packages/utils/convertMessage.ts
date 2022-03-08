@@ -26,11 +26,11 @@ function convertSystemMessage(message: any) {
         const content = JSON.parse(message.content);
         switch (content.command) {
             case 'roll': {
-                message.content = `掷出了${content.value}点 (上限${content.top}点)`;
+                message.content = `Throw out${content.value} Point (upper limit${content.top}Point)`;
                 break;
             }
             case 'rps': {
-                message.content = `使出了 ${content.value}`;
+                message.content = `Make out ${content.value}`;
                 break;
             }
             default: {

@@ -1,4 +1,4 @@
-const AvatarCount = 22;
+const AvatarCount = 15;
 const publicPath = process.env.PublicPath || '/';
 
 /**
@@ -6,7 +6,7 @@ const publicPath = process.env.PublicPath || '/';
  * ######
  */
 export default function getRandomAvatar() {
-    const number = Math.floor(Math.random() * (AvatarCount + 1));
+    const number = Math.floor(Math.random() * AvatarCount);
     return `${publicPath}avatar/${number}.jpg`;
 }
 

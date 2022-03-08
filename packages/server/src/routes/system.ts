@@ -8,23 +8,11 @@ import OSS, { STS } from 'ali-oss';
 
 import config from '@chatpuppy/config/server';
 import logger from '@chatpuppy/utils/logger';
-import User from '@chatpuppy/database/mongoose/models/user';
-import Group from '@chatpuppy/database/mongoose/models/group';
+import User from '@chatpuppy/database/gundb/models/user';
+import Group from '@chatpuppy/database/gundb/models/group';
 
-import Socket from '@chatpuppy/database/mongoose/models/socket';
-import {
-    getAllSealIp,
-    getAllSealUser,
-    getSealIpKey,
-    getSealUserKey,
-    DisableSendMessageKey,
-    DisableNewUserSendMessageKey,
-    Redis,
-} from '@chatpuppy/database/redis/initRedis';
-
-/** Baidu void token */
+/** Baidu Voice token */
 let baiduToken = '';
-
 let lastBaiduTokenTime = Date.now();
 
 /**
@@ -41,26 +29,19 @@ export async function search(ctx: Context<{ keywords: string }>) {
     }
 
     const escapedKeywords = RegexEscape(keywords);
-    const users = await User.find(
-        { username: { $regex: escapedKeywords } },
-        { avatar: 1, username: 1 },
-    );
-    const groups = await Group.find(
-        { name: { $regex: escapedKeywords } },
-        { avatar: 1, name: 1, members: 1 },
-    );
+    const users = await User.getUserName(escapedKeywords);
+    const groups = await Group.getGroupName(escapedKeywords);
 
     return {
         users,
         groups: groups.map((group) => ({
-            _id: group._id,
+            _id: group.uuid,
             avatar: group.avatar,
             name: group.name,
             members: group.members.length,
         })),
     };
 }
-
 /**
  * Search memes
  * @param ctx Context
@@ -138,103 +119,6 @@ export async function getBaiduToken() {
     lastBaiduTokenTime =
         Date.now() + (res.data.expires_in - 60 * 60 * 24) * 1000;
     return { token: baiduToken };
-}
-
-/**
- * Forbidden user, only administrator
- * @param ctx Context
- */
-export async function sealUser(ctx: Context<{ username: string }>) {
-    const { username } = ctx.data;
-    assert(username !== '', 'Usernamce can not be empty');
-
-    const user = await User.findOne({ username });
-    if (!user) {
-        throw new AssertionError({ message: 'User not found' });
-    }
-
-    const userId = user._id.toString();
-    const isSealUser = await Redis.has(getSealUserKey(userId));
-    assert(!isSealUser, 'User is forbidden');
-
-    await Redis.set(getSealUserKey(userId), userId, Redis.Minute * 10);
-
-    return {
-        msg: 'ok',
-    };
-}
-
-/**
- * Get banned list, including banned user and banned IP, only administrator
- */
-export async function getSealList() {
-    const sealUserList = await getAllSealUser();
-    const sealIpList = await getAllSealIp();
-    const users = await User.find({ _id: { $in: sealUserList } });
-
-    const result = {
-        users: users.map((user) => user.username),
-        ips: sealIpList,
-    };
-    return result;
-}
-
-const CantSealLocalIp = 'Can not ban innter IP address';
-const CantSealSelf = 'Can not ban yourself';
-const IpInSealList = 'IP is banned already';
-
-/**
- * Ban IP address, only administrator
- */
-export async function sealIp(ctx: Context<{ ip: string }>) {
-    const { ip } = ctx.data;
-    assert(ip !== '::1' && ip !== '127.0.0.1', CantSealLocalIp);
-    assert(ip !== ctx.socket.ip, CantSealSelf);
-
-    const isSealIp = await Redis.has(getSealIpKey(ip));
-    assert(!isSealIp, IpInSealList);
-
-    await Redis.set(getSealIpKey(ip), ip, Redis.Hour * 6);
-
-    return {
-        msg: 'ok',
-    };
-}
-
-/**
- * Ban all IPs of user, only administrator
- */
-export async function sealUserOnlineIp(ctx: Context<{ userId: string }>) {
-    const { userId } = ctx.data;
-
-    const user = await User.findOne({ _id: userId });
-    assert(user, 'User not found');
-    const sockets = await Socket.find({ user: userId });
-    const ipList = [
-        ...sockets.map((socket) => socket.ip),
-        user.lastLoginIp,
-    ].filter(
-        (ip) =>
-            ip !== '' &&
-            ip !== '::1' &&
-            ip !== '127.0.0.1' &&
-            ip !== ctx.socket.ip,
-    );
-
-    const isSealIpList = await Promise.all(
-        ipList.map((ip) => Redis.has(getSealIpKey(ip))),
-    );
-    assert(!isSealIpList.every((isSealIp) => isSealIp), IpInSealList);
-
-    await Promise.all(
-        ipList.map(async (ip) => {
-            await Redis.set(getSealIpKey(ip), ip, Redis.Hour * 6);
-        }),
-    );
-
-    return {
-        msg: 'ok',
-    };
 }
 
 type STSResult = {
@@ -326,30 +210,4 @@ export async function uploadFile(
         logger.error('[uploadFile]', typedErr.message);
         return `Upload file fail: ${typedErr.message}`;
     }
-}
-
-export async function toggleSendMessage(ctx: Context<{ enable: boolean }>) {
-    const { enable } = ctx.data;
-    await Redis.set(DisableSendMessageKey, (!enable).toString());
-    return {
-        msg: 'ok',
-    };
-}
-
-export async function toggleNewUserSendMessage(
-    ctx: Context<{ enable: boolean }>,
-) {
-    const { enable } = ctx.data;
-    await Redis.set(DisableNewUserSendMessageKey, (!enable).toString());
-    return {
-        msg: 'ok',
-    };
-}
-
-export async function getSystemConfig() {
-    return {
-        disableSendMessage: (await Redis.get(DisableSendMessageKey)) === 'true',
-        disableNewUserSendMessage:
-            (await Redis.get(DisableNewUserSendMessageKey)) === 'true',
-    };
 }

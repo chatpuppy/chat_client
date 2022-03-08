@@ -9,7 +9,7 @@ const SocketSchema = new Schema({
         index: true,
     },
     user: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'User',
     },
     ip: String,
@@ -39,6 +39,7 @@ export interface SocketDocument extends Document {
 
 /**
  * Socket Model
+ * 客户端socket连接信息
  */
 const Socket = model<SocketDocument>('Socket', SocketSchema);
 

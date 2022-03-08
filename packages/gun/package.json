@@ -1,0 +1,20 @@
+{
+  "name": "@chatpuppy/gun",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=production DOTENV_CONFIG_PATH=../../.env ts-node -r dotenv/config --transpile-only src/main.ts",
+    "dev:gun": "ts-node --transpile-only main.ts"
+  },
+  "dependencies": {
+    "@chatpuppy/config": "^1.0.0",
+    "@chatpuppy/utils": "^1.0.0",
+    "gun": "^0.2020.1235",
+    "koa": "^2.13.1",
+    "event-iterator": "^2.0.0"
+  },
+  "devDependencies": {
+    "svelte": "^3.0.0"
+  }
+}

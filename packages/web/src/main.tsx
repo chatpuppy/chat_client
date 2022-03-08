@@ -19,6 +19,7 @@ if (window.location.protocol === 'https:' && 'serviceWorker' in navigator) {
     });
 }
 
+// If front-end monitoring is configured, dynamically load and start monitoring.
 if (config.frontendMonitorAppId) {
     // @ts-ignore
     import(/* webpackChunkName: "frontend-monitor" */ 'wpk-reporter').then(

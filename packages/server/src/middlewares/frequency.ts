@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
-import {
-    getNewUserKey,
-    getSealUserKey,
-    Redis,
-} from '@chatpuppy/database/redis/initRedis';
+// import {
+//     getNewUserKey,
+//     getSealUserKey,
+//     Redis,
+// } from '@chatpuppy/database/redis/initRedis';
 
 export const CALL_SERVICE_FREQUENTLY = 'Sending messages too frequently';
 export const NEW_USER_CALL_SERVICE_FREQUENTLY =
@@ -35,6 +35,7 @@ export default function frequency(
 ) {
     let callTimes: Record<string, number> = {};
 
+    // Count the times of emptying every 60s.
     setInterval(() => {
         callTimes = {};
     }, clearDataInterval);

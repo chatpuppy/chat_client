@@ -3,6 +3,7 @@ import socket from '../socket';
 
 import { SEAL_TEXT, SEAL_USER_TIMEOUT } from '../../../utils/const';
 
+/** Is the user banned? */
 let isSeal = false;
 
 export default function fetch<T = any>(
@@ -20,10 +21,13 @@ export default function fetch<T = any>(
                 if (toast) {
                     Message.error(res);
                 }
-                
+                /**
+                * After the server returns to the banned state, the state is stored locally.
+                * When the user triggers the interface request again, it directly refuses.
+                */
                 if (res === SEAL_TEXT) {
                     isSeal = true;
-
+                    // User ban is different from ip ban, which takes a short time.
                     setTimeout(() => {
                         isSeal = false;
                     }, SEAL_USER_TIMEOUT);

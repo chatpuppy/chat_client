@@ -33,12 +33,19 @@ const GroupSchema = new Schema({
 });
 
 export interface GroupDocument extends Document {
+    /** GroupName */
     name: string;
+    /** Avatar */
     avatar: string;
+    /** announcement */
     announcement: string;
+    /** creator */
     creator: string;
+    /** isDefault Group */
     isDefault: boolean;
+    /** members */
     members: string[];
+    /** createTime */
     createTime: Date;
 }
 

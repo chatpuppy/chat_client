@@ -49,9 +49,9 @@ interface MessageState {
 }
 
 /**
- * Message组件用hooks实现有些问题
- * 功能上要求Message组件渲染后触发滚动, 实测中发现在useEffect中触发滚动会比在componentDidMount中晚
- * 具体表现就是会先看到历史消息, 然后一闪而过再滚动到合适的位置
+* There are some problems in implementing the message component with hooks.
+* functionally, the Message component is required to trigger scrolling after rendering. In actual measurement, it is found that triggering scrolling in useEffect will be later than in componentDidMount.
+* The concrete performance is that you will first see the historical news, then flash it and then scroll to the appropriate position.
  */
 @pureRender
 class Message extends Component<MessageProps, MessageState> {

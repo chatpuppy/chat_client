@@ -12,10 +12,10 @@ export default {
     // mongodb address
     database: env.Database || 'mongodb://localhost:27017/chatpuppy',
 
-    redis: {
-        host: env.RedisHost || 'localhost',
-        port: env.RedisPort ? parseInt(env.RedisPort, 10) : 6379,
-    },
+    // redis: {
+    //     host: env.RedisHost || 'localhost',
+    //     port: env.RedisPort ? parseInt(env.RedisPort, 10) : 6379,
+    // },
 
     // jwt encryption secret
     jwtSecret: env.JwtSecret || 'jwtSecret',

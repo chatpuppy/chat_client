@@ -142,6 +142,7 @@ socket.on('message', async (message: any) => {
             title = `${message.from.username} talk to you:`;
         }
     } else {
+        // The contact does not exist and it is a message sent by yourself. No new contact will be created.
         if (isSelfMessage) {
             return;
         }
