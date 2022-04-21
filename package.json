@@ -10,6 +10,7 @@
     "dev:web": "npx lerna run dev:web --stream",
     "dev:gun": "npx lerna run dev:gun --stream",
     "build:web": "npx lerna run build:web --stream",
+    "build:web_win": "npx lerna run build:web_win --stream",
     "dev:app": "cd packages/app && yarn dev:app && cd ../../",
     "build:android": "cd packages/app && yarn build:android && cd ../../",
     "build:ios": "cd packages/app && yarn build:ios && cd ../../",
