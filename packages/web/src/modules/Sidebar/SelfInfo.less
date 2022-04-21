@@ -47,6 +47,37 @@
 }
 
 .button {
-    width: 100px;
+    width: auto;
     height: 36px;
 }
+
+.listAvatar {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.avatar {
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
+.selected {
+    outline: 5px solid var(--primary-color-8);
+    opacity: 0.8;
+}
+
+.disabled {
+    background-color: #aaa;
+    color: #fff;
+    pointer-events: none;
+    &:hover {
+      background-color: #aaa;
+      color: #fff;
+    }
+  }

@@ -85,7 +85,6 @@ function ChatInput() {
         { image: string; width: number; height: number }[]
     >([]);
 
-    /** Global input box focus shortcut key */
     function focusInput(e: KeyboardEvent) {
         const $target: HTMLElement = e.target as HTMLElement;
         if (
@@ -129,8 +128,7 @@ function ChatInput() {
     }
 
     /**
-     * Insert text into the input box cursor.
-     * @param value text to insert
+     * @param value 
      */
     function insertAtCursor(value: string) {
         const input = $input.current as unknown as HTMLInputElement;
@@ -491,23 +489,18 @@ function ChatInput() {
         } else if (at.enable) {
             const { key } = e;
             setTimeout(() => {
-                // If @ has been deleted, exit @ calculation mode.
                 // @ts-ignore
                 if (!/@/.test($input.current.value)) {
                     setAt({ enable: false, content: '' });
                     return;
                 }
-                // If you are entering Chinese, and it is not the space bar, ignore the input.
                 if (inputIME && key !== ' ') {
                     return;
                 }
-                // If Chinese is not entered, and it is the space bar, @ the calculation mode ends.
                 if (!inputIME && key === ' ') {
                     setAt({ enable: false, content: '' });
                     return;
                 }
-
-                // If you are typing Chinese, return directly to avoid getting pinyin letters.
                 if (inputIME) {
                     return;
                 }

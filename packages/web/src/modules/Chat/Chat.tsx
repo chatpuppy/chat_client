@@ -142,6 +142,8 @@ function Chat() {
         }
     }
 
+    const nickname =  linkman.type === 'friend' ? linkman.nickname : ''
+
     return (
         <div className={Style.chat} {...aero}>
             <HeaderBar
@@ -151,6 +153,7 @@ function Chat() {
                 onlineMembersCount={linkman.onlineMembers?.length}
                 isOnline={linkman.isOnline}
                 onClickFunction={handleClickFunction}
+                nickname={nickname}
             />
             <MessageList />
             <ChatInput />

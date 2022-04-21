@@ -1,6 +1,13 @@
 import logger from '@chatpuppy/utils/logger';
 import { v4 as uuid } from 'uuid';
 import { gun } from "../initGundb";
+let nodeSocket = gun.get("sockets")
+
+function delay(ms: number) {
+    return new Promise((res, rej) => {
+        setTimeout(res, ms);
+    })
+}
 
 const Socket = {
     async create(socket: SocketDocument) {
@@ -13,31 +20,43 @@ const Socket = {
 
     async getOneUser(user: string | undefined) {
         const sockets = [] as Array<SocketDocument>
-        // if (typeof user === 'undefined') {
-        //     return sockets
-        // }
-        const is_return = false;
-        await gun.get("sockets").map().on(data => {
-            if (data){
-                if (data.user === user) {
-                    sockets.push(data)
+        // await gun.get("sockets").map(socket => (socket && socket.hasOwnProperty('user') && socket.user == user) ? socket : undefined).once( function(socket, id) {
+        //     logger.info(socket)
+        //     sockets.push(socket as SocketDocument)
+        // })
+
+        await nodeSocket.map().on(  async function(socket) {
+            if(socket){
+                if (socket.hasOwnProperty('user') && socket.user == user) {
+                    sockets.push(socket)
                 }
             }
+            return sockets
         })
+        // gun.get("sockets").map(async socket => {
+        //     if(socket){
+        //         if (socket.hasOwnProperty('user') && socket.user == user) {
+        //             sockets.push(socket)
+        //         }
+        //     }
+        // })
+        await delay(2000)
         return sockets
     },
 
     async getOne(id: string) {
         let socket = {} as SocketDocument
-        gun.get("sockets").get(id).on(data => {
-            socket = data
+        await gun.get("sockets").get(id).once(data => {
+            socket = data as SocketDocument
         })
         return socket
     },
 
 
+
     async deleteOne(id: string) {
-        await gun.get("sockets").get(id).put(null as any)
+        // @ts-ignore
+        gun.get("sockets").get(id).put(null)
     },
 
     async getAllMembers(members: string) {
@@ -66,6 +85,11 @@ const Socket = {
         })
         return socket
     },
+
+    async deleteMany() {
+        // @ts-ignore
+        // gun.get('sockets').put(null)
+    }
 
 }
 

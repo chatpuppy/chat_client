@@ -1,4 +1,4 @@
-import WuZeiNiangImage from '@chatpuppy/assets/images/admin.png';
+import DefaultAvatarImage from '@chatpuppy/assets/images/admin.png';
 
 // function convertRobot10Message(message) {
 //     if (message.from._id === '5adad39555703565e7903f79') {
@@ -20,7 +20,7 @@ function convertSystemMessage(message: any) {
         message.from._id = 'system';
         message.from.originUsername = message.from.username;
         message.from.username = 'System';
-        message.from.avatar = WuZeiNiangImage;
+        message.from.avatar = DefaultAvatarImage;
         message.from.tag = 'system';
 
         const content = JSON.parse(message.content);
@@ -42,7 +42,7 @@ function convertSystemMessage(message: any) {
         message.from._id = 'system';
         message.from.originUsername = message.from.username;
         message.from.username = 'System';
-        message.from.avatar = WuZeiNiangImage;
+        message.from.avatar = DefaultAvatarImage;
         message.from.tag = 'system';
         message.content = `Revoked the message`;
     }

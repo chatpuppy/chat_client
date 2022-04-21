@@ -27,6 +27,7 @@ export type SetGuestPayload = Group;
 export type SetUserPayload = {
     _id: string;
     username: string;
+    address: string;
     tag: string;
     avatar: string;
     groups: Group[];

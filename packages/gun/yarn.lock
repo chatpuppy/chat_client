@@ -20,22 +20,22 @@
     tslib "^2.0.0"
 
 "@peculiar/webcrypto@^1.1.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@peculiar/webcrypto/-/webcrypto-1.3.1.tgz#cd152b5d41841b4296983425fbeb9defb085bb0a"
-  integrity sha512-BdzqCnzquMaoPYsFqWP/Q8SNslweb6A+oVaVbt9JBuXuvb528CEDUGVA0NSEZrgXj8jt++2kx3anChiKhOV3Nw==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@peculiar/webcrypto/-/webcrypto-1.3.2.tgz#8ea98f1410068cf7da0c7e74758a21caa26caf8d"
+  integrity sha512-oUgNj+8oT7uROEMEpZZ3U+kZjyxj1KXuvA8P5kiMUveTya9eyS8KTqu/dzdEtYC3u7dvjknVz+0sUfkWOBHfQg==
   dependencies:
     "@peculiar/asn1-schema" "^2.0.44"
     "@peculiar/json-schema" "^1.1.12"
     pvtsutils "^1.2.2"
     tslib "^2.3.1"
-    webcrypto-core "^1.6.0"
+    webcrypto-core "^1.7.1"
 
 "@types/asn1js@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/asn1js/-/asn1js-2.0.2.tgz#bb1992291381b5f06e22a829f2ae009267cdf8c5"
   integrity sha512-t4YHCgtD+ERvH0FyxvNlYwJ2ezhqw7t+Ygh4urQ7dJER8i185JPv6oIM3ey5YQmGN6Zp9EMbpohkjZi9t3UxwA==
 
-"@typescript/lib-dom@npm:@types/web":
+"@types/web@^0.0.55":
   version "0.0.55"
   resolved "https://registry.yarnpkg.com/@types/web/-/web-0.0.55.tgz#0677cd86c6a4dd8c3592bd5f36435aa7e1b99028"
   integrity sha512-YMH9aZrSJIMRMioCUwrgauI3iS/w2wRFN45Xxm0FE9Tt3hqaqkvOzjDFGsNjyKZzz7GJC0ilb+0tv59ytSUbrQ==
@@ -388,14 +388,14 @@ vary@^1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-webcrypto-core@^1.6.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/webcrypto-core/-/webcrypto-core-1.7.0.tgz#7c1a7e65253d874e081c6d5fbcc48f59bd840137"
-  integrity sha512-7d2yeX62KSjpy8wM6/aJsuKDQjYRlTobxFxh/UM9VPS5usePpsjy5j2Y9Mv0k7dSuUxMo0BaIVmnRRcindi2sA==
+webcrypto-core@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/webcrypto-core/-/webcrypto-core-1.7.1.tgz#eb30112c28d0f75442cfb52cae59676c7fe155ef"
+  integrity sha512-Gw2zLzYSJ7Imp5lLDu3CcWB5oTTACMDEE2PjoLfttGgIhd7BfackBdVgEzd9ZM/i65gpNq0+IelL0JZ48QwzNg==
   dependencies:
     "@peculiar/asn1-schema" "^2.0.44"
     "@peculiar/json-schema" "^1.1.12"
-    "@typescript/lib-dom" "npm:@types/web"
+    "@types/web" "^0.0.55"
     asn1js "^2.2.0"
     pvtsutils "^1.2.2"
     tslib "^2.3.1"

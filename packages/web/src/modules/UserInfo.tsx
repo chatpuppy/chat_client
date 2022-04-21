@@ -24,6 +24,7 @@ interface UserInfoProps {
     user?: {
         _id: string;
         username: string;
+        address: string
         avatar: string;
         ip: string;
         isOnline?: string;
@@ -166,7 +167,7 @@ function UserInfo(props: UserInfoProps) {
                                 src={getOSSFileUrl(user.avatar)}
                                 alt="Avatar"
                             />
-                            <p>{user.username}</p>
+                            <div className={Style.username}><p>{user.username}</p></div>
                             <p className={Style.ip}>
                                 {userIps.map((ip) => (
                                     <span

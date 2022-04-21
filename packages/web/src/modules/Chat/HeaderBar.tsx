@@ -28,6 +28,7 @@ type Props = {
     type: string;
     onlineMembersCount?: number;
     isOnline?: boolean;
+    nickname: string;
 
     onClickFunction: () => void;
 };
@@ -40,6 +41,7 @@ function HeaderBar(props: Props) {
         onlineMembersCount,
         isOnline,
         onClickFunction,
+        nickname
     } = props;
 
     const action = useAction();
@@ -53,6 +55,7 @@ function HeaderBar(props: Props) {
     function handleShareGroup() {
         Message.success('Invitation link copied, invite your friend join the group.');
     }
+
 
     return (
         <div className={Style.headerBar} {...aero}>
@@ -84,7 +87,7 @@ function HeaderBar(props: Props) {
             <h2 className={Style.name}>
                 {name && (
                     <span>
-                        {name}{' '}
+                        {nickname ? nickname : name}
                         {isLogin && onlineMembersCount !== undefined && (
                             <b
                                 className={styles.count}

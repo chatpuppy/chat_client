@@ -7,22 +7,22 @@ function saveUsername(username: string) {
 
 /**
  * Register new user
- * @param username 
- * @param password 
+ * @param address 
+ * @param avatar
  * @param os 
  * @param browser 
  * @param environment 
  */
 export async function register(
-    username: string,
-    password: string,
+    address: string,
+    avatar: string,
     os = '',
     browser = '',
     environment = '',
 ) {
     const [err, user] = await fetch('register', {
-        username,
-        password,
+        address,
+        avatar,
         os,
         browser,
         environment,
@@ -32,28 +32,25 @@ export async function register(
         return null;
     }
 
-    saveUsername(user.username);
+    saveUsername(user.address);
     return user;
 }
 
 /**
  * Login by username
- * @param username 
- * @param password 
+ * @param address 
  * @param os 
  * @param browser 
  * @param environment 
  */
 export async function login(
-    username: string,
-    password: string,
+    address: string,
     os = '',
     browser = '',
     environment = '',
 ) {
     const [err, user] = await fetch('login', {
-        username,
-        password,
+        address,
         os,
         browser,
         environment,
@@ -63,7 +60,7 @@ export async function login(
         return null;
     }
 
-    saveUsername(user.username);
+    saveUsername(user.address);
     return user;
 }
 
@@ -117,21 +114,8 @@ export async function guest(os = '', browser = '', environment = '') {
  * Update user avatar
  * @param avatar avatar url
  */
-export async function changeAvatar(avatar: string) {
-    const [error] = await fetch('changeAvatar', { avatar });
-    return !error;
-}
-
-/**
- * Update user password
- * @param oldPassword 
- * @param newPassword 
- */
-export async function changePassword(oldPassword: string, newPassword: string) {
-    const [error] = await fetch('changePassword', {
-        oldPassword,
-        newPassword,
-    });
+export async function changeAvatar(avatar: string, address: string) {
+    const [error] = await fetch('changeAvatar', { avatar, address });
     return !error;
 }
 
@@ -139,9 +123,10 @@ export async function changePassword(oldPassword: string, newPassword: string) {
  * Update user name
  * @param username 
  */
-export async function changeUsername(username: string) {
+export async function changeUsername(username: string, address: string) {
     const [error] = await fetch('changeUsername', {
         username,
+        address
     });
     return !error;
 }
@@ -208,6 +193,15 @@ export async function leaveGroup(groupId: string) {
  */
 export async function addFriend(userId: string) {
     const [, user] = await fetch<User>('addFriend', { userId });
+    return user;
+}
+
+/**
+ * Add NickName Friend buddy
+ * @param userId 
+ */
+ export async function changeNickNameFriend(userId: string,friendId: string, nickname: string) {
+    const [, user] = await fetch<User>('changeNameBuddy', { userId, friendId, nickname });
     return user;
 }
 

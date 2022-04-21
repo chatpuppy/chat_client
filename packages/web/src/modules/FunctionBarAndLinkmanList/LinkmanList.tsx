@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useSelector } from 'react-redux';
 
 import { Linkman, State } from '../../state/reducer';
@@ -24,6 +24,8 @@ function LinkmanList() {
                 preview = `${lastMessage.from.username}: ${preview}`;
             }
         }
+        const nickname =  linkman.type === 'friend' ? linkman.nickname : ''
+
         return (
             <LinkmanComponent
                 key={linkman._id}
@@ -33,6 +35,9 @@ function LinkmanList() {
                 preview={preview}
                 time={time}
                 unread={linkman.unread}
+                type={linkman.type}
+                uuid={linkman.uuid}
+                nickname={ nickname }           
             />
         );
     }
@@ -51,6 +56,7 @@ function LinkmanList() {
             ? 1
             : -1;
     }
+ 
 
     return (
         <div className={Style.linkmanList}>

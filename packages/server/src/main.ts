@@ -3,6 +3,7 @@ import { doctor } from '@chatpuppy/bin/scripts/doctor';
 import logger from '@chatpuppy/utils/logger';
 import Group, { GroupDocument } from '@chatpuppy/database/gundb/models/group';
 import getRandomAvatar from '@chatpuppy/utils/getRandomAvatar';
+import Socket from '@chatpuppy/database/gundb/models/socket';
 import app from './app';
 
 
@@ -13,6 +14,7 @@ import app from './app';
 
     const server = await app.listen(config.port, async () => {
         // await Socket.deleteMany({}); // Delete all historical data del of Socket table
+        await Socket.deleteMany()
         logger.info(`>>> server listen on http://localhost:${config.port}`);
     });
 
@@ -30,6 +32,7 @@ import app from './app';
             logger.error('[defaultGroup]', 'create default group fail');
         }
     }
+
     // Determine whether the default group exists or not, and create one if it does not exist.
     return null;
 })();

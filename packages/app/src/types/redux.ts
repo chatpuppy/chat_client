@@ -213,6 +213,7 @@ export type User = {
     _id: string;
     username: string;
     avatar: string;
+    address: string;
     tag: string;
     isAdmin: boolean;
     notificationTokens: string[];

@@ -69,6 +69,7 @@ socket.on('connect', async () => {
             platform.name,
             platform.description,
         );
+        console.log("user", user);
         if (user) {
             dispatch({
                 type: ActionTypes.SetUser,
@@ -81,12 +82,15 @@ socket.on('connect', async () => {
                 ),
             ];
             const linkmanMessages = await getLinkmansLastMessagesV2(linkmanIds);
-            Object.values(linkmanMessages).forEach(
+            console.log("linkmanMessages", linkmanMessages);
+            linkmanMessages && Object.values(linkmanMessages).forEach(
                 // @ts-ignore
                 ({ messages }: { messages: Message[] }) => {
                     messages.forEach(convertMessage);
+
                 },
             );
+            console.log("linkmanMessages", linkmanMessages);
             dispatch({
                 type: ActionTypes.SetLinkmansLastMessages,
                 payload: linkmanMessages,

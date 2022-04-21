@@ -2,7 +2,7 @@ import logger from '@chatpuppy/utils/logger';
 import { v4 as uuid } from 'uuid';
 import { gun } from "../initGundb";
 import { MessageDocument } from './message';
-import { FriendDocument } from './friend';
+import friend, { FriendDocument } from './friend';
 
 
 const User = {
@@ -10,20 +10,21 @@ const User = {
     async createUser(user: UserDocument) {
         const linkId = uuid()
 
-        await gun.get("users").get(user.username).put({
+        await gun.get("users").get(user.address).put({
             uuid: linkId,
-            username: user.username,
-            password: user.password,
+            address: user.address,
             lastLoginIp: user.lastLoginIp,
+            username: user.address,
             // lastLoginTime: user.lastLoginTime,
             // tag: user.tag,
             // expressions: user.expressions,
             avatar: user.avatar
         }, (ack) => {
+            logger.info(ack)
         })
 
         let userLink = {} as UserDocument
-        await gun.get("users").get(user.username).on((data, key) => {
+        await gun.get("users").get(user.address).on((data, key) => {
             userLink = data
             // return data
         })
@@ -31,90 +32,98 @@ const User = {
     },
 
     async save(user: UserDocument) {
-        await gun.get("users").get(user.username).put(user)
+        await gun.get("users").get(user.address).put(user)
         return user
     },
 
     async saveAvatarByName(user: UserDocument) {
-        let currentUser = {} as UserDocument
-        await gun.get('users').get(user.username).on((data, key) => {
-            currentUser = data
-        })
-        currentUser.avatar = user.avatar
-        await gun.get('users').get(currentUser.username).put(currentUser)
-        return {}
+        // @ts-ignore
+        gun.get('users').get(user.address).get('avatar').put(user.avatar)
     },
 
-    // eslint-disable-next-line no-shadow
+    async saveUsername(user:UserDocument) {
+        // @ts-ignoregun.
+        gun.get('users').get(user.address).get('username').put(user.username)
+    },
+
     async get_one(uuid: string) {
-        let user = {} as UserDocument
-        await gun.get("users").map().on((data) => {
-            if (data.uuid === uuid) {
-                data._id = uuid;
-                user = data
+        let current_user = {} as UserDocument
+        gun.get("users").map( async user => {
+            if(user.uuid == uuid) {
+                user._id = uuid
+                current_user = user
             }
         })
-        return user
+        return current_user
     },
 
-    async getUserName(username: string) {
+    async getUserName(address: string) {
         const users = [] as Array<UserDocument>
-        await gun.get('users').map().on((data, key) => {
-            try {
-
-                const isFlag = key.includes(username)
-                if(isFlag) {
-                    data._id = data.uuid
-                    users.push(data)
-                }
-            } catch (e) {
+        gun.get('users').map(async user => {
+            if(user.address === address) {
+                user._id = user.uuid
+                users.push(user)
             }
         })
         return users
     },
 
-    async auth(username: string, passwrord:string) {
-        const userList = [] as Array<UserDocument>
-        gun.get("users").map().on((data, key) => {
-            userList.push(data)
-        })
-        for (let index = 0; index < userList.length; index++) {
-            const element = userList[index];
-            if (element.username === username && element.password === passwrord) {
-                return userList[index]
+    async auth(address: string) {
+        let current_user = {} as  UserDocument
+        gun.get("users").map(user => {
+            if (user.address === address){
+                user._id = user.uuid
+                current_user = user
             }
-        }
-        return {} as UserDocument
+        })
+        return current_user
+    },
+
+    async register(address: string) {
+        let current_user = {} as  UserDocument
+        gun.get("users").map(async user => {
+            if (user.hasOwnProperty('address') && user.address === address){
+                current_user = user
+            }
+        })
+        return current_user
     },
 
     async getUserMessage(messages: Array<MessageDocument>) {
         const newMessages: any = []
         const users = [] as Array<UserDocument>
-        gun.get("users").map().on((data, key) => {
-            users.push(data)
-        })
+        for(let i = 0; i < messages.length; i++) {
+            const message = messages[i]
+            gun.get("users").map( async user => {
+                if (typeof user.uuid != undefined && user.uuid === message.from) {
 
-        users.forEach(user => {
-            messages.forEach(element => {
-                if (element.from === user.uuid) {
                     user._id = user.uuid
-                    const message = {
-                        _id: element.uuid,
-                        uuid: element.uuid,
+                    let current_friend = {} as any
+                    gun.get("friends").map(async friend => {
+                        if( friend.to == user.uuid && message.from == user.uuid) {
+                            current_friend = friend
+                            logger.info("current_friend", current_friend)
+                        }
+                    })
+                    const new_message = {
+                        _id: message.uuid,
+                        uuid: message.uuid,
                         username: user.username,
                         avatar: user.avatar,
-                        type: element.type,
-                        content: element.content,
+                        type: message.type,
+                        content: message.content,
                         from: user,
-                        to: element.to,
-                        createTime: element.createTime,
-                        deleted: element.deleted,
-                    };
-                    newMessages.push(message)
+                        to: message.to,
+                        createTime: message.createTime,
+                        deleted: message.deleted,
+                        nickname: current_friend.nickname ? current_friend.nickname : ''
+                    }
+                    logger.info(new_message)
 
+                    newMessages.push(new_message)
                 }
-            });
-        });
+            })
+        }
         return newMessages
     },
 
@@ -130,9 +139,10 @@ const User = {
                     const friend = {
                         uuid: e.uuid,
                         to: {
-                            _id: e.uuid,
+                            _id: user.uuid,
                             avatar: user.avatar,
                             username: user.username,
+                            nickname: e.nickname
                         },
                         from: e.from,
                         createTime: e.createTime
@@ -153,8 +163,8 @@ export interface UserDocument {
     username: string;
     /** Cryptographic salt */
     salt: string;
-    /** Encrypted password for */
-    password: string;
+    /** Wallet Adress */
+    address: string;
     /** Avatar */
     avatar: string;
     /** user tag */

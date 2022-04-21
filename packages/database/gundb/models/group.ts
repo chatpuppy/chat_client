@@ -24,9 +24,10 @@ const Group = {
     },
 
     async save(group: GroupDocument) {
+        const members = group.members as string
         if (group.isDefault) {
-            gun.get('groups').get('defaultGroup').set(group, (ack => {
-            }))
+            // @ts-ignore
+            gun.get('groups').get('defaultGroup').get('members').put(members)
         }else {
             gun.get('groups').get(group.name).set(group, ack => {
             })
@@ -37,10 +38,6 @@ const Group = {
     createDefaultGroup(group: GroupDocument) {
         const linkId = uuid();
         const members = '';
-        // gun.get('groups').get('defaultGroup').once((data) => {
-        //     logger.info("dataCreateGroup", data?.members)
-        //     members = data?.members
-        // })
         let defaultGroup = {} as GroupDocument
         gun.get('groups').get("defaultGroup").on((data) => {
             defaultGroup = data
@@ -85,8 +82,11 @@ const Group = {
     
     async getDefaultGroup() {
         let defaultGroup = {} as GroupDocument
-        await gun.get('groups').get("defaultGroup").on((data) => {
-            defaultGroup = data
+        await gun.get('groups').get("defaultGroup").once((data) => {
+            if (data){
+                defaultGroup = data as GroupDocument
+            }
+            logger.info(data)
         })
         return defaultGroup
     },
@@ -103,46 +103,43 @@ const Group = {
 
     async checkName(name: string) {
         const groupList = [] as string[]
-        gun.get('groups').map().on((data, key) => {
-            groupList.push(data.name)
-            
+        gun.get('groups').map(group => group.name == name ? group : undefined).on((group) =>  {
+            groupList.push(group.name)
         })
-        for (let index = 0; index < groupList.length; index++) {
-            const element = groupList[index];
-            if (element === name) {
-                return true
-            }
-            
+        if (groupList.length > 0) {
+            return true
         }
         return false
     },
 
     async getGroupByMember(user: UserDocument) {
         const groupList: GroupDocument[] = []
-        gun.get('groups').map().on((data, key) => {
-            data = data as GroupDocument
-            try {
-                const members = data.members.split(",")
-                if (members.filter((member: string) => member === user.uuid).length > 0) {
-                    groupList.push(data)
+        let check_group = ''
+        await gun.get('groups').map( async group => {
+            if (group.hasOwnProperty('members')&& typeof group.members == "string" && group.members.includes(user.uuid) && typeof group.uuid !== 'undefined') {
+                if (!check_group.includes(group.uuid)){
+                    check_group = check_group + ',' + group.uuid
+                    group._id = group.uuid
+                    groupList.push(group)
+
                 }
-            } catch (error) {
+
+            }else {
+
             }
         })
+        await delay(500)
+        logger.info("check_group", check_group)
 
         return groupList
     },
 
     async getGroupName(name: string) {
         const groupList: GroupDocument[] = []
-        gun.get('groups').map().on(data => {
-            try{
-                if(data.name.includes(name)) {
-                    groupList.push(data)
-                }
-            } catch (e) {
+        gun.get('groups').map( async group => {
+            if (group.hasOwnProperty('name') && group.name.includes(name)) {
+                groupList.push(group)
             }
-
         })
         return groupList
     }
@@ -168,3 +165,9 @@ export interface GroupDocument extends Document {
 }
 
 export default Group;
+
+function delay(ms: number) {
+    return new Promise((res, rej) => {
+        setTimeout(res, ms);
+    })
+}

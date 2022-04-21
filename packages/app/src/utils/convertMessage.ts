@@ -15,14 +15,14 @@
 
 import { Message } from '../types/redux';
 
-const WuZeiNiangImage = require('../assets/images/admin.png');
+const DefaultAvatarImage = require('../assets/images/admin.png');
 
 function convertSystemMessage(message: Message) {
     if (message.type === 'system') {
         message.from._id = 'system';
         message.from.originUsername = message.from.username;
         message.from.username = 'System';
-        message.from.avatar = WuZeiNiangImage;
+        message.from.avatar = DefaultAvatarImage;
         message.from.tag = 'system';
 
         let content = null;
@@ -35,11 +35,11 @@ function convertSystemMessage(message: Message) {
         }
         switch (content?.command) {
             case 'roll': {
-                message.content = `掷出了${content.value}点 (上限${content.top}点)`;
+                message.content = `Throw out${content.value} Point (upper limit${content.top}Point)`;
                 break;
             }
             case 'rps': {
-                message.content = `使出了 ${content.value}`;
+                message.content = `Make out ${content.value}`;
                 break;
             }
             default: {
@@ -51,7 +51,7 @@ function convertSystemMessage(message: Message) {
         message.from._id = 'system';
         message.from.originUsername = message.from.username;
         message.from.username = 'System';
-        message.from.avatar = WuZeiNiangImage;
+        message.from.avatar = DefaultAvatarImage;
         message.from.tag = 'system';
         message.content = `Revoded message`;
     }

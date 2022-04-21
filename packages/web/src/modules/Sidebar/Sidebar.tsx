@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import loadable from '@loadable/component';
 
+import { useMoralis } from "react-moralis";
+
 import { isMobile } from '@chatpuppy/utils/ua';
 import { State } from '../../state/reducer';
 import useIsLogin from '../../hooks/useIsLogin';
@@ -29,9 +31,16 @@ const SettingAsync = loadable(
 );
 
 function Sidebar() {
+
     const sidebarVisible = useSelector(
         (state: State) => state.status.sidebarVisible,
     );
+
+    if (!sidebarVisible) {
+        return null;
+    }
+
+    const { logout } = useMoralis();
     const action = useAction();
     const isLogin = useIsLogin();
     const isConnect = useSelector((state: State) => state.connect);
@@ -40,6 +49,14 @@ function Sidebar() {
     );
     const avatar = useSelector(
         (state: State) => state.user && state.user.avatar,
+    );
+
+    const address = useSelector(
+        (state: State) => state.user && state.user.address || ''
+    );
+
+    const username = useSelector(
+        (state: State) => state.user &&  state.user.username || ''
     );
 
     const [selfInfoDialogVisible, toggleSelfInfoDialogVisible] =
@@ -52,13 +69,11 @@ function Sidebar() {
     const [settingDialogVisible, toggleSettingDialogVisible] = useState(false);
     const aero = useAero();
 
-    if (!sidebarVisible) {
-        return null;
-    }
 
-    function logout() {
+    function logoutUser() {
+        logout();
         action.logout();
-        window.localStorage.removeItem('token');
+        window.localStorage.clear();
         Message.success('Loged out successfully');
         socket.disconnect();
         socket.connect();
@@ -80,6 +95,10 @@ function Sidebar() {
         );
     }
 
+    function displayName() {
+        return username ? username.substring(0,2) : address.substring(0,2)
+    }
+
     return (
         <>
             <div className={Style.sidebar} {...aero}>
@@ -89,6 +108,9 @@ function Sidebar() {
                         src={avatar}
                         onClick={() => toggleSelfInfoDialogVisible(true)}
                     />
+                )}
+                { isLogin &&!avatar && (
+                    <div className={Style.nonAvatar} onClick={() => toggleSelfInfoDialogVisible(true)}>{ displayName() }</div>
                 )}
                 {isLogin && (
                     <OnlineStatus
@@ -109,12 +131,12 @@ function Sidebar() {
                                 onClick={() => toggleAdminDialogVisible(true)}
                             />,
                         )}
-                    <Tooltip 
+                    <Tooltip
                         placement="right"
                         mouseEnterDelay={0.3}
                         overlay={<span>Home</span>}
                     >
-                        <a 
+                        <a
                             className={Style.linkButton}
                             href="https://www.chatpuppy.com"
                             target="_black"
@@ -226,7 +248,7 @@ function Sidebar() {
                                 height={40}
                                 icon="logout"
                                 iconSize={26}
-                                onClick={logout}
+                                onClick={logoutUser}
                             />,
                         )}
                 </div>

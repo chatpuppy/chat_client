@@ -8,7 +8,6 @@ import Socket from '@chatpuppy/database/gundb/models/socket'
 import User from '@chatpuppy/database/gundb/models/user';
 
 /**
- * 获取指定群组的在线用户辅助方法
  * @param group 
  */
 async function getGroupOnlineMembersHelper(group: GroupDocument) {
@@ -74,7 +73,6 @@ export async function createGroup(ctx: Context<{ name: string }>) {
 
 const GroupOnlineMembersCacheExpireTime = 1000 * 60;
 /**
- * 获取群组在线成员
  */
 function getGroupOnlineMembersWrapperV2() {
     const cache: Record<
@@ -110,8 +108,7 @@ function getGroupOnlineMembersWrapperV2() {
 export const getGroupOnlineMembersV2 = getGroupOnlineMembersWrapperV2();
 
 /**
- * 获取默认群组的在线成员
- * 无需登录态
+ * 
  */
 
 function getDefaultGroupOnlineMembersWrapper() {
@@ -152,7 +149,6 @@ export async function getGroupBasicInfo(ctx: Context<{ groupId: string }>) {
 }
 
 /**
- * 加入群组
  * @param ctx Context
  */
 export async function joinGroup(ctx: Context<{ groupId: string }>) {

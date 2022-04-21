@@ -2,6 +2,8 @@
     "verbose": true,
     "ignore": [
         "test/**/*",
-        "public/**/*"
+        "public/**/*",
+        "**/gun/**/*",
+        "**/server/radata/*"
     ]
 }

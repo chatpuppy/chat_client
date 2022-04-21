@@ -15,13 +15,14 @@ const History = {
 
     async save(history: HistoryDocument) {
         gun.get("histories").get(history.uuid).put(history)
+        logger.info(history)
         return history
     },
 
     // eslint-disable-next-line no-shadow
     async getLinkMans(uuid: string, linkmans: Array<string>) {
         const histories = [] as Array<HistoryDocument>
-        await gun.get("histories").map().on((data, key) => {
+        await gun.get("histories").map().on( async (data, key) => {
             if (data.user === uuid && linkmans.filter(linkman => data.linkman === linkman).length > 0) {
                 histories.push(data)
             }
@@ -59,6 +60,7 @@ export async function createOrUpdateHistory(
     //         linkman: linkmanId,
     //         message: messageId,
     //     });
+    logger.info("=====SAVE=====")
     const history = await History.getOne(userId, linkmanId);
     if (Object.keys(history).length > 0) {
         history.message = messageId;
@@ -73,4 +75,10 @@ export async function createOrUpdateHistory(
     }
 
     return {};
+}
+
+function delay(ms: number) {
+    return new Promise((res, rej) => {
+        setTimeout(res, ms);
+    })
 }

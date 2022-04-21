@@ -125,6 +125,12 @@ function MessageList() {
         if (!tag && isGroup && message.from._id === creator) {
             tag = 'Creator';
         }
+        let name = ''
+        if(message.nickname != '') {
+            name = message.nickname
+        }else {
+            name = message.from.username
+        }
 
         return (
             <MessageComponent
@@ -134,7 +140,7 @@ function MessageList() {
                 isSelf={isSelf}
                 userId={message.from._id}
                 avatar={message.from.avatar}
-                username={message.from.username}
+                username={name}
                 originUsername={message.from.originUsername}
                 time={message.createTime}
                 type={message.type}

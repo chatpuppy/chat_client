@@ -24,7 +24,9 @@ export interface Message {
     from: {
         _id: string;
         username: string;
+        address: string;
         avatar: string;
+        uuid: string;
         originUsername: string;
         tag: string;
     };
@@ -32,6 +34,7 @@ export interface Message {
     percent: number;
     createTime: string;
     deleted?: boolean;
+    nickname: string;
 }
 
 export interface MessagesMap {
@@ -60,14 +63,17 @@ export interface Group {
 
 export interface Friend {
     _id: string;
+    uuid: string;
     name: string;
     avatar: string;
+    nickname: string,
     createTime: string;
 }
 
 export interface Linkman extends Group, User {
     type: string;
     unread: number;
+    nickname: string;
     messages: MessagesMap;
 }
 
@@ -78,6 +84,7 @@ export interface LinkmansMap {
 export interface User {
     _id: string;
     username: string;
+    address: string;
     avatar: string;
     isOnline: boolean;
 }
@@ -87,6 +94,7 @@ export interface State {
     user: {
         _id: string;
         username: string;
+        address: string;
         avatar: string;
         tag: string;
         isAdmin: boolean;
@@ -194,11 +202,13 @@ function transformFriend(friend: Linkman): Linkman {
         _id: getFriendId(from, to._id),
         name: to.username,
         avatar: to.avatar,
+        uuid: to._id,
+        nickname: to.nickname,
         // @ts-ignore
         createTime: friend.createTime,
     };
     initLinkmanFields(transformedFriend as unknown as Linkman, 'friend');
-    return transformedFriend as Linkman;
+    return transformedFriend as unknown as Linkman;
 }
 
 function transformTemporary(temporary: Linkman): Linkman {
@@ -264,6 +274,7 @@ function reducer(state: State = initialState, action: Action): State {
                 user: {
                     _id: '',
                     username: '',
+                    address: '',
                     avatar: '',
                     tag: '',
                     isAdmin: false,
@@ -276,8 +287,9 @@ function reducer(state: State = initialState, action: Action): State {
         }
 
         case ActionTypes.SetUser: {
-            const { _id, username, avatar, tag, groups, friends, isAdmin } =
+            const { _id, username, address, avatar, tag, groups, friends, isAdmin } =
                 action.payload as SetUserPayload;
+
             // @ts-ignore
             const linkmans: Linkman[] = [
                 // @ts-ignore
@@ -292,12 +304,12 @@ function reducer(state: State = initialState, action: Action): State {
             if (!state.user && linkmans.length > 0) {
                 focus = linkmans[0]._id;
             }
-
             return {
                 ...state,
                 user: {
                     _id,
                     username,
+                    address,
                     avatar,
                     tag,
                     isAdmin,

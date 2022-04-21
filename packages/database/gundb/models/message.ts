@@ -3,6 +3,13 @@ import { v4 as uuid } from 'uuid';
 import { gun } from "../initGundb";
 import Group from './group';
 import User from './user';
+import group from "./group";
+
+function delay(ms: number) {
+    return new Promise((res, rej) => {
+        setTimeout(res, ms);
+    })
+}
 
 
 const Message = {
@@ -20,10 +27,10 @@ const Message = {
 
     async getToGroup(groupId: string) {
         const messages = [] as Array<MessageDocument>;
-        gun.get("messages").map().on((data, key) => {
-            if (data.to === groupId) {
-                messages.push(data);
-            }
+        gun.get('messages').map().on(  function(message) {
+            if( message.to === groupId)
+                messages.push(message as MessageDocument);
+
         })
         return messages
     },

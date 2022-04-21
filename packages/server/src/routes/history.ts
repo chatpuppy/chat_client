@@ -14,9 +14,9 @@ export async function updateHistory(
 
     // @ts-ignore
     const [user, linkman, message] = await Promise.all([
-        User.get_one(self),
+        await User.get_one(self),
         linkmanId,
-        Message.get_one(messageId),
+        await Message.get_one(messageId),
     ]);
 
     assert(user, 'User not found');

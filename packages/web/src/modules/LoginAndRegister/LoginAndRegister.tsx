@@ -1,44 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-    Tabs,
-    TabPane,
-    TabContent,
-    ScrollableInkTabBar,
-} from '../../components/Tabs';
-import Style from './LoginAndRegister.less';
-import Login from './Login';
-import Register from './Register';
+import ConnectWallet from './ConnectWallet';
 import Dialog from '../../components/Dialog';
 import { State } from '../../state/reducer';
 import useAction from '../../hooks/useAction';
 
 function LoginAndRegister() {
+    const [loading, setLoading] = useState(false);
     const action = useAction();
     const loginRegisterDialogVisible = useSelector(
         (state: State) => state.status.loginRegisterDialogVisible,
     );
 
+    
     return (
         <Dialog
             visible={loginRegisterDialogVisible}
-            closable={false}
+            closable={!loading}
             onClose={() => action.toggleLoginRegisterDialog(false)}
+            maskClosable={false}
         >
-            <Tabs
-                className={Style.login}
-                defaultActiveKey="login"
-                renderTabBar={() => <ScrollableInkTabBar />}
-                renderTabContent={() => <TabContent />}
-            >
-                <TabPane tab="Login" key="login">
-                    <Login />
-                </TabPane>
-                <TabPane tab="Register" key="register">
-                    <Register />
-                </TabPane>
-            </Tabs>
+                <ConnectWallet loading={loading} setLoading={setLoading}/>
+            
         </Dialog>
     );
 }

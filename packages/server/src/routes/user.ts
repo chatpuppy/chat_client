@@ -28,43 +28,62 @@ interface Environment {
 }
 
 export async function register(
-    ctx: Context<{username: string, password: string} & Environment>
+    ctx: Context<{address: string, avatar: string} & Environment>
 ) {
-    assert(!config.disableRegister, '注册功能已被禁用, 请联系管理员开通账号');
-    const { username, password, os, browser, environment } = ctx.data;
-    assert(username, '用户名不能为空');
-    assert(password, '密码不能为空');
+    const { address, os, browser, environment, avatar } = ctx.data;
 
     const defaultGroup = await Group.getDefaultGroup()
 
 
     if (!defaultGroup) {
         // TODO: refactor when node types support "Assertion Functions" https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
-        throw new AssertionError({ message: '默认群组不存在' });
+        throw new AssertionError({ message: 'Default group is not exist' });
     }
-
-    let newUser = null;
-    try {
-        newUser = {
-            username,
-            password,
-            avatar: getRandomAvatar(),
-            lastLoginIp: ctx.socket.ip
-        };
-        
-        newUser = await User.createUser(newUser as UserDocument);
-    } catch (err) {
-        if ((err as Error).name === 'ValifationError') {
-            return '用户名包含不支持的字符或者长度超过限制';
+    logger.info(defaultGroup)
+    logger.info(address)
+    let newUser = await User.auth(address);
+    let is_new = false;
+    console.log("Auth", newUser)
+    if (Object.keys(newUser).length == 0) {
+        try {
+            logger.info("=====")
+            newUser = {
+                address,
+                avatar,
+                lastLoginIp: ctx.socket.ip
+            } as UserDocument;
+            logger.info("=====")
+            newUser = await User.createUser(newUser);
+            is_new = true
+            logger.info("=====")
+        } catch (err) {
+            if ((err as Error).name === 'ValifationError') {
+                return 'User name contains unsupported characters or its length exceeds the limit.';
+            }
+            throw err;
         }
-        throw err;
     }
-    defaultGroup.members = `${defaultGroup.members  },${  newUser.uuid}`
-    await Group.save(defaultGroup)
+    let groups = []
+
+    if (is_new) {
+        defaultGroup.members = `${defaultGroup.members  },${  newUser.uuid}`
+        await Group.save(defaultGroup)
+        groups.push(defaultGroup)
+    }
+    else {
+        groups = await Group.getGroupByMember(newUser)
+    }
     // eslint-disable-next-line no-use-before-define
-    const token = generateToken(newUser.uuid, environment);
+    const token = generateToken(newUser.address, environment);
 
     ctx.socket.user = newUser.uuid;
+    const friends = await Friend.getByFrom(newUser.uuid)
+    let currentFriends = [] as any
+    if (friends.length > 0){
+        currentFriends = await User.getDataByFriend(friends)
+    }else {
+        currentFriends = []
+    }
 
     const socket = await Socket.getOne(ctx.socket.id)
     socket.user = newUser.uuid
@@ -77,18 +96,10 @@ export async function register(
     const data = {
         _id: newUser.uuid,
         avatar: newUser.avatar,
+        address: newUser.address,
         username: newUser.username,
-        groups: [
-            {
-                _id: defaultGroup.uuid,
-                name: defaultGroup.name,
-                avatar: defaultGroup.avatar,
-                creator: defaultGroup.creator,
-                createTime: defaultGroup.createTime,
-                messages: [],
-            },
-        ],
-        friends: [],
+        groups,
+        friends: currentFriends,
         token,
         isAdmin: false,
         notificationTokens: [],
@@ -97,7 +108,6 @@ export async function register(
 }
 
 /**
- * 游客登录, 只能获取默认群组信息
  * @param ctx Context
  */
 export async function guest(ctx: Context<Environment>) {
@@ -113,24 +123,28 @@ export async function guest(ctx: Context<Environment>) {
     // );
 
     const defaultGroup = await Group.getDefaultGroup();
-
+    logger.info("defaultGroup", defaultGroup)
     if (Object.keys(defaultGroup).length === 0) {
-        throw new AssertionError({ message: '默认群组不存在' });
+        throw new AssertionError({ message: 'Default group is not exist' });
     }
 
 
     ctx.socket.join(defaultGroup._id);
     let  messages = await Message.getToGroup(defaultGroup.uuid);
+    messages.sort((a, b)=> (new Date(a.createTime).getTime() >  new Date(b.createTime).getTime()) ? -1 : 1)
+
+
     messages = await User.getUserMessage(messages)
     await handleInviteV2Messages(messages);
+    const data = { messages, ...defaultGroup }
+    logger.info("data", data)
 
-    return { messages, ...defaultGroup };
+    return data;
 }
 
 /**
- * 生成jwt token
- * @param user 用户
- * @param environment 客户端环境信息
+ * @param user 
+ * @param environment 
  */
 function generateToken(user: string, environment: string) {
     return jwt.encode(
@@ -145,19 +159,18 @@ function generateToken(user: string, environment: string) {
 
 
 /**
- * 账密登录
  * @param ctx Context
  */
 export async function login(
     ctx: Context<{ username: string; password: string } & Environment>,
 ) {
     const { username, password, os, browser, environment } = ctx.data;
-    assert(username, '用户名不能为空');
-    assert(password, '密码不能为空');
-    const user = await User.auth(username, password)
+    assert(username, 'Username can not be empty');
+    assert(password, 'Password can not be empty');
+    const user = await User.auth(username)
 
     if (Object.keys(user).length === 0) {
-        throw new AssertionError({ message: '该用户不存在' });
+        throw new AssertionError({ message: 'User not exist' });
     }
 
     user.lastLoginTime = new Date();
@@ -202,29 +215,29 @@ export async function login(
     };
 }
 /**
- * token登录
  * @param ctx Context
  */
 export async function loginByToken(
     ctx: Context<{ token: string } & Environment>,
 ) {
     const { token, os, browser, environment } = ctx.data;
-    assert(token, 'token不能为空');
+    assert(token, 'token can not be empty');
 
     let payload = null;
     try {
         payload = jwt.decode(token, config.jwtSecret);
     } catch (err) {
-        return '非法token';
+        return 'Inavailable token';
     }
+    assert(Date.now() < payload.expires, 'token timeout');
+    assert.equal(environment, payload.environment, 'Illegal login');
 
-    assert(Date.now() < payload.expires, 'token已过期');
-    assert.equal(environment, payload.environment, '非法登录');
 
-    const user = await User.get_one(payload.user)
+    const user = await User.auth(payload.user)
+    logger.info("Auth", user)
 
-    if (!user) {
-        throw new AssertionError({ message: '用户不存在' });
+    if (Object.keys(user).length === 0) {
+        throw new AssertionError({ message: 'User not exist' });
     }
 
 
@@ -233,11 +246,14 @@ export async function loginByToken(
 
 
     const groups = await Group.getGroupByMember(user)
+    // groups.forEach((group: GroupDocument) => {
+    //     ctx.socket.join(group._id);
+    // });
+    for (let i = 0; i < groups.length; i++) {
+        ctx.socket.join(groups[i]._id);
+    }
 
-    groups.forEach((group: GroupDocument) => {
-        group._id = group.uuid;
-        ctx.socket.join(group._id);
-    });
+
 
     ctx.socket.user = user.uuid;
 
@@ -257,20 +273,23 @@ export async function loginByToken(
     }else {
         currentFriends = []
     }
-
-
+    logger.info("friends", friends)
     // eslint-disable-next-line no-use-before-define
     const notificationTokens = await getUserNotificationTokens(user);
-    return {
+
+    const  data = {
         _id: user.uuid,
         avatar: user.avatar,
         username: user.username,
+        address: user.address,
         tag: user.tag,
         groups,
         friends: currentFriends,
         isAdmin: config.administrator.includes(user.uuid),
         notificationTokens: []
     }
+
+    return data
 }
 
 async function getUserNotificationTokens(user: UserDocument) {
@@ -281,58 +300,80 @@ async function getUserNotificationTokens(user: UserDocument) {
 
 
 /**
- * 修改用户头像
  * @param ctx Context
  */
-export async function changeAvatar(ctx: Context<{ avatar: string }>) {
-    const { avatar } = ctx.data;
-    assert(avatar, '新头像链接不能为空');
+export async function changeAvatar(ctx: Context<{ avatar: string, address: string }>) {
+    const { avatar, address } = ctx.data;
+    assert(avatar, 'Url of avatar cannot be empty');
+    logger.info(ctx.data)
 
     const user = {
         uuid: ctx.socket.user,
-        avatar
+        avatar,
+        address
     } as UserDocument
 
     await User.saveAvatarByName(user)
-
-    // await User.updateOne(
-    //     { _id: ctx.socket.user },
-    //     {
-    //         avatar,
-    //     },
-    // );
-
     return {};
 }
 
 /**
- * 添加好友, 单向添加
+ * @param ctx Context
+ */
+export async function changeUsername(ctx: Context<{ username: string, address: string }>) {
+    const {username, address} = ctx.data;
+    assert(username, 'New username can not be empty');
+    const user = {
+        uuid: ctx.socket.user,
+        username,
+        address
+    } as UserDocument
+    logger.info(user)
+    await User.saveUsername(user)
+    return {
+        msg: 'ok',
+    };
+}
+
+/**
  * @param ctx Context
  */
 export async function addFriend(ctx: Context<{ userId: string }>) {
     const { userId } = ctx.data;
-    assert(ctx.socket.user !== userId, '不能添加自己为好友');
+    assert(ctx.socket.user !== userId, 'Can add yourself');
 
 
     const user = await User.get_one(userId)
     const friend = await Friend.get(ctx.socket.user, user.uuid);
-    assert(friend.length === 0, '你们已经是好友了');
+    assert(friend.length === 0, 'Your have added already');
 
 
 
     const newFriend = await Friend.addFriend({
         from: ctx.socket.user ,
         to: user.uuid,
-        createTime: new Date().toString()
+        createTime: new Date().toString(),
+        nickname: '',
     } as FriendDocument);
 
     return {
-        _id: user.uuid,
+        _id: newFriend.uuid,
         username: user.username,
         avatar: user.avatar,
         from: newFriend.from,
         to: newFriend.to,
+        nickname: '',
     };
+}
+
+export async function changeNameBuddy(ctx: Context<{userId: string, friendId: string, nickname: string}>) {
+    logger.info(ctx.data)
+    const {userId, friendId, nickname} = ctx.data
+
+    await Friend.changeName(friendId, nickname, ctx.socket.user)
+    return {
+        msg: 'ok'
+    }
 }
 
 const UserOnlineStatusCacheExpireTime = 1000 * 60;
@@ -346,13 +387,15 @@ function getUserOnlineStatusWrapper() {
         ctx: Context<{ userId: string }>,
     ) {
         const { userId } = ctx.data;
-        assert(userId, 'userId不能为空');
+        assert(userId, 'userId can not be empty');
 
         if (cache[userId] && cache[userId].expireTime > Date.now()) {
             return {
                 isOnline: cache[userId].value,
             };
         }
+        // const friend = await Friend.getUuid(userId)
+        // logger.info(friend)
         const sockets = await Socket.getOneUser(userId)
         const isOnline = sockets.length > 0;
         cache[userId] = {

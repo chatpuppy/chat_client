@@ -5,6 +5,7 @@ import 'regenerator-runtime/runtime';
 import React from 'react';
 import ReactDom from 'react-dom';
 import { Provider } from 'react-redux';
+import { MoralisProvider } from "react-moralis";
 
 import config from '@chatpuppy/config/client';
 import setCssVariable from './utils/setCssVariable';
@@ -12,6 +13,8 @@ import App from './App';
 import store from './state/store';
 import getData from './localStorage';
 
+const serverUrl = 'https://v8kr79ecxkrf.usemoralis.com:2053/server' 
+const appId = 'DoqGdmeiyZOF1OYpMUBkKAphWRbxdqbHGo3Z1M4z'
 // Register Service Worker
 if (window.location.protocol === 'https:' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -63,7 +66,9 @@ if (window.location.pathname !== '/') {
 
 ReactDom.render(
     <Provider store={store}>
-        <App />
+        <MoralisProvider  appId={appId} serverUrl={serverUrl} >
+            <App />
+        </MoralisProvider>
     </Provider>,
     document.getElementById('app'),
 );

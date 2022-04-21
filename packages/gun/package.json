@@ -4,7 +4,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production DOTENV_CONFIG_PATH=../../.env ts-node -r dotenv/config --transpile-only src/main.ts",
+    "start_bak": "cross-env NODE_ENV=production DOTENV_CONFIG_PATH=../../.env ts-node -r dotenv/config --transpile-only main.ts",
+    "start": "cross-env NODE_ENV=production DOTENV_CONFIG_PATH=../../.env ts-node --transpile-only main.ts",
     "dev:gun": "ts-node --transpile-only main.ts"
   },
   "dependencies": {
