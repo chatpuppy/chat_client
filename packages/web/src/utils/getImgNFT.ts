@@ -4,7 +4,7 @@ export const getImgNFT = async(url: string) => {
     return await axios.get(url)
     .then(function (response) {
       // handle success
-      return response.data.image
+      return response.data.image || response.data.image_url || response.data.background_image 
     })
     .catch(function (error) {
       // handle error

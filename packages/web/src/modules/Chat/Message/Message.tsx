@@ -22,6 +22,7 @@ import { State } from "../../../state/reducer";
 import Tooltip from "../../../components/Tooltip";
 import themes from "../../../themes";
 import FileMessage from "./FileMessage";
+import { parseAddress, displayAddress } from '../../../utils/stringUtils';
 
 const { dispatch } = store;
 
@@ -176,6 +177,7 @@ class Message extends Component<MessageProps, MessageState> {
 
   render() {
     const { isSelf, avatar, tag, tagColorMode, username } = this.props;
+    console.log('this.props', this.props);
     const { showButtonList } = this.state;
 
     let tagColor = `rgb(${themes.default.primaryColor})`;
@@ -185,7 +187,9 @@ class Message extends Component<MessageProps, MessageState> {
       tagColor = getPerRandomColor(username);
     }
 
-    const name = (!avatar && username) && username.substring(0, 2) || '';
+    console.log('sssss',!avatar && username && username.startsWith('0x'))
+    const userName =  username ?  username.startsWith('0x') ? displayAddress(username) : username.substring(0, 3) : ''
+    const name = (!avatar && username) &&  userName || '';
 
     return (
       <div className={`${Style.message} ${isSelf ? Style.self : ""}`} ref={this.$container}>
@@ -210,7 +214,7 @@ class Message extends Component<MessageProps, MessageState> {
                     this.handleClickAvatar(context.showUserInfo)
                   }
                 >
-                  {name}
+                 {name}
                 </div>
               )}
             </>
@@ -223,7 +227,7 @@ class Message extends Component<MessageProps, MessageState> {
                 {tag}
               </span>
             )}
-            <span className={Style.nickname}>{username}</span>
+            <span className={Style.nickname}>{parseAddress(username)}</span>
             <span className={Style.time}>{this.formatTime()}</span>
           </div>
           <div className={Style.contentButtonBlock} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>

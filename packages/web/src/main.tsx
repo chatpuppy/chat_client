@@ -13,8 +13,8 @@ import App from './App';
 import store from './state/store';
 import getData from './localStorage';
 
-const serverUrl = 'https://0g1qa1q67rws.usemoralis.com:2053/server' 
-const appId = 'NFnm2kT2Tf7czzvhRMHJ02fz0v7rav3c8Xw0DLVx'
+const serverUrl = 'https://dsfr8r26mv1j.usemoralis.com:2053/server' 
+const appId = 'QSnFt52NWfD2bssblWPnias4kMBg6utwbdPnyNmf'
 // Register Service Worker
 if (window.location.protocol === 'https:' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {

@@ -14,6 +14,7 @@ import OnlineStatus from './OnlineStatus';
 import useAction from '../../hooks/useAction';
 import socket from '../../socket';
 import Message from '../../components/Message';
+import {displayAddress} from '../../utils/stringUtils'
 
 import Admin from './Admin';
 
@@ -96,7 +97,7 @@ function Sidebar() {
     }
 
     function displayName() {
-        return username ? username.substring(0,2) : address.substring(0,2)
+        return username ? username.substring(0,3) : displayAddress(address);
     }
 
     return (
