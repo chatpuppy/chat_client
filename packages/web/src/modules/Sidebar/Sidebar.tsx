@@ -97,7 +97,7 @@ function Sidebar() {
     }
 
     function displayName() {
-        return username ? username.substring(0,3) : displayAddress(address);
+        return username && displayAddress(username) || ''
     }
 
     return (

@@ -187,8 +187,7 @@ class Message extends Component<MessageProps, MessageState> {
       tagColor = getPerRandomColor(username);
     }
 
-    console.log('sssss',!avatar && username && username.startsWith('0x'))
-    const userName =  username ?  username.startsWith('0x') ? displayAddress(username) : username.substring(0, 3) : ''
+    const userName =  username && displayAddress(username) || ''
     const name = (!avatar && username) &&  userName || '';
 
     return (
