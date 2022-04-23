@@ -22,9 +22,9 @@ interface SelfInfoProps {
 function SelfInfo(props: SelfInfoProps) {
   const { visible, onClose } = props;
 
-  
-  const { user } = useMoralis();
   const Web3Api = useMoralisWeb3Api();
+  const { user } = useMoralis();
+
   const action = useAction();
   const userNameInfo = useSelector((state: State) => (state.user &&  state.user.username) || "");
   const userAddress = useSelector((state: State) => (state.user && state.user.address) || "");
@@ -91,8 +91,7 @@ function SelfInfo(props: SelfInfoProps) {
       address: userAddress,
     };
     const { result } = await Web3Api.account.getNFTs(options);
-    const nfts = result.filter( (v,i,a)=> a.findIndex( t => ( t.token_uri === v.token_uri ))===i && v.metadata)
-    setNfts(nfts);
+    setNfts(result);
     setLoading(false);
   }
 
@@ -137,12 +136,13 @@ function NFT({ url = "", selectNFT, selected }) {
   const [imgSrc, setImgSrc] = useState("");
   const [ errored, setErrored] = useState(false);
 
-  useEffect(() => {
-    async function fetchImageAPI() {
-      const image = await getImgNFT(url);
-      setImgSrc(getImgSrc(image));
-    }
+  async function fetchImageAPI() {
+    const image = await getImgNFT(url);
+    console.log('getImgSrc(image)', getImgSrc(image))
+    setImgSrc(getImgSrc(image));
+  }
 
+  useEffect(() => {
     fetchImageAPI();
   }, []);
 
