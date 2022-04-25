@@ -108,51 +108,6 @@ function MessageList() {
         }
     }
 
-    function renderMessage(message: Message) {
-        const isSelf = message.from._id === selfId;
-        let shouldScroll = true;
-        if ($list.current) {
-            // @ts-ignore
-            const { scrollHeight, clientHeight, scrollTop } = $list.current;
-            shouldScroll =
-                isSelf ||
-                scrollHeight === clientHeight ||
-                scrollTop === 0 ||
-                scrollTop > scrollHeight - clientHeight * 2;
-        }
-
-        let { tag } = message.from;
-        if (!tag && isGroup && message.from._id === creator) {
-            tag = 'Creator';
-        }
-        let name = ''
-        if(message.nickname != '') {
-            name = message.nickname
-        }else {
-            name = message.from.username
-        }
-
-        return (
-            <MessageComponent
-                key={message._id}
-                id={message._id}
-                linkmanId={focus}
-                isSelf={isSelf}
-                userId={message.from._id}
-                avatar={message.from.avatar}
-                username={name}
-                originUsername={message.from.originUsername}
-                time={message.createTime}
-                type={message.type}
-                content={message.content}
-                tag={tag}
-                loading={message.loading}
-                percent={message.percent}
-                shouldScroll={shouldScroll}
-                tagColorMode={tagColorMode}
-            />
-        );
-    }
 
     return (
         <div className={styles.container}>
@@ -161,8 +116,8 @@ function MessageList() {
                 onScroll={handleScroll}
                 ref={$list}
             >
-                {Object.values(messages).map((message) =>
-                    renderMessage(message),
+                {Object.values(messages).map((message,index) =>
+                    <Message key={index} message={message} selfId={selfId} $list={$list} isGroup={isGroup} creator={creator} tagColorMode={tagColorMode} />
                 )}
             </div>
         </div>
@@ -170,3 +125,52 @@ function MessageList() {
 }
 
 export default MessageList;
+
+
+
+const Message = ( {message, selfId, $list , isGroup , creator, tagColorMode}) => {
+    const isSelf = message.from._id === selfId;
+    let shouldScroll = true;
+    if ($list.current) {
+        // @ts-ignore
+        const { scrollHeight, clientHeight, scrollTop } = $list.current;
+        shouldScroll =
+            isSelf ||
+            scrollHeight === clientHeight ||
+            scrollTop === 0 ||
+            scrollTop > scrollHeight - clientHeight * 2;
+    }
+
+    let { tag } = message.from;
+    if (!tag && isGroup && message.from._id === creator) {
+        tag = 'Creator';
+    }
+
+    let name = ''
+    if(message.nickname) {
+        name = message.nickname
+    }else {
+        name = message.from.username
+    }
+
+    return (
+        <MessageComponent
+            key={message._id}
+            id={message._id}
+            linkmanId={focus}
+            isSelf={isSelf}
+            userId={message.from._id}
+            avatar={message.from.avatar}
+            username={name}
+            originUsername={message.from.originUsername}
+            time={message.createTime}
+            type={message.type}
+            content={message.content}
+            tag={tag}
+            loading={message.loading}
+            percent={message.percent}
+            shouldScroll={shouldScroll}
+            tagColorMode={tagColorMode}
+        />
+    );
+}

@@ -26,12 +26,18 @@ const Message = {
     },
 
     async getToGroup(groupId: string) {
-        const messages = [] as Array<MessageDocument>;
-        gun.get('messages').map().on(  function(message) {
-            if( message.to === groupId)
-                messages.push(message as MessageDocument);
-
+        let messages = [] as Array<MessageDocument>;
+        // gun.get('messages').get(groupId).map().on(  function(message) {
+        //     if( message){
+        //         // messages.push(message as MessageDocument);
+        //     }
+        // })
+        gun.get('messages').get(groupId).map().on((data, key) => {
+            if (data) {
+                messages.push(data as MessageDocument);
+            }
         })
+        await delay(100)
         return messages
     },
 
@@ -43,10 +49,14 @@ const Message = {
         return message
     },
 
-    async create(message: MessageDocument) {
+    async create(message: MessageDocument, to: string = '') {
         message.uuid = uuid()
         message.deleted = false
-        await gun.get("messages").get(message.uuid).put(message)
+        logger.info('to', to)
+        if ( to != '') {
+            gun.get("messages").get(to).get(message.uuid).put(message)
+        }
+        logger.info("sendMessage", message)
         return message
     }
 }

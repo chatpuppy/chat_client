@@ -4,7 +4,6 @@ import assert, { AssertionError } from 'assert';
 import jwt from 'jwt-simple';
 import config from '@chatpuppy/config/server';
 import User, { UserDocument} from '@chatpuppy/database/gundb/models/user'
-import getRandomAvatar from '@chatpuppy/utils/getRandomAvatar';
 
 import Message, {
     handleInviteV2Messages,
@@ -16,10 +15,8 @@ import Socket, { SocketDocument } from '@chatpuppy/database/gundb/models/socket'
 
 import logger from '@chatpuppy/utils/logger';
 import Notification from '@chatpuppy/database/gundb/models/notification';
-import { getSocketIp } from '@chatpuppy/utils/socket';
 
 
-const OneDay = 1000 * 60 * 60 * 24;
 
 interface Environment {
     os: string;
@@ -39,23 +36,18 @@ export async function register(
         // TODO: refactor when node types support "Assertion Functions" https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
         throw new AssertionError({ message: 'Default group is not exist' });
     }
-    logger.info(defaultGroup)
-    logger.info(address)
     let newUser = await User.auth(address);
     let is_new = false;
     console.log("Auth", newUser)
     if (Object.keys(newUser).length == 0) {
         try {
-            logger.info("=====")
             newUser = {
                 address,
-                avatar,
+                avatar: avatar,
                 lastLoginIp: ctx.socket.ip
             } as UserDocument;
-            logger.info("=====")
             newUser = await User.createUser(newUser);
             is_new = true
-            logger.info("=====")
         } catch (err) {
             if ((err as Error).name === 'ValifationError') {
                 return 'User name contains unsupported characters or its length exceeds the limit.';
@@ -64,7 +56,6 @@ export async function register(
         }
     }
     let groups = []
-
     if (is_new) {
         defaultGroup.members = `${defaultGroup.members  },${  newUser.uuid}`
         await Group.save(defaultGroup)
@@ -123,7 +114,6 @@ export async function guest(ctx: Context<Environment>) {
     // );
 
     const defaultGroup = await Group.getDefaultGroup();
-    logger.info("defaultGroup", defaultGroup)
     if (Object.keys(defaultGroup).length === 0) {
         throw new AssertionError({ message: 'Default group is not exist' });
     }
@@ -131,20 +121,18 @@ export async function guest(ctx: Context<Environment>) {
 
     ctx.socket.join(defaultGroup._id);
     let  messages = await Message.getToGroup(defaultGroup.uuid);
-    messages.sort((a, b)=> (new Date(a.createTime).getTime() >  new Date(b.createTime).getTime()) ? -1 : 1)
-
+    // messages.sort((a, b)=> (new Date(a.createTime).getTime() >  new Date(b.createTime).getTime()) ? -1 : 1)
 
     messages = await User.getUserMessage(messages)
+    messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
     await handleInviteV2Messages(messages);
     const data = { messages, ...defaultGroup }
-    logger.info("data", data)
-
     return data;
 }
 
 /**
- * @param user 
- * @param environment 
+ * @param user
+ * @param environment
  */
 function generateToken(user: string, environment: string) {
     return jwt.encode(
@@ -224,6 +212,7 @@ export async function loginByToken(
     assert(token, 'token can not be empty');
 
     let payload = null;
+
     try {
         payload = jwt.decode(token, config.jwtSecret);
     } catch (err) {
@@ -234,7 +223,6 @@ export async function loginByToken(
 
 
     const user = await User.auth(payload.user)
-    logger.info("Auth", user)
 
     if (Object.keys(user).length === 0) {
         throw new AssertionError({ message: 'User not exist' });
@@ -246,6 +234,7 @@ export async function loginByToken(
 
 
     const groups = await Group.getGroupByMember(user)
+    logger.info("groups", groups)
     // groups.forEach((group: GroupDocument) => {
     //     ctx.socket.join(group._id);
     // });
@@ -253,7 +242,7 @@ export async function loginByToken(
         ctx.socket.join(groups[i]._id);
     }
 
-
+    logger.info(user)
 
     ctx.socket.user = user.uuid;
 
@@ -265,7 +254,7 @@ export async function loginByToken(
         environment,
         ip: ctx.socket.ip
     } as SocketDocument)
-
+    logger.info(socket)
     const friends = await Friend.getByFrom(user.uuid)
     let currentFriends = [] as any
     if (friends.length > 0){
@@ -273,10 +262,9 @@ export async function loginByToken(
     }else {
         currentFriends = []
     }
-    logger.info("friends", friends)
     // eslint-disable-next-line no-use-before-define
     const notificationTokens = await getUserNotificationTokens(user);
-
+    logger.info(friends)
     const  data = {
         _id: user.uuid,
         avatar: user.avatar,
@@ -300,12 +288,12 @@ async function getUserNotificationTokens(user: UserDocument) {
 
 
 /**
+ * 修改用户头像
  * @param ctx Context
  */
 export async function changeAvatar(ctx: Context<{ avatar: string, address: string }>) {
     const { avatar, address } = ctx.data;
     assert(avatar, 'Url of avatar cannot be empty');
-    logger.info(ctx.data)
 
     const user = {
         uuid: ctx.socket.user,
@@ -328,7 +316,6 @@ export async function changeUsername(ctx: Context<{ username: string, address: s
         username,
         address
     } as UserDocument
-    logger.info(user)
     await User.saveUsername(user)
     return {
         msg: 'ok',
@@ -367,7 +354,6 @@ export async function addFriend(ctx: Context<{ userId: string }>) {
 }
 
 export async function changeNameBuddy(ctx: Context<{userId: string, friendId: string, nickname: string}>) {
-    logger.info(ctx.data)
     const {userId, friendId, nickname} = ctx.data
 
     await Friend.changeName(friendId, nickname, ctx.socket.user)
@@ -395,7 +381,6 @@ function getUserOnlineStatusWrapper() {
             };
         }
         // const friend = await Friend.getUuid(userId)
-        // logger.info(friend)
         const sockets = await Socket.getOneUser(userId)
         const isOnline = sockets.length > 0;
         cache[userId] = {

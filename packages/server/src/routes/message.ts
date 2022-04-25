@@ -17,8 +17,8 @@ import Socket, { SocketDocument} from '@chatpuppy/database/gundb/models/socket';
 import Notification from '@chatpuppy/database/gundb/models/notification';
 import History, {createOrUpdateHistory} from '@chatpuppy/database/gundb/models/history'
 
-import Friend from "@chatpuppy/database/gundb/models/friend";
 import client from '../../../config/client';
+import Friend from "@chatpuppy/database/gundb/models/friend";
 
 
 /** Get the first number of historical messages. */
@@ -70,7 +70,6 @@ async function pushNotification(
  * @param ctx Context
  */
 export async function sendMessage(ctx: Context<SendMessageData>) {
-    logger.info(ctx.data)
     const { to, content } = ctx.data;
     let { type } = ctx.data;
     assert(to, 'to cannot be empty');
@@ -80,26 +79,22 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
     let toUser: UserDocument | null = null;
     let uuid: string = '';
     if (to.length === 36) {
+        logger.info("to", to)
         toGroup = await Group.getGroupByUuid(to);
+        logger.info("toGroup", toGroup)
         uuid = toGroup.uuid
         assert(toGroup, 'Group not found');
     } else {
         const userId = to.replace(ctx.socket.user, '');
         assert(userId, 'Invalid user id');
-        logger.info("UserId", userId)
         // const friend = await Friend.getUuid(userId)
         // logger.info("friend", friend)
         toUser = await User.get_one(userId)
-        logger.info(toUser)
         uuid = toUser.uuid
 
         assert(toUser, 'User not found');
     }
-    let messageContent = content;function delay(ms: number) {
-        return new Promise((res, rej) => {
-            setTimeout(res, ms);
-        })
-    }
+    let messageContent = content;
     if (type === 'text') {
         assert(messageContent.length <= 2048, 'Message length too long');
 
@@ -147,7 +142,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
     }
     const user = await User.get_one(ctx.socket.user);
     if (!user) {
-        throw new AssertionError({ message: 'User is not exist' });
+        throw new AssertionError({ message: '用户不存在' });
     }
     const message = await Message.create({
         from: ctx.socket.user,
@@ -155,7 +150,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
         type,
         content: messageContent,
         createTime: new Date().toLocaleString()
-    } as MessageDocument);
+    } as MessageDocument, to);
 
     const messageData = {
         _id: message.uuid,
@@ -166,7 +161,6 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
         content: message.content
     };
 
-    logger.info("messageData", messageData)
     if (type === 'inviteV2') {
         await handleInviteV2MessageModify(messageData);
     }
@@ -232,17 +226,18 @@ export async function getLinkmansLastMessagesV2(
             result[history.linkman] = history.message;
             return result
         }, {})
-    logger.info("historyMap", historyMap)
     const linkmansMessages = await Promise.all(
         linkmans.map(async (linkmanId) => {
             let messages = await Message.getToGroup(linkmanId)
-            messages = await User.getUserMessage(messages)
 
+            messages = await User.getUserMessage(messages)
             messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
             await handleInviteV2Messages(messages)
             return messages
+
         })   
     );
+
 
     type ResponseData = {
         [linkmanId: string]: {
@@ -255,12 +250,11 @@ export async function getLinkmansLastMessagesV2(
         (result: ResponseData, linkmanId, index) => {
             const messages = linkmansMessages[index];
             if (historyMap[linkmanId]) {
-                logger.info("messages", messages)
-                logger.info(historyMap[linkmanId])
                 const messageIndex = messages.findIndex(
                     ({uuid}) => uuid === historyMap[linkmanId]
                 );
-                logger.info(messageIndex)
+                logger.info("messageIndex", messageIndex)
+                logger.info("historyMap[linkmanId]", historyMap[linkmanId])
                 result[linkmanId] = {
                     messages,
                     unread: messageIndex === -1 ? 100: messageIndex
@@ -275,10 +269,12 @@ export async function getLinkmansLastMessagesV2(
         },
         {},
     );
+    // logger.info("responseData", responseData)
     return responseData
 }
 
 /**
+ * 获取默认群组的历史消息
  * @param ctx Context
  */
 
@@ -288,7 +284,7 @@ export async function getDefaultGroupHistoryMessages(
     const { existCount } = ctx.data;
     const group = await Group.getDefaultGroup();
     if (Object.keys(group).length === 0) {
-        throw new AssertionError({ message: 'Default group is not exist' });
+        throw new AssertionError({ message: '默认群组不存在' });
     }
     const messages = await Message.getToGroup(group.uuid)
     await handleInviteV2Messages(messages);
@@ -297,7 +293,7 @@ export async function getDefaultGroupHistoryMessages(
 }
 
 /**
- *
+ * 获取联系人的历史消息
  * @param ctx Context
  */
 export async function getLinkmanHistoryMessages(
@@ -305,12 +301,11 @@ export async function getLinkmanHistoryMessages(
 
 ) {
     const { linkmanId, existCount } = ctx.data;
-    logger.info(ctx.data)
-    let messages = await Message.getToGroup(linkmanId)
-    messages = await User.getUserMessage(messages)
-    await handleInviteV2Messages(messages);
-    messages = messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
-    const result = messages.slice(existCount).reverse();
+    // let messages = await Message.getToGroup(linkmanId)
+    // messages = await User.getUserMessage(messages)
+    // await handleInviteV2Messages(messages);
+    // messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
+    // const result = messages.slice(existCount);
 
-    return result;
+    return [];
 }

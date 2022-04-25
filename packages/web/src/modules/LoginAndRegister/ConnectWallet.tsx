@@ -4,10 +4,10 @@ import { useDispatch } from "react-redux";
 import { useMoralisWeb3Api, useMoralis } from "react-moralis";
 import ReactLoading from "react-loading";
 
+import { Select, Option } from "../../components/Select";
+
 import getFriendId from "@chatpuppy/utils/getFriendId";
 import convertMessage from "@chatpuppy/utils/convertMessage";
-
-import { Select, Option } from "../../components/Select";
 import Style from "./ConnectWallet.less";
 import Message from "../../components/Message";
 import useAction from "../../hooks/useAction";

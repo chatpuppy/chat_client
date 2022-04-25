@@ -1,6 +1,6 @@
+import { gun } from "../initGundb";
 import { v4 as uuid } from 'uuid';
 import logger from "@chatpuppy/utils/logger";
-import { gun } from "../initGundb";
 
 const  Friend = {
     async addFriend(friend: FriendDocument) {
@@ -22,7 +22,6 @@ const  Friend = {
     async get(to: string, from: string) {
         const friends = [] as FriendDocument[]
         gun.get('friends').map().on(data => {
-            logger.info(data)
             if(data) {
                 if (data.to === to && data.from === from) {
                     friends.push((data))
@@ -37,10 +36,11 @@ const  Friend = {
         const friends = [] as FriendDocument[]
 
         gun.get('friends').map(async friend => {
-            if ( friend.hasOwnProperty('from') && friend.from === from) {
-                friend._id = friend.uuid
-                friends.push(friend)
-                logger.info(friend)
+            if (friend) {
+                if (friend.hasOwnProperty('from') && friend.from === from) {
+                    friend._id = friend.uuid
+                    friends.push(friend)
+                }
             }
         })
         await delay(500)

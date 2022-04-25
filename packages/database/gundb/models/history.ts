@@ -4,18 +4,30 @@ import { gun } from "../initGundb";
 
 const History = {
     async getOne(user: string, linkman: string) {
-        let history = {} as HistoryDocument
-        gun.get("histories").map().on((data, key) => {
-            if (data.userId === user && data.linkman === linkman) {
-                history = data
-            }
-        })
-        return history
+        let new_history = {} as HistoryDocument
+        gun.get("histories").map(
+            async history => {
+                if (history){
+                    if (history.userId === user && history.linkman === linkman) {
+                        new_history = history
+                    }
+                }
+            })
+        // ).on((data, key) => {
+        //     if (data.userId === user && data.linkman === linkman) {
+        //         history = data
+        //     }
+        // })
+        return new_history
     },
 
-    async save(history: HistoryDocument) {
-        gun.get("histories").get(history.uuid).put(history)
-        logger.info(history)
+    async save(history: HistoryDocument, uuid: string = '') {
+        if (uuid == ''){
+            gun.get("histories").get(history.uuid).put(history)
+        }else {
+            // @ts-ignore
+            gun.get("histories").get(history.uuid).get('message').put(history.message)
+        }
         return history
     },
 
@@ -60,7 +72,6 @@ export async function createOrUpdateHistory(
     //         linkman: linkmanId,
     //         message: messageId,
     //     });
-    logger.info("=====SAVE=====")
     const history = await History.getOne(userId, linkmanId);
     if (Object.keys(history).length > 0) {
         history.message = messageId;

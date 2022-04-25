@@ -42,10 +42,11 @@ export async function createGroup(ctx: Context<{ name: string }>) {
     assert(!group, 'Group is exist')
 
     let newGroup = {} as GroupDocument;
+    const user = await User.get_one(ctx.socket.user)
     try {
         newGroup = await Group.createGroup({
             name,
-            avatar: getRandomAvatar(),
+            avatar: user.avatar,
             creator: ctx.socket.user,
             members: ctx.socket.user,
             createTime: new Date().toString()

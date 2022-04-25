@@ -4,13 +4,17 @@ import { gun } from "../initGundb";
 import { MessageDocument } from './message';
 import friend, { FriendDocument } from './friend';
 
+function delay(ms: number) {
+    return new Promise((res, rej) => {
+        setTimeout(res, ms);
+    })
+}
 
 const User = {
 
     async createUser(user: UserDocument) {
         const linkId = uuid()
-
-        await gun.get("users").get(user.address).put({
+        gun.get("users").get(user.address).put({
             uuid: linkId,
             address: user.address,
             lastLoginIp: user.lastLoginIp,
@@ -20,15 +24,13 @@ const User = {
             // expressions: user.expressions,
             avatar: user.avatar
         }, (ack) => {
-            logger.info(ack)
         })
 
-        let userLink = {} as UserDocument
         await gun.get("users").get(user.address).on((data, key) => {
-            userLink = data
+            user = data
             // return data
         })
-        return userLink
+        return user
     },
 
     async save(user: UserDocument) {
@@ -92,38 +94,40 @@ const User = {
     async getUserMessage(messages: Array<MessageDocument>) {
         const newMessages: any = []
         const users = [] as Array<UserDocument>
+
         for(let i = 0; i < messages.length; i++) {
             const message = messages[i]
             gun.get("users").map( async user => {
-                if (typeof user.uuid != undefined && user.uuid === message.from) {
-
-                    user._id = user.uuid
-                    let current_friend = {} as any
-                    gun.get("friends").map(async friend => {
-                        if( friend.to == user.uuid && message.from == user.uuid) {
-                            current_friend = friend
-                            logger.info("current_friend", current_friend)
+                if (user) {
+                    if (typeof user.uuid != undefined && user.uuid === message.from) {
+                        user._id = user.uuid
+                        let current_friend = {} as FriendDocument
+                        gun.get("friends").map(async friend => {
+                            if (friend) {
+                                if (friend.to == user.uuid && message.from == user.uuid) {
+                                    current_friend = friend
+                                }
+                            }
+                        })
+                        const new_message = {
+                            _id: message.uuid,
+                            uuid: message.uuid,
+                            username: user.username,
+                            avatar: user.avatar,
+                            type: message.type,
+                            content: message.content,
+                            from: user,
+                            to: message.to,
+                            createTime: message.createTime,
+                            deleted: message.deleted,
+                            nickname: current_friend.nickname ? current_friend.nickname : ''
                         }
-                    })
-                    const new_message = {
-                        _id: message.uuid,
-                        uuid: message.uuid,
-                        username: user.username,
-                        avatar: user.avatar,
-                        type: message.type,
-                        content: message.content,
-                        from: user,
-                        to: message.to,
-                        createTime: message.createTime,
-                        deleted: message.deleted,
-                        nickname: current_friend.nickname ? current_friend.nickname : ''
+                        newMessages.push(new_message)
                     }
-                    logger.info(new_message)
-
-                    newMessages.push(new_message)
                 }
             })
         }
+        await delay(500)
         return newMessages
     },
 
@@ -131,7 +135,9 @@ const User = {
         const currentFriends = [] as any[]
         const users = [] as UserDocument[]
         await gun.get('users').map().on(data => {
-            users.push(data)
+            if (data) {
+                users.push(data)
+            }
         })
         friends.forEach(e => {
             users.forEach(user => {

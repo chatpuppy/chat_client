@@ -29,8 +29,8 @@ const Group = {
             // @ts-ignore
             gun.get('groups').get('defaultGroup').get('members').put(members)
         }else {
-            gun.get('groups').get(group.name).set(group, ack => {
-            })
+            // @ts-ignore
+            gun.get('groups').get(group.name).get('members').put(members)
         }
     },
 
@@ -85,8 +85,8 @@ const Group = {
         await gun.get('groups').get("defaultGroup").once((data) => {
             if (data){
                 defaultGroup = data as GroupDocument
+                defaultGroup._id = data.uuid
             }
-            logger.info(data)
         })
         return defaultGroup
     },
@@ -115,21 +115,22 @@ const Group = {
     async getGroupByMember(user: UserDocument) {
         const groupList: GroupDocument[] = []
         let check_group = ''
-        await gun.get('groups').map( async group => {
-            if (group.hasOwnProperty('members')&& typeof group.members == "string" && group.members.includes(user.uuid) && typeof group.uuid !== 'undefined') {
-                if (!check_group.includes(group.uuid)){
-                    check_group = check_group + ',' + group.uuid
-                    group._id = group.uuid
-                    groupList.push(group)
+        gun.get('groups').map( async group => {
+            if (group) {
+                if (group.hasOwnProperty('members') && typeof group.members == "string" && group.members.includes(user.uuid) && typeof group.uuid !== 'undefined') {
+                    if (!check_group.includes(group.uuid)) {
+                        check_group = check_group + ',' + group.uuid
+                        group._id = group.uuid
+                        groupList.push(group)
+
+                    }
+
+                } else {
 
                 }
-
-            }else {
-
             }
         })
         await delay(500)
-        logger.info("check_group", check_group)
 
         return groupList
     },
