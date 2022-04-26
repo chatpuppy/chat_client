@@ -26,10 +26,11 @@ const User = {
         }, (ack) => {
         })
 
-        await gun.get("users").get(user.address).on((data, key) => {
-            user = data
-            // return data
-        })
+        // await gun.get("users").get(user.address).on((data, key) => {
+        //     user = data
+        //     // return data
+        // })
+        user.uuid = linkId
         return user
     },
 
@@ -72,12 +73,15 @@ const User = {
 
     async auth(address: string) {
         let current_user = {} as  UserDocument
-        gun.get("users").map(user => {
-            if (user.address === address){
-                user._id = user.uuid
-                current_user = user
+        gun.get("users").map(async user => {
+            if (user) {
+                if (user.address === address) {
+                    user._id = user.uuid
+                    current_user = user
+                }
             }
         })
+
         return current_user
     },
 

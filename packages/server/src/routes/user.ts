@@ -47,6 +47,7 @@ export async function register(
                 lastLoginIp: ctx.socket.ip
             } as UserDocument;
             newUser = await User.createUser(newUser);
+            logger.info("newUser", newUser)
             is_new = true
         } catch (err) {
             if ((err as Error).name === 'ValifationError') {
@@ -82,7 +83,6 @@ export async function register(
     socket.browser = browser
     socket.environment = environment
     await Socket.create(socket)
-
 
     const data = {
         _id: newUser.uuid,

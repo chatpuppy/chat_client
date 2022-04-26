@@ -34,16 +34,20 @@ const  Friend = {
 
     async getByFrom(from: string) {
         const friends = [] as FriendDocument[]
-
-        gun.get('friends').map(async friend => {
-            if (friend) {
-                if (friend.hasOwnProperty('from') && friend.from === from) {
-                    friend._id = friend.uuid
-                    friends.push(friend)
+        try {
+            gun.get('friends').map().on(friend => {
+                logger.info("friend", friend)
+                if (friend) {
+                    if (friend.hasOwnProperty('from') && friend.from === from) {
+                        friend._id = friend.uuid
+                        friends.push(friend)
+                    }
                 }
-            }
-        })
-        await delay(500)
+            })
+        } catch (e) {
+            logger.warn(e)
+        }
+        await delay(200)
         return friends
     },
 
