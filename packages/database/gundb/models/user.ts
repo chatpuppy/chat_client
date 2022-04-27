@@ -23,11 +23,13 @@ const User = {
             // tag: user.tag,
             // expressions: user.expressions,
             avatar: user.avatar
-        }, (ack) => {
         })
 
-        // await gun.get("users").get(user.address).on((data, key) => {
-        //     user = data
+        // gun.get("users").get(user.address).once((data, key) => {
+        //     if (data) {
+        //         // @ts-ignore
+        //         user = data
+        //     }
         //     // return data
         // })
         user.uuid = linkId

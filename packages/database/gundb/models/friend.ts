@@ -17,6 +17,7 @@ const  Friend = {
                 gun.get('friends').get(friend.uuid).get('nickname').put(nickname)
             }
         })
+
     },
 
     async get(to: string, from: string) {
@@ -33,21 +34,27 @@ const  Friend = {
     },
 
     async getByFrom(from: string) {
-        const friends = [] as FriendDocument[]
+        const friends: FriendDocument[] = []
+        logger.info("start catch")
         try {
             gun.get('friends').map().on(friend => {
                 logger.info("friend", friend)
-                if (friend) {
-                    if (friend.hasOwnProperty('from') && friend.from === from) {
-                        friend._id = friend.uuid
-                        friends.push(friend)
+                try {
+                    if (friend) {
+                        if (friend.hasOwnProperty('from') && friend.from === from) {
+                            friend._id = friend.uuid
+                            friends.push(friend)
+                        }
                     }
+                } catch (e) {
+                    logger.warn(e)
                 }
             })
         } catch (e) {
             logger.warn(e)
         }
-        await delay(200)
+        logger.info("end catch")
+        // await delay(200)
         return friends
     },
 

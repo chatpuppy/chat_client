@@ -25,7 +25,7 @@ const Socket = {
         //     sockets.push(socket as SocketDocument)
         // })
 
-        await nodeSocket.map().on(  async function(socket) {
+        gun.get("sockets").map().on(  async function(socket) {
             if(socket){
                 if (socket.hasOwnProperty('user') && socket.user == user) {
                     sockets.push(socket)
@@ -40,13 +40,13 @@ const Socket = {
         //         }
         //     }
         // })
-        await delay(2000)
+        await delay(1000)
         return sockets
     },
 
     async getOne(id: string) {
         let socket = {} as SocketDocument
-        await gun.get("sockets").get(id).once(data => {
+        gun.get("sockets").get(id).once(data => {
             socket = data as SocketDocument
         })
         return socket
