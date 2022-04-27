@@ -6,18 +6,13 @@ const History = {
     async getOne(user: string, linkman: string) {
         let new_history = {} as HistoryDocument
         gun.get("histories").map(
-            async history => {
-                if (history){
-                    if (history.userId === user && history.linkman === linkman) {
-                        new_history = history
-                    }
+        ).on((data, key) => {
+            if (data) {
+                if (data.userId === user && data.linkman === linkman) {
+                    history = data
                 }
-            })
-        // ).on((data, key) => {
-        //     if (data.userId === user && data.linkman === linkman) {
-        //         history = data
-        //     }
-        // })
+            }
+        })
         return new_history
     },
 
@@ -72,7 +67,7 @@ export async function createOrUpdateHistory(
     //         linkman: linkmanId,
     //         message: messageId,
     //     });
-    const history = await History.getOne(userId, linkmanId);
+    let history = await History.getOne(userId, linkmanId);
     if (Object.keys(history).length > 0) {
         history.message = messageId;
         await History.save(history)

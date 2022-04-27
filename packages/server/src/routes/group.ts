@@ -178,7 +178,14 @@ export async function joinGroup(ctx: Context<{ groupId: string }>) {
         creator: group.creator,
         messages
     }
+}
 
+export async function updateGroup(ctx: Context<{ name: string, avatar: string}>) {
+    const { name, avatar} = ctx.data
+    assert(name, 'Invalid group name')
 
-
+    await Group.saveGroup(name, avatar)
+    return {
+        msg: 'ok'
+    }
 }

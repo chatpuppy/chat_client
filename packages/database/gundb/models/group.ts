@@ -143,6 +143,11 @@ const Group = {
             }
         })
         return groupList
+    },
+
+    async saveGroup( name: string, avatar: string) {
+        // @ts-ignore
+        gun.get('groups').get(name).get('avatar').put(avatar)
     }
 }
 

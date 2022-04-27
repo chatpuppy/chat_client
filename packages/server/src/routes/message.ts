@@ -207,7 +207,6 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
             );
         }
     }
-
     await createOrUpdateHistory(ctx.socket.user, to, message.uuid);
     return messageData;
 
