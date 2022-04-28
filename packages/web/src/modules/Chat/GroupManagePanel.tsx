@@ -1,5 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 
 import readDiskFIle from '../../utils/readDiskFile';
 import uploadFile, { getOSSFileUrl } from '../../utils/uploadFile';
@@ -12,6 +13,8 @@ import Message from '../../components/Message';
 import Avatar from '../../components/Avatar';
 import Tooltip from '../../components/Tooltip';
 import Dialog from '../../components/Dialog';
+import NFT from "../../components/NFT";
+
 import {
     changeGroupName,
     changeGroupAvatar,
@@ -29,20 +32,40 @@ interface GroupManagePanelProps {
     avatar: string;
     creator: string;
     onlineMembers: GroupMember[];
+    name: string;
 }
 
 function GroupManagePanel(props: GroupManagePanelProps) {
-    const { visible, onClose, groupId, avatar, creator, onlineMembers } = props;
+    const Web3Api = useMoralisWeb3Api();
+    const { visible, onClose, groupId, avatar, creator, onlineMembers, name } = props;
+    const { user } = useMoralis();
 
     const action = useAction();
     const isLogin = useIsLogin();
     const selfId = useSelector((state: State) => state.user?._id);
+    const userAddress = useSelector((state: State) => (state.user && state.user.address) || "");
+
     const [deleteConfirmDialog, setDialogStatus] = useState(false);
     const [groupName, setGroupName] = useState('');
+    const [nfts, setNfts] = useState([]);
+    const [selected, setSelected] = useState("");
+    const [avatarNFT, setAvatarNFT] = useState("");
+    const [loading, setLoading] = useState(false);
+
     const context = useContext(ShowUserOrGroupInfoContext);
 
+    useEffect(() => {
+        if(!userAddress) return
+        getNFT();
+        setGroupName(name);
+      }, [userAddress]);
+
+      useEffect(() => {
+        setGroupName(name);
+      }, [name]);
+
     async function handleChangeGroupName() {
-        const isSuccess = await changeGroupName(groupId, groupName);
+        const isSuccess = await changeGroupName(name, groupName);
         if (isSuccess) {
             Message.success('Update group name successfully');
             action.setLinkmanProperty(groupId, 'name', groupName);
@@ -50,29 +73,13 @@ function GroupManagePanel(props: GroupManagePanelProps) {
     }
 
     async function handleChangeGroupAvatar() {
-        const image = await readDiskFIle(
-            'blob',
-            'image/png,image/jpeg,image/gif',
-        );
-        if (!image) {
-            return;
-        }
-        if (image.length > config.maxAvatarSize) {
-            // eslint-disable-next-line consistent-return
-            return Message.error('Update group avatar fail, max size 1.5M');
-        }
-
         try {
-            const imageUrl = await uploadFile(
-                image.result as Blob,
-                `GroupAvatar/${selfId}_${Date.now()}.${image.ext}`,
-            );
-            const isSuccess = await changeGroupAvatar(groupId, imageUrl);
+            const isSuccess = await changeGroupAvatar(name, selected);
             if (isSuccess) {
                 action.setLinkmanProperty(
                     groupId,
                     'avatar',
-                    URL.createObjectURL(image.result),
+                    selected,
                 );
                 Message.success('Update avatar successfully');
             }
@@ -116,6 +123,23 @@ function GroupManagePanel(props: GroupManagePanelProps) {
         onClose();
     }
 
+    async function getNFT() {
+        setLoading(true)
+        const chain = user && user.get("chain");
+        const options = {
+          chain: chain,
+          address: userAddress,
+        };
+        const { result } = await Web3Api.account.getNFTs(options);
+        setNfts(result);
+        setLoading(false);
+      }
+    
+      function selectNFT(image: string) {
+        setSelected(image);
+        setAvatarNFT(image)
+      }
+
     return (
         <div
             className={`${Style.groupManagePanel} ${visible ? 'show' : 'hide'}`}
@@ -139,7 +163,7 @@ function GroupManagePanel(props: GroupManagePanelProps) {
                                 onChange={setGroupName}
                             />
                             <Button
-                                className={Style.button}
+                                className={`${Style.button} ${(!groupName || name === groupName ) && Style.disabled}`}
                                 onClick={handleChangeGroupName}
                             >
                                 Confirm
@@ -149,12 +173,16 @@ function GroupManagePanel(props: GroupManagePanelProps) {
                     {isLogin && selfId === creator ? (
                         <div className={Style.block}>
                             <p className={Style.blockTitle}>Update group avatar</p>
-                            <img
-                                className={Style.avatar}
-                                src={getOSSFileUrl(avatar)}
-                                alt="Preview"
-                                onClick={handleChangeGroupAvatar}
-                            />
+                            { !loading && nfts.length > 0 ? (
+                                <>
+                                <div className={Style.listAvatar}>{ nfts.map((item, index) => <NFT key={index} url={item.token_uri} selectNFT={selectNFT} selected={selected} />)}</div>
+                                <Button className={`${Style.button} ${(!avatarNFT || !selected)  && Style.disabled}`} onClick={ handleChangeGroupAvatar}>
+                                    Save Avatar
+                                </Button>
+                                </>
+                        ) : (
+                            !loading && <div> NFTs not found</div>
+                        )}
                         </div>
                     ) : null}
 

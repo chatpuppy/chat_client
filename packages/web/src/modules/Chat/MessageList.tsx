@@ -160,7 +160,7 @@ const Message = ( {message, selfId, $list , isGroup , creator, tagColorMode}) =>
             linkmanId={focus}
             isSelf={isSelf}
             userId={message.from._id}
-            avatar={message.from.avatar}
+            avatar={ message.from.avatar}
             username={name}
             originUsername={message.from.originUsername}
             time={message.createTime}

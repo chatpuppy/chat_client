@@ -14,7 +14,6 @@ import OnlineStatus from './OnlineStatus';
 import useAction from '../../hooks/useAction';
 import socket from '../../socket';
 import Message from '../../components/Message';
-import {displayAddress} from '../../utils/stringUtils'
 
 import Admin from './Admin';
 
@@ -50,14 +49,6 @@ function Sidebar() {
     );
     const avatar = useSelector(
         (state: State) => state.user && state.user.avatar,
-    );
-
-    const address = useSelector(
-        (state: State) => state.user && state.user.address || ''
-    );
-
-    const username = useSelector(
-        (state: State) => state.user &&  state.user.username || ''
     );
 
     const [selfInfoDialogVisible, toggleSelfInfoDialogVisible] =
@@ -96,22 +87,15 @@ function Sidebar() {
         );
     }
 
-    function displayName() {
-        return username && displayAddress(username) || ''
-    }
-
     return (
         <>
             <div className={Style.sidebar} {...aero}>
-                {isLogin && avatar && (
+                {isLogin && (
                     <Avatar
                         className={Style.avatar}
-                        src={avatar}
+                        src={ avatar }
                         onClick={() => toggleSelfInfoDialogVisible(true)}
                     />
-                )}
-                { isLogin &&!avatar && (
-                    <div className={Style.nonAvatar} onClick={() => toggleSelfInfoDialogVisible(true)}>{ displayName() }</div>
                 )}
                 {isLogin && (
                     <OnlineStatus

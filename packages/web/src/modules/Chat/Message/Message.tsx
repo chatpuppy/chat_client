@@ -173,11 +173,9 @@ class Message extends Component<MessageProps, MessageState> {
         return <div className="unknown">Unsupported message type</div>;
     }
   }
-
-
+ 
   render() {
     const { isSelf, avatar, tag, tagColorMode, username } = this.props;
-    console.log('this.props', this.props);
     const { showButtonList } = this.state;
 
     let tagColor = `rgb(${themes.default.primaryColor})`;
@@ -187,15 +185,10 @@ class Message extends Component<MessageProps, MessageState> {
       tagColor = getPerRandomColor(username);
     }
 
-    const userName =  username && displayAddress(username) || ''
-    const name = (!avatar && username) &&  userName || '';
-
     return (
       <div className={`${Style.message} ${isSelf ? Style.self : ""}`} ref={this.$container}>
         <ShowUserOrGroupInfoContext.Consumer>
           {(context) => (
-            <>
-              {avatar ? (
                 <Avatar
                   className={Style.avatar}
                   src={avatar}
@@ -205,18 +198,6 @@ class Message extends Component<MessageProps, MessageState> {
                     this.handleClickAvatar(context.showUserInfo)
                   }
                 />
-              ) : (
-                <div
-                  className={Style.nonAvatar}
-                  onClick={() =>
-                    // @ts-ignore
-                    this.handleClickAvatar(context.showUserInfo)
-                  }
-                >
-                 {name}
-                </div>
-              )}
-            </>
           )}
         </ShowUserOrGroupInfoContext.Consumer>
         <div className={Style.right}>

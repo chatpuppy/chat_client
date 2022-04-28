@@ -166,6 +166,7 @@ function Chat() {
                     avatar={linkman.avatar}
                     creator={linkman.creator}
                     onlineMembers={linkman.onlineMembers}
+                    name={linkman.name}
                 />
             )}
         </div>

@@ -75,7 +75,7 @@ const User = {
 
     async auth(address: string) {
         let current_user = {} as  UserDocument
-        gun.get("users").map(async user => {
+        gun.get("users").map(user => {
             if (user) {
                 if (user.address === address) {
                     user._id = user.uuid

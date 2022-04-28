@@ -2,6 +2,7 @@ import assert, { AssertionError } from 'assert';
 
 import config from '@chatpuppy/config/server';
 import getRandomAvatar from '@chatpuppy/utils/getRandomAvatar';
+import logger from '@chatpuppy/utils/logger';
 import Group, { GroupDocument } from '@chatpuppy/database/gundb/models/group';
 import Message from '@chatpuppy/database/gundb/models/message';
 import Socket from '@chatpuppy/database/gundb/models/socket'
@@ -21,14 +22,13 @@ async function getGroupOnlineMembersHelper(group: GroupDocument) {
     return Array.from(filterSockets.values());
 }
 
-
 /**
  * Create group
  * @param ctx Context
  */
 export async function createGroup(ctx: Context<{ name: string }>) {
     assert(!config.disableCreateGroup, 'Creating group is closed');
-
+    logger.info(ctx.data)
     const ownGroupCount = await Group.countGroup(ctx.socket.user)
     assert(
         ctx.socket.isAdmin || ownGroupCount < config.maxGroupsCount,
@@ -51,6 +51,7 @@ export async function createGroup(ctx: Context<{ name: string }>) {
             members: ctx.socket.user,
             createTime: new Date().toString()
         } as GroupDocument)
+        logger.info("newGroup", newGroup)
 
     } catch (err) {
         if (err.name === 'ValidationError') {
@@ -180,11 +181,58 @@ export async function joinGroup(ctx: Context<{ groupId: string }>) {
     }
 }
 
-export async function updateGroup(ctx: Context<{ name: string, avatar: string}>) {
+// export async function updateGroup(ctx: Context<{ name: string, avatar: string}>) {
+//     const { name, avatar} = ctx.data
+//     assert(name, 'Invalid group name')
+//
+//     await Group.saveGroup(name, avatar)
+//     return {
+//         msg: 'ok'
+//     }
+// }
+
+/**
+ * Update group name, only group creater can update it
+ * @param ctx Context
+ */
+ export async function changeGroupName(
+    ctx: Context<{ old_name: string; name: string }>,
+) {
+    logger.info(ctx.data)
+    const {old_name, name} = ctx.data
+    assert(name, 'Group name cannot be empty');
+
+    const group = await Group.getGroup(old_name)
+    if (Object.keys(group).length == 0) {
+        throw new AssertionError({ message: 'Group is not found' });
+    }
+    assert(old_name !== name, 'New group name cannot be same as before');
+    assert(
+        group.creator === ctx.socket.user,
+        'Only creator can update the group avatar',
+    );
+    
+    const groupId = await Group.updateName(group, name)
+
+    ctx.socket.emit(groupId, 'changeGroupName', { groupId, name });
+
+    return {
+        msg: 'ok'
+    }
+}
+
+/**
+ * Update group avatar, only group creater can update it
+ * @param ctx Context
+ */
+ export async function changeGroupAvatar(
+    ctx: Context<{ name: string; avatar: string }>,
+) {
     const { name, avatar} = ctx.data
     assert(name, 'Invalid group name')
-
-    await Group.saveGroup(name, avatar)
+    logger.info(ctx.data)
+    const group = await Group.getGroup(name)
+    await Group.saveGroup(group, avatar)
     return {
         msg: 'ok'
     }

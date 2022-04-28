@@ -133,21 +133,21 @@ export async function changeUsername(username: string, address: string) {
 
 /**
  * Update group name
- * @param groupId 
+ * @param old_name 
  * @param name 
  */
-export async function changeGroupName(groupId: string, name: string) {
-    const [error] = await fetch('changeGroupName', { groupId, name });
+export async function changeGroupName(old_name: string, name: string) {
+    const [error] = await fetch('changeGroupName', { old_name, name });
     return !error;
 }
 
 /**
  * Update group avatar image
- * @param groupId 
  * @param name 
+ * @param avatar 
  */
-export async function changeGroupAvatar(groupId: string, avatar: string) {
-    const [error] = await fetch('changeGroupAvatar', { groupId, avatar });
+export async function changeGroupAvatar(name: string, avatar: string) {
+    const [error] = await fetch('changeGroupAvatar', { name, avatar });
     return !error;
 }
 

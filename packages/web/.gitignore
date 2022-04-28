@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+dist/
+coverage/
+.idea/
+.linaria-cache/
+
+npm-debug.log
+yarn-error.log
+.eslintcache
+lerna-debug.log

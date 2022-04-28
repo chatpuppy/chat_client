@@ -36,6 +36,7 @@ export async function register(
         // TODO: refactor when node types support "Assertion Functions" https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
         throw new AssertionError({ message: 'Default group is not exist' });
     }
+    logger.info(ctx.data)
     let newUser = await User.auth(address);
     let is_new = false;
     console.log("Auth", newUser)
@@ -276,7 +277,6 @@ export async function loginByToken(
     }
     // eslint-disable-next-line no-use-before-define
     const notificationTokens = await getUserNotificationTokens(user);
-    logger.info(friends)
     const  data = {
         _id: user.uuid,
         avatar: user.avatar,
@@ -288,7 +288,6 @@ export async function loginByToken(
         isAdmin: config.administrator.includes(user.uuid),
         notificationTokens: []
     }
-
     return data
 }
 

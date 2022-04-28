@@ -5,12 +5,12 @@ import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import Dialog from "../../components/Dialog";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import NFT from "../../components/NFT";
 import { State } from "../../state/reducer";
 import Message from "../../components/Message";
 import { changeAvatar, changeUsername } from "../../service";
 import useAction from "../../hooks/useAction";
 import socket from "../../socket";
-import { getImgNFT, getImgSrc } from "../../utils/getImgNFT";
 import Style from "./SelfInfo.less";
 import Common from "./Common.less";
 
@@ -26,6 +26,7 @@ function SelfInfo(props: SelfInfoProps) {
   const { user } = useMoralis();
 
   const action = useAction();
+  const userAddresssss = useSelector((state: State) => (state.user) || "");
   const userNameInfo = useSelector((state: State) => (state.user &&  state.user.username) || "");
   const userAddress = useSelector((state: State) => (state.user && state.user.address) || "");
   const avatar = useSelector((state: State) => state.user?.avatar);
@@ -35,7 +36,6 @@ function SelfInfo(props: SelfInfoProps) {
   const [selected, setSelected] = useState("");
   const [username, setUsername] = useState("");
   const [avatarNFT, setAvatarNFT] = useState("");
-
 
   useEffect(() => {
     getNFT();
@@ -47,8 +47,6 @@ function SelfInfo(props: SelfInfoProps) {
 
 
   function reLogin(message: string) {
-    action.logout();
-    localStorage.clear();
     Message.success(message);
     socket.disconnect();
     socket.connect();
@@ -120,7 +118,7 @@ function SelfInfo(props: SelfInfoProps) {
           <p className={Common.title}>Update UserName</p>
           <div>
             <Input className={Style.input} value={username} onChange={setUsername} type="text" placeholder="Username" />
-            <Button className={`${Style.button} ${!username && Style.disabled}`} onClick={handleChangeUsername}>
+            <Button className={`${Style.button} ${(!username || userNameInfo == username)  && Style.disabled}`} onClick={handleChangeUsername}>
               Save User Name
             </Button>
           </div>
@@ -131,32 +129,3 @@ function SelfInfo(props: SelfInfoProps) {
 }
 
 export default SelfInfo;
-
-function NFT({ url = "", selectNFT, selected }) {
-  const [imgSrc, setImgSrc] = useState("");
-  const [ errored, setErrored] = useState(false);
-
-  async function fetchImageAPI() {
-    const image = await getImgNFT(url);
-    console.log('getImgSrc(image)', getImgSrc(image))
-    setImgSrc(getImgSrc(image));
-  }
-
-  useEffect(() => {
-    fetchImageAPI();
-  }, []);
-
-  const handleErrorLoad = () => {
-    setErrored(true);
-  }
-
-  return (
-    <>
-      {imgSrc && !errored && (
-        <div onClick={() => selectNFT(getImgSrc(imgSrc))}>
-          <img className={`${Style.avatar} ${imgSrc === selected ? Style.selected : ""}`} src={imgSrc} onError={handleErrorLoad}/>
-        </div>
-      )}
-    </>
-  );
-}

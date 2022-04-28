@@ -16,6 +16,8 @@ import { Message as MessageReducer } from "../../state/reducer";
 import { ActionTypes } from "../../state/action";
 import { getImgNFT, getImgSrc } from "../../utils/getImgNFT";
 
+const blockies = require('../../lib/blockies.js');
+
 const Chains = [
   {
     chain: "Ethereum",
@@ -54,7 +56,7 @@ function ConnectWallet(props:ConnectWalletProps) {
       signingMessage: "ChatPuppy Authentication",
       onSuccess: async (result) => {
         const address = result.get("ethAddress");
-        Message.success("Connect Wallet Successfully");
+        Message.success("Connect Wallet Successfully");       
         const avatar = await getAvatarFromAddress(address);
         await handleRegister(address, avatar);
       },
@@ -66,7 +68,7 @@ function ConnectWallet(props:ConnectWalletProps) {
     });
   }
 
-  async function getAvatarFromAddress(address) {
+  async function getAvatarFromAddress(address: string) {
     let nfts;
     const chain = Chains.find((i) => i.chain === netWork)?.value || Chains[0].value;
     let options = {
@@ -75,7 +77,7 @@ function ConnectWallet(props:ConnectWalletProps) {
     };
  
 
-    const { result } = await Web3Api.account.getNFTs(options); 
+    const { result } = (address && chain) && await Web3Api.account.getNFTs(options); 
 
     nfts = result
 
@@ -86,12 +88,13 @@ function ConnectWallet(props:ConnectWalletProps) {
         nfts = result;
       },1000)
     }
-    
+
     const image = nfts.length > 0 ? await getImgNFT(nfts[0].token_uri) : "";
 
     setOptionsRequest({ ...optionsRequest,...options})
     setListNFT([...listNFT, ...nfts]);
-    return image ? getImgSrc(image) : "";
+
+    return image ? getImgSrc(image) : blockies.create({ seed: address  ,size: 10 ,scale: 3 }).toDataURL();
   }
 
   async function handleRegister(address: string, avatar: string) {
@@ -121,10 +124,12 @@ function ConnectWallet(props:ConnectWalletProps) {
   useEffect(() => {
     if (!isAuthenticated) return;
     const chain = Chains.find((i) => i.chain === netWork)?.value || Chains[0].value;
-    setUserData({ chain: chain });
+
     listNFT.length > 0 && listNFT.forEach(nft => {
       if(!nft.token_uri) setTimeout( async ()=>  await Web3Api.token.reSyncMetadata({ ...optionsRequest, flag:'uri' , token_id: nft.token_id}), 1000 )
     });
+
+    setUserData({ chain: chain });
   }, [isAuthenticated]);
 
   return (

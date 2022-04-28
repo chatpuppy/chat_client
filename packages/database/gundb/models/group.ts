@@ -58,7 +58,7 @@ const Group = {
         group.uuid = linkId
         group._id = linkId
         defaultGroup = group
-        
+
         return defaultGroup
     },
 
@@ -72,14 +72,17 @@ const Group = {
 
     async getGroupByUuid(uuid: string) {
         let group = {} as GroupDocument
-        await gun.get('groups').map().on((data, key) => {
-            if (data.uuid === uuid){
-                group = data
+        gun.get('groups').map().on((data, key) => {
+            if (data){
+                if (data.uuid === uuid){
+                    group = data
+                }
             }
         })
+        await delay(500)
         return group
     },
-    
+
     async getDefaultGroup() {
         let defaultGroup = {} as GroupDocument
         await gun.get('groups').get("defaultGroup").once((data) => {
@@ -103,7 +106,7 @@ const Group = {
 
     async checkName(name: string) {
         const groupList = [] as string[]
-        gun.get('groups').map(group => group.name == name ? group : undefined).on((group) =>  {
+        gun.get('groups').map(group => group && group.name == name ? group : undefined).on((group) =>  {
             groupList.push(group.name)
         })
         if (groupList.length > 0) {
@@ -115,7 +118,8 @@ const Group = {
     async getGroupByMember(user: UserDocument) {
         const groupList: GroupDocument[] = []
         let check_group = ''
-        gun.get('groups').map( async group => {
+        gun.get('groups').map( group => {
+
             if (group) {
                 if (group.hasOwnProperty('members') && typeof group.members == "string" && group.members.includes(user.uuid) && typeof group.uuid !== 'undefined') {
                     if (!check_group.includes(group.uuid)) {
@@ -130,7 +134,8 @@ const Group = {
                 }
             }
         })
-        await delay(500)
+        await delay(1000)
+        logger.info("check_group", check_group)
 
         return groupList
     },
@@ -145,10 +150,38 @@ const Group = {
         return groupList
     },
 
-    async saveGroup( name: string, avatar: string) {
+
+    async saveGroup( group: GroupDocument, avatar: string) {
         // @ts-ignore
-        gun.get('groups').get(name).get('avatar').put(avatar)
+        gun.get('groups').get(group.name).get('avatar').put(avatar)
+        // logger.info("save success")
+        // gun.get('groups').get(group.name).put(null)
+        // group.avatar = avatar
+        // gun.get('groups').get(group.name).set(group as GroupDocument)
+        return group
+    },
+
+
+    async getGroup(name: string) {
+        let group = {} as GroupDocument
+        gun.get('groups').get(name).on((data) => {
+            if (data) {
+                group = data as GroupDocument
+                group._id = data.uuid
+            }
+        })
+        return group
+    },
+
+
+    async updateName(group: GroupDocument, new_name: string) {
+        // @ts-ignore
+        gun.get('groups').get(group.name).put(null)
+        group.name = new_name
+        gun.get('groups').get(new_name).put(group as GroupDocument)
+        return group._id
     }
+
 }
 
 export interface GroupDocument extends Document {
@@ -171,6 +204,7 @@ export interface GroupDocument extends Document {
 }
 
 export default Group;
+
 
 function delay(ms: number) {
     return new Promise((res, rej) => {
