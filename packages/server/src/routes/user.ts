@@ -39,7 +39,6 @@ export async function register(
     logger.info(ctx.data)
     let newUser = await User.auth(address);
     let is_new = false;
-    console.log("Auth", newUser)
     if (Object.keys(newUser).length == 0) {
         try {
             newUser = {
@@ -48,7 +47,6 @@ export async function register(
                 lastLoginIp: ctx.socket.ip
             } as UserDocument;
             newUser = await User.createUser(newUser);
-            logger.info("newUser", newUser)
             is_new = true
         } catch (err) {
             if ((err as Error).name === 'ValifationError') {
@@ -60,42 +58,30 @@ export async function register(
     let groups = []
     if (is_new) {
         defaultGroup.members = `${defaultGroup.members  },${  newUser.uuid}`
-        logger.info("test1")
         await Group.save(defaultGroup)
-        logger.info("test2")
         groups.push(defaultGroup)
     }
     else {
-        logger.info("test3")
         groups = await Group.getGroupByMember(newUser)
-        logger.info("test4")
     }
     // eslint-disable-next-line no-use-before-define
     const token = generateToken(newUser.address, environment);
 
     ctx.socket.user = newUser.uuid;
-    logger.info("test5")
     const friends = await Friend.getByFrom(newUser.uuid)
-    logger.info("test6")
     let currentFriends = [] as any
     if (friends.length > 0){
-        logger.info("test7")
         currentFriends = await User.getDataByFriend(friends)
-        logger.info("test8")
     }else {
         currentFriends = []
     }
 
-    logger.info("test9")
     const socket = await Socket.getOne(ctx.socket.id)
-    logger.info("test10")
     socket.user = newUser.uuid
     socket.os = os
     socket.browser = browser
     socket.environment = environment
-    logger.info("test11")
     await Socket.create(socket)
-    logger.info("test12")
 
     const data = {
         _id: newUser.uuid,
@@ -247,7 +233,6 @@ export async function loginByToken(
 
 
     const groups = await Group.getGroupByMember(user)
-    logger.info("groups", groups)
     // groups.forEach((group: GroupDocument) => {
     //     ctx.socket.join(group._id);
     // });
@@ -255,7 +240,6 @@ export async function loginByToken(
         ctx.socket.join(groups[i]._id);
     }
 
-    logger.info(user)
 
     ctx.socket.user = user.uuid;
 

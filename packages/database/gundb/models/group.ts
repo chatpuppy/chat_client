@@ -118,8 +118,7 @@ const Group = {
     async getGroupByMember(user: UserDocument) {
         const groupList: GroupDocument[] = []
         let check_group = ''
-        gun.get('groups').map( group => {
-
+        gun.get('groups').map().on( group => {
             if (group) {
                 if (group.hasOwnProperty('members') && typeof group.members == "string" && group.members.includes(user.uuid) && typeof group.uuid !== 'undefined') {
                     if (!check_group.includes(group.uuid)) {
@@ -134,19 +133,21 @@ const Group = {
                 }
             }
         })
-        await delay(1000)
-        logger.info("check_group", check_group)
+        await delay(1500)
 
         return groupList
     },
 
     async getGroupName(name: string) {
         const groupList: GroupDocument[] = []
-        gun.get('groups').map( async group => {
-            if (group.hasOwnProperty('name') && group.name.includes(name)) {
-                groupList.push(group)
+        gun.get('groups').map( group => {
+            if (group){
+                if (group.hasOwnProperty('name') && group.name.includes(name)) {
+                    groupList.push(group)
+                }
             }
         })
+        await delay(500)
         return groupList
     },
 
