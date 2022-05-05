@@ -51,7 +51,6 @@ export async function createGroup(ctx: Context<{ name: string }>) {
             members: ctx.socket.user,
             createTime: new Date().toString()
         } as GroupDocument)
-        logger.info("newGroup", newGroup)
 
     } catch (err) {
         if (err.name === 'ValidationError') {
@@ -167,7 +166,7 @@ export async function joinGroup(ctx: Context<{ groupId: string }>) {
 
     await Group.save(group)
 
-    let messages = await Message.getToGroup(group.uuid)
+    let messages = await Message.getToGroup(group.uuid,0)
     messages = await User.getUserMessage(messages)
 
     ctx.socket.join(group.uuid)

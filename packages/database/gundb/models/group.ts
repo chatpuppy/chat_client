@@ -147,7 +147,7 @@ const Group = {
                 }
             }
         })
-        await delay(500)
+        await delay(1000)
         return groupList
     },
 

@@ -21,7 +21,7 @@ function InviteMessage(props: InviteMessageProps) {
             group.type = 'group';
             action.addLinkman(group, true);
             Message.success('Join group successfully');
-            const messages = await getLinkmanHistoryMessages(invite.group, 0);
+            const messages = await getLinkmanHistoryMessages(invite.group, 0, '');
             if (messages) {
                 action.addLinkmanHistoryMessages(invite.group, messages);
             }

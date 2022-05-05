@@ -79,9 +79,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
     let toUser: UserDocument | null = null;
     let uuid: string = '';
     if (to.length === 36) {
-        logger.info("to", to)
         toGroup = await Group.getGroupByUuid(to);
-        logger.info("toGroup", toGroup)
         uuid = toGroup.uuid
         assert(toGroup, 'Group not found');
     } else {
@@ -144,6 +142,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
     if (!user) {
         throw new AssertionError({ message: '用户不存在' });
     }
+    logger.info("usersMessage", user)
     const message = await Message.create({
         from: ctx.socket.user,
         to,
@@ -160,6 +159,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
         type,
         content: message.content
     };
+    logger.info("messageData", messageData)
 
     if (type === 'inviteV2') {
         await handleInviteV2MessageModify(messageData);
@@ -227,10 +227,11 @@ export async function getLinkmansLastMessagesV2(
         }, {})
     const linkmansMessages = await Promise.all(
         linkmans.map(async (linkmanId) => {
-            let messages = await Message.getToGroup(linkmanId)
-
-            messages = await User.getUserMessage(messages)
+            let messages = await Message.getToGroup(linkmanId, 0)
             messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
+            messages = await User.getUserMessage(messages)
+            
+            
             await handleInviteV2Messages(messages)
             return messages
 
@@ -252,8 +253,6 @@ export async function getLinkmansLastMessagesV2(
                 const messageIndex = messages.findIndex(
                     ({uuid}) => uuid === historyMap[linkmanId]
                 );
-                logger.info("messageIndex", messageIndex)
-                logger.info("historyMap[linkmanId]", historyMap[linkmanId])
                 result[linkmanId] = {
                     messages,
                     unread: messageIndex === -1 ? 100: messageIndex
@@ -285,10 +284,10 @@ export async function getDefaultGroupHistoryMessages(
     if (Object.keys(group).length === 0) {
         throw new AssertionError({ message: '默认群组不存在' });
     }
-    const messages = await Message.getToGroup(group.uuid)
+    const messages = await Message.getToGroup(group.uuid, existCount, '')
     await handleInviteV2Messages(messages);
-    const result = messages.slice(existCount).reverse();
-    return result;
+    // const result = messages.slice(existCount).reverse();
+    return messages;
 }
 
 /**
@@ -296,15 +295,17 @@ export async function getDefaultGroupHistoryMessages(
  * @param ctx Context
  */
 export async function getLinkmanHistoryMessages(
-    ctx: Context<{ linkmanId: string; existCount: number }>,
+    ctx: Context<{ linkmanId: string; existCount: number, createTime: string }>,
 
 ) {
-    const { linkmanId, existCount } = ctx.data;
-    // let messages = await Message.getToGroup(linkmanId)
-    // messages = await User.getUserMessage(messages)
-    // await handleInviteV2Messages(messages);
+    const { linkmanId, existCount, createTime } = ctx.data;
+    logger.info(ctx.data)
+    // let create_time = new Date(Date.parse(createTime)  - 1 * 1000 * 60 * 5)
+    // logger.info(create_time.toISOString())
+    let messages = await Message.getToGroup(linkmanId, existCount, createTime)
+    messages = await User.getUserMessage(messages)
+    await handleInviteV2Messages(messages);
     // messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
     // const result = messages.slice(existCount);
-
-    return [];
+    return messages;
 }

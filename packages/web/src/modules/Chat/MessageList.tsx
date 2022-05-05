@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useMoralis } from "react-moralis";
 
 import { css } from 'linaria';
 import { State, Message } from '../../state/reducer';
@@ -95,6 +96,7 @@ function MessageList() {
                 historyMessages = await getLinkmanHistoryMessages(
                     focus,
                     Object.keys(messages).length,
+                    messages[Object.keys(messages)[0]].createTime
                 );
             } else {
                 historyMessages = await getDefaultGroupHistoryMessages(
@@ -129,6 +131,7 @@ export default MessageList;
 
 
 const Message = ( {message, selfId, $list , isGroup , creator, tagColorMode}) => {
+    const { user } = useMoralis();
     const isSelf = message.from._id === selfId;
     let shouldScroll = true;
     if ($list.current) {

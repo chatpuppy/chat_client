@@ -54,7 +54,7 @@ function InviteInfo() {
             groupRes.type = 'group';
             action.addLinkman(groupRes, true);
 
-            const messages = await getLinkmanHistoryMessages(groupId, 0);
+            const messages = await getLinkmanHistoryMessages(groupId, 0, '');
             if (messages) {
                 action.addLinkmanHistoryMessages(groupId, messages);
             }

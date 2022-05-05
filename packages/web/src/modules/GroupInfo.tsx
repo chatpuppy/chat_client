@@ -46,7 +46,7 @@ function GroupInfo(props: GroupInfoProps) {
             groupRes.type = 'group';
             action.addLinkman(groupRes, true);
 
-            const messages = await getLinkmanHistoryMessages(group._id, 0);
+            const messages = await getLinkmanHistoryMessages(group._id, 0, '');
             if (messages) {
                 action.addLinkmanHistoryMessages(group._id, messages);
             }

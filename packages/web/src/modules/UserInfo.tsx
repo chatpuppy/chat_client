@@ -100,7 +100,7 @@ function UserInfo(props: UserInfoProps) {
                 };
                 action.addLinkman((newLinkman as unknown) as Linkman, true);
             }
-            const messages = await getLinkmanHistoryMessages(_id, existCount);
+            const messages = await getLinkmanHistoryMessages(_id, existCount, '');
             if (messages) {
                 action.addLinkmanHistoryMessages(_id, messages);
             }

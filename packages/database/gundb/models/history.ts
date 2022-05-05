@@ -2,14 +2,25 @@ import { v4 as uuid } from 'uuid';
 import logger from '@chatpuppy/utils/logger';
 import { gun } from "../initGundb";
 
+var history_gun = gun.get("histories")
 const History = {
     async getOne(user: string, linkman: string) {
         let new_history = {} as HistoryDocument
-        gun.get("histories").map(
-        ).on((data, key) => {
+        var match = {
+            // lexical queries are kind of like a limited RegEx or Glob.
+            '.': {
+              // property selector
+              '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 24).toISOString(), // find any indexed property larger ~3 hours ago
+            //   '<': ''
+            },
+            // '-': 1, // filter in reverse
+          };
+        // @ts-ignore
+        history_gun.get(match).map(
+        ).once((data, key) => {
             if (data) {
                 if (data.userId === user && data.linkman === linkman) {
-                    history = data
+                    new_history = data as HistoryDocument
                 }
             }
         })
@@ -17,11 +28,12 @@ const History = {
     },
 
     async save(history: HistoryDocument, uuid: string = '') {
+        const index = new Date().toISOString()
         if (uuid == ''){
-            gun.get("histories").get(history.uuid).put(history)
+            history_gun.get(index).put(history)
         }else {
             // @ts-ignore
-            gun.get("histories").get(history.uuid).get('message').put(history.message)
+            history_gun.get(index).get('message').put(history.message)
         }
         return history
     },
@@ -29,10 +41,23 @@ const History = {
     // eslint-disable-next-line no-shadow
     async getLinkMans(uuid: string, linkmans: Array<string>) {
         const histories = [] as Array<HistoryDocument>
-        await gun.get("histories").map().on( async (data, key) => {
-            if (data.user === uuid && linkmans.filter(linkman => data.linkman === linkman).length > 0) {
-                histories.push(data)
+        var match = {
+            // lexical queries are kind of like a limited RegEx or Glob.
+            '.': {
+              // property selector
+              '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 24).toISOString(), // find any indexed property larger ~3 hours ago
+            //   '<': ''
+            },
+            // '-': 1, // filter in reverse
+          };
+        // @ts-ignore
+        history_gun.get(match).map().once( async (data, key) => {
+            if(data){
+                if (data.user === uuid && linkmans.filter(linkman => data.linkman === linkman).length > 0) {
+                    histories.push(data as HistoryDocument)
+                }
             }
+            
         })
         return histories
     }

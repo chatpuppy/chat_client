@@ -1,4 +1,4 @@
-import logger from '@chatpuppy/utils/logger';
+    import logger from '@chatpuppy/utils/logger';
 import { v4 as uuid } from 'uuid';
 import { gun } from "../initGundb";
 import Group from './group';
@@ -11,11 +11,13 @@ function delay(ms: number) {
     })
 }
 
+var message_gun = gun.get('messages')
+
 
 const Message = {
     async get(to: string) {
         const messages = [] as Array<MessageDocument>;
-        await gun.get("messages").map().on((data, key) => {
+        message_gun.map().on((data, key) => {
             if (data) {
                 data.id = data.uuid
                 messages.push(data);
@@ -25,25 +27,111 @@ const Message = {
         return messages
     },
 
-    async getToGroup(groupId: string) {
+    async getToGroup(groupId: string, existCount: number = 0, createTime: string = '') {
         let messages = [] as Array<MessageDocument>;
-        // gun.get('messages').get(groupId).map().on(  function(message) {
-        //     if( message){
-        //         // messages.push(message as MessageDocument);
+
+        // var match = {
+        //     '-': 1
+        // }
+        // logger.info(match)
+        let count = 0
+        let previous = 0
+        if (existCount > 0) {
+            previous = existCount
+            existCount = previous + 15
+        }else {
+            existCount = 60
+        }
+        logger.info("previous", previous)
+        logger.info("count", count)
+        logger.info("existCount", existCount)
+        // @ts-ignore
+        // message_gun.get(groupId).once(async (data, key) => {
+            
+        //     if(data){
+        //         // @ts-ignore
+        //         const sortable = Object.entries(data['_']['>']).sort(([,a],[,b]) => b-a).reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+        //             Object.entries(sortable).forEach(
+        //             ([key, value]) => 
+        //             {
+        //                 message_gun.get(groupId).get(key).once( async (data, key) => {
+        //                     if(data){
+        //                         if (previous <= count && count < existCount){
+        //                             messages.push(data as MessageDocument);
+                                    
+        //                         }
+        //                         count++
+        //                     }
+        //                 })
+        //             }
+        //           );
+                
+        //     }
+            
+        // })
+        // message_gun.get(groupId).map().on( async (data, key) => {
+        //     if(data){
+        //         if (previous <= count && count < existCount){
+        //             messages.push(data as MessageDocument);
+                    
+        //         }
+        //         count++
         //     }
         // })
-        gun.get('messages').get(groupId).map().on((data, key) => {
-            if (data) {
-                messages.push(data as MessageDocument);
+        // -----------------------
+        // match = {'.': { '>': new Date(+new Date() - 1*3600*60*60*24).toISOString(),'-': 1}, '%': 50000}
+        // if (createTime != ''){
+        //     // @ts-ignore
+        //     match = {'.': { '>': new Date(+new Date() - 1*3600*60*60*24).toISOString(), '<': createTime}, '%': 50000}
+        // }
+        // -----------------------
+
+        var match = {
+            // lexical queries are kind of like a limited RegEx or Glob.
+            '.': {
+              // property selector
+              '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 24).toISOString(), // find any indexed property larger ~3 hours ago
+            //   '<': ''
+            },
+            // '-': 1, // filter in reverse
+          };
+            
+        logger.info(match)
+        // @ts-ignore
+        message_gun.get(groupId).map().on(async (data, key) => {
+            // logger.info(data)
+            // logger.info(key)
+            // if(data) {
+            //     if (previous <= count && count < existCount) {
+            //         messages.push(data as MessageDocument)
+            //     }
+            // }
+            // count++
+            if(data){
+                // if (previous <= count && count < existCount) {
+                    // @ts-ignore
+                    messages = [...messages.slice(-(existCount - 1)), data as MessageDocument].sort((a, b) => a.createTime - b.createTime);
+                // }
             }
+            // count++
+            
         })
-        await delay(100)
+                
+        await delay(3000)
+        // if (existCount != 15){
+        //     messages.slice()
+        // }
+        // console.log(existCount)
+        if (previous> 0) {
+            messages = [...messages.slice(-existCount, -previous )]
+        }
+        logger.info("messages", messages.length)
         return messages
     },
 
     async get_one(uuid: string) {
         let message = {} as MessageDocument
-        gun.get("messages").get(uuid).on((data, key) => {
+        message_gun.get(uuid).on((data, key) => {
             message = data
         })
         return message
@@ -52,11 +140,11 @@ const Message = {
     async create(message: MessageDocument, to: string = '') {
         message.uuid = uuid()
         message.deleted = false
-        logger.info('to', to)
+        const index = new Date().toISOString()
+        message.createTime = index
         if ( to != '') {
-            gun.get("messages").get(to).get(message.uuid).put(message)
+            message_gun.get(to).get(index).put(message)
         }
-        logger.info("sendMessage", message)
         return message
     }
 }

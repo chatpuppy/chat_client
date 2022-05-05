@@ -1,10 +1,14 @@
 import axios from 'axios';
 
 export const getImgNFT = async(url: string) => {
+  if(!url) return;
   let urlRequest = ''
-  if(url && url.includes('https://ipfs.moralis.io:2053')) {
-    urlRequest = url.replace('https://ipfs.moralis.io:2053', 'https://gateway.moralisipfs.com')
-  }
+
+  const idx = url.indexOf('/ipfs/')
+  const prefixUrl  = url.slice(0, idx);
+  
+  urlRequest = url.replace(prefixUrl, 'https://ipfs.io')
+  
   return await axios.get(urlRequest)
   .then(function (response) {
     // handle success

@@ -10,15 +10,17 @@ function delay(ms: number) {
     })
 }
 
+var user_gun = gun.get('users')
+
 const User = {
 
     async createUser(user: UserDocument) {
         const linkId = uuid()
-        gun.get("users").get(user.address).put({
+        user_gun.get(user.address).put({
             uuid: linkId,
             address: user.address,
             lastLoginIp: user.lastLoginIp,
-            username: user.address,
+            username: user.username,
             // lastLoginTime: user.lastLoginTime,
             // tag: user.tag,
             // expressions: user.expressions,
@@ -37,34 +39,38 @@ const User = {
     },
 
     async save(user: UserDocument) {
-        await gun.get("users").get(user.address).put(user)
+        user_gun.get(user.address).put(user)
         return user
     },
 
     async saveAvatarByName(user: UserDocument) {
         // @ts-ignore
-        gun.get('users').get(user.address).get('avatar').put(user.avatar)
+        user_gun.get(user.address).get('avatar').put(user.avatar)
     },
 
     async saveUsername(user:UserDocument) {
         // @ts-ignoregun.
-        gun.get('users').get(user.address).get('username').put(user.username)
+        user_gun.get(user.address).get('username').put(user.username)
     },
 
     async get_one(uuid: string) {
         let current_user = {} as UserDocument
-        gun.get("users").map( async user => {
-            if(user.uuid == uuid) {
-                user._id = uuid
-                current_user = user
+        user_gun.map().once( async (user) => {
+            if(user){
+                if (user.uuid == uuid){
+                    user._id = user.uuid
+                current_user = user as UserDocument
+                }
+                
             }
         })
+        await delay(200)
         return current_user
     },
 
     async getUserName(address: string) {
         const users = [] as Array<UserDocument>
-        gun.get('users').map(async user => {
+        user_gun.map(async user => {
             if(user.address === address) {
                 user._id = user.uuid
                 users.push(user)
@@ -75,23 +81,23 @@ const User = {
 
     async auth(address: string) {
         let current_user = {} as  UserDocument
-        gun.get("users").map(user => {
+        user_gun.get(address).once(async (user) => {
             if (user) {
-                if (user.address === address) {
-                    user._id = user.uuid
-                    current_user = user
-                }
+                user._id = user.uuid
+                current_user = user as UserDocument
             }
         })
+        await delay(200)
 
         return current_user
     },
 
     async register(address: string) {
         let current_user = {} as  UserDocument
-        gun.get("users").map(async user => {
+        user_gun.map(async user => {
             if (user.hasOwnProperty('address') && user.address === address){
                 current_user = user
+                return;
             }
         })
         return current_user
@@ -103,8 +109,9 @@ const User = {
 
         for(let i = 0; i < messages.length; i++) {
             const message = messages[i]
-            gun.get("users").map( async user => {
+            user_gun.map().on( async (user) => {
                 if (user) {
+                    
                     if (typeof user.uuid != undefined && user.uuid === message.from) {
                         user._id = user.uuid
                         let current_friend = {} as FriendDocument
@@ -128,6 +135,7 @@ const User = {
                             deleted: message.deleted,
                             nickname: current_friend.nickname ? current_friend.nickname : ''
                         }
+                        // logger.info("new_message", new_message)
                         newMessages.push(new_message)
                     }
                 }
@@ -140,7 +148,7 @@ const User = {
     async getDataByFriend(friends: FriendDocument[]) {
         const currentFriends = [] as any[]
         const users = [] as UserDocument[]
-        await gun.get('users').map().on(data => {
+        user_gun.map().on(data => {
             if (data) {
                 users.push(data)
             }

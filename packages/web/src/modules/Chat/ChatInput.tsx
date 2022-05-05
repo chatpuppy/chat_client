@@ -429,10 +429,12 @@ function ChatInput() {
                     groupName: '',
                 }),
             );
-            handleSendMessage(id, 'inviteV2', groupId);
+            setTimeout( () => handleSendMessage(id, 'inviteV2', groupId), 200)
+          
         } else {
             const id = addSelfMessage('text', xss(message));
-            handleSendMessage(id, 'text', message);
+            setTimeout( () => handleSendMessage(id, 'text', message), 200)
+            
         }
 
         // @ts-ignore

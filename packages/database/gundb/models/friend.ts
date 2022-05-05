@@ -38,7 +38,6 @@ const  Friend = {
         logger.info("start catch")
         try {
             gun.get('friends').map().on(friend => {
-                logger.info("friend", friend)
                 try {
                     if (friend) {
                         if (friend.hasOwnProperty('from') && friend.from === from) {
@@ -47,13 +46,10 @@ const  Friend = {
                         }
                     }
                 } catch (e) {
-                    logger.warn(e)
                 }
             })
         } catch (e) {
-            logger.warn(e)
         }
-        logger.info("end catch")
         // await delay(200)
         return friends
     },

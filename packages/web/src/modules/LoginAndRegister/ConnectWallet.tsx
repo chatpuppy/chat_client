@@ -98,7 +98,16 @@ function ConnectWallet(props:ConnectWalletProps) {
   }
 
   async function handleRegister(address: string, avatar: string) {
-    const user = await register(address, avatar, platform.os?.family, platform.name, platform.description);
+    const options = { address:  address };
+    let usename = '';
+    try {
+      let data  = await Web3Api.resolve.resolveAddress(options);
+      usename = data.name
+    } catch (error) {
+      console.error(error);
+    }
+    if (!usename) usename = address
+    const user = await register(address, avatar, usename, platform.os?.family, platform.name, platform.description);
 
     if (user) {
       action.setUser(user);

@@ -25,9 +25,9 @@ interface Environment {
 }
 
 export async function register(
-    ctx: Context<{address: string, avatar: string} & Environment>
+    ctx: Context<{address: string, avatar: string, username: string} & Environment>
 ) {
-    const { address, os, browser, environment, avatar } = ctx.data;
+    const { address, os, browser, environment, avatar, username } = ctx.data;
 
     const defaultGroup = await Group.getDefaultGroup()
 
@@ -44,7 +44,8 @@ export async function register(
             newUser = {
                 address,
                 avatar: avatar,
-                lastLoginIp: ctx.socket.ip
+                lastLoginIp: ctx.socket.ip,
+                username: username
             } as UserDocument;
             newUser = await User.createUser(newUser);
             is_new = true
@@ -119,7 +120,7 @@ export async function guest(ctx: Context<Environment>) {
 
 
     ctx.socket.join(defaultGroup._id);
-    let  messages = await Message.getToGroup(defaultGroup.uuid);
+    let  messages = await Message.getToGroup(defaultGroup.uuid, 0);
     // messages.sort((a, b)=> (new Date(a.createTime).getTime() >  new Date(b.createTime).getTime()) ? -1 : 1)
 
     messages = await User.getUserMessage(messages)
@@ -222,6 +223,7 @@ export async function loginByToken(
 
 
     const user = await User.auth(payload.user)
+    logger.info("Auth", user)
 
     if (Object.keys(user).length === 0) {
         throw new AssertionError({ message: 'User not exist' });
@@ -251,7 +253,6 @@ export async function loginByToken(
         environment,
         ip: ctx.socket.ip
     } as SocketDocument)
-    logger.info(socket)
     const friends = await Friend.getByFrom(user.uuid)
     let currentFriends = [] as any
     if (friends.length > 0){

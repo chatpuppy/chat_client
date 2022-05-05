@@ -9,6 +9,7 @@ function saveUsername(username: string) {
  * Register new user
  * @param address 
  * @param avatar
+ * @param username
  * @param os 
  * @param browser 
  * @param environment 
@@ -16,6 +17,7 @@ function saveUsername(username: string) {
 export async function register(
     address: string,
     avatar: string,
+    username: string,
     os = '',
     browser = '',
     environment = '',
@@ -23,6 +25,7 @@ export async function register(
     const [err, user] = await fetch('register', {
         address,
         avatar,
+        username,
         os,
         browser,
         environment,
@@ -32,7 +35,7 @@ export async function register(
         return null;
     }
 
-    saveUsername(user.address);
+    saveUsername(user.username);
     return user;
 }
 
@@ -60,7 +63,7 @@ export async function login(
         return null;
     }
 
-    saveUsername(user.address);
+    saveUsername(user.username);
     return user;
 }
 
@@ -233,10 +236,12 @@ export async function getLinkmansLastMessagesV2(linkmanIds: string[]) {
 export async function getLinkmanHistoryMessages(
     linkmanId: string,
     existCount: number,
+    createTime: string,
 ) {
     const [, messages] = await fetch('getLinkmanHistoryMessages', {
         linkmanId,
         existCount,
+        createTime
     });
     return messages;
 }
