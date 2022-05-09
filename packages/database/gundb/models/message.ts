@@ -27,6 +27,7 @@ const Message = {
         return messages
     },
 
+		// Get group messages
     async getToGroup(groupId: string, existCount: number = 0, createTime: string = '') {
         let messages = [] as Array<MessageDocument>;
 
@@ -34,7 +35,7 @@ const Message = {
         //     '-': 1
         // }
         // logger.info(match)
-        let count = 0
+        const count = 0
         let previous = 0
         if (existCount > 0) {
             previous = existCount
@@ -44,7 +45,8 @@ const Message = {
         }
         logger.info("previous", previous)
         logger.info("count", count)
-        logger.info("existCount", existCount)
+        logger.info("existCount", existCount) // Max messages count
+				logger.info('groupId', groupId)
         // @ts-ignore
         // message_gun.get(groupId).once(async (data, key) => {
             
@@ -86,19 +88,19 @@ const Message = {
         // }
         // -----------------------
 
-        var match = {
-            // lexical queries are kind of like a limited RegEx or Glob.
-            '.': {
-              // property selector
-              '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 24).toISOString(), // find any indexed property larger ~3 hours ago
-            //   '<': ''
-            },
-            // '-': 1, // filter in reverse
-          };
+        // var match = {
+        //     // lexical queries are kind of like a limited RegEx or Glob.
+        //     '.': {
+        //       // property selector
+        //       '>': new Date(+new Date() - 1 * 1000 * 60 * 60 * 24).toISOString(), // find any indexed property larger ~3 hours ago
+        //     //   '<': ''
+        //     },
+        //     // '-': 1, // filter in reverse
+        //   };
             
-        logger.info(match)
+        // logger.info(match)
         // @ts-ignore
-        message_gun.get(groupId).map().on(async (data, key) => {
+        message_gun.get(groupId).map().once(async (data, key) => {
             // logger.info(data)
             // logger.info(key)
             // if(data) {
@@ -116,7 +118,7 @@ const Message = {
             // count++
             
         })
-                
+				
         await delay(3000)
         // if (existCount != 15){
         //     messages.slice()
@@ -125,7 +127,7 @@ const Message = {
         if (previous> 0) {
             messages = [...messages.slice(-existCount, -previous )]
         }
-        logger.info("messages", messages.length)
+        // logger.info("messages", messages.length)
         return messages
     },
 

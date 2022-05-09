@@ -150,7 +150,7 @@ const User = {
                 const user = users.get(message.from)
                 if (user) {
                     user._id = user.uuid
-                    const friend = await this.getMessageFriendFrom(user.uuid, message.from)
+                    // const friend = await this.getMessageFriendFrom(user.uuid, message.from) // ###### Cancel this line to save time for mapping
                     const item = {
                         _id: message.uuid,
                         uuid: message.uuid,
@@ -162,7 +162,7 @@ const User = {
                         to: message.to,
                         createTime: message.createTime,
                         deleted: message.deleted,
-                        nickname: friend ? friend.nickname : ''
+                        nickname: '',// friend ? friend.nickname : ''
                     }
                     items.push(item)
                 }

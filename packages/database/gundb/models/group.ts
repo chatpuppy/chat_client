@@ -79,7 +79,7 @@ const Group = {
                 }
             }
         })
-        await delay(500)
+        await delay(500);
         return group
     },
 

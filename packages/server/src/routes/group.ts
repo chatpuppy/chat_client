@@ -167,6 +167,7 @@ export async function joinGroup(ctx: Context<{ groupId: string }>) {
     await Group.save(group)
 
     let messages = await Message.getToGroup(group.uuid,0)
+		console.log("joinGroup total messages:", messages.length)
     messages = await User.getUserMessage(messages)
 
     ctx.socket.join(group.uuid)

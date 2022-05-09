@@ -229,6 +229,7 @@ export async function getLinkmansLastMessagesV2(
         linkmans.map(async (linkmanId) => {
             let messages = await Message.getToGroup(linkmanId, 0)
             messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
+						console.log("getLinkmansLastMessagesV2 total messages: " + messages.length)
             messages = await User.getUserMessage(messages)
             
             
@@ -303,6 +304,7 @@ export async function getLinkmanHistoryMessages(
     // let create_time = new Date(Date.parse(createTime)  - 1 * 1000 * 60 * 5)
     // logger.info(create_time.toISOString())
     let messages = await Message.getToGroup(linkmanId, existCount, createTime)
+		console.log('getLinkmanHistoryMessages total messages: ', messages.length)
     messages = await User.getUserMessage(messages)
     await handleInviteV2Messages(messages);
     // messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
