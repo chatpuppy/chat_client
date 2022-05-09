@@ -103,46 +103,72 @@ const User = {
         return current_user
     },
 
-    async getUserMessage(messages: Array<MessageDocument>) {
-        const newMessages: any = []
-        const users = [] as Array<UserDocument>
-
-        for(let i = 0; i < messages.length; i++) {
-            const message = messages[i]
-            user_gun.map().on( async (user) => {
-                if (user) {
-                    
-                    if (typeof user.uuid != undefined && user.uuid === message.from) {
-                        user._id = user.uuid
-                        let current_friend = {} as FriendDocument
-                        gun.get("friends").map(async friend => {
-                            if (friend) {
-                                if (friend.to == user.uuid && message.from == user.uuid) {
-                                    current_friend = friend
-                                }
-                            }
-                        })
-                        const new_message = {
-                            _id: message.uuid,
-                            uuid: message.uuid,
-                            username: user.username,
-                            avatar: user.avatar,
-                            type: message.type,
-                            content: message.content,
-                            from: user,
-                            to: message.to,
-                            createTime: message.createTime,
-                            deleted: message.deleted,
-                            nickname: current_friend.nickname ? current_friend.nickname : ''
-                        }
-                        // logger.info("new_message", new_message)
-                        newMessages.push(new_message)
-                    }
-                }
+    // TODO: 改善方案，gundb.map.on(callback) / gundb.map(callback) 替换使用 Map 维护一个全局的参数，当用户注册登入的时候通过gundb的subscribe进行[时序锁]更新维护
+    // getUsersMap 获取所有用户
+    async getUsersMap(): Promise<Map<string, UserDocument>> {
+        const users: Map<string, UserDocument> = new Map<string, UserDocument>()
+        const array: Array<UserDocument> = []
+        gun.get('users').map((user: UserDocument) => {
+            return new Promise<void>(resolve => { 
+                array.push(user)
+                resolve()
             })
-        }
-        await delay(500)
-        return newMessages
+        })
+        await Promise.allSettled(array)
+        array.forEach(user => {
+            users.set(user.uuid, user)
+        })
+        return users
+    },
+
+    // getFriends 获取用户所有朋友
+    async getFriends(uuid: string): Promise<Array<FriendDocument>> {
+        const friends: Array<FriendDocument> = []
+        gun.get('friends').map((friend: FriendDocument) => {
+            return new Promise<void>(resolve => {
+                if (friend.to === uuid) friends.push(friend)
+                resolve()
+            })
+        })
+        return Promise.all(friends)
+    },
+
+    // getMessageFriendFrom 判定消息是否来自于朋友
+    // uuid: 目标用户UUID
+    // from: 消息来源用户UUID
+    async getMessageFriendFrom(uuid: string, from: string): Promise<FriendDocument | null> {
+        const friends = await this.getFriends(uuid)
+        const index = friends.findIndex(friend => friend.uuid === from)
+        return index > -1 ? friends[index] : null
+    },
+
+    async getUserMessage(messages: Array<MessageDocument>): Promise<Array<any>> {
+        const items: Array<any> = []
+        const users = await this.getUsersMap()
+        messages.forEach(async message => {
+            try {
+                const user = users.get(message.from)
+                if (user) {
+                    user._id = user.uuid
+                    const friend = await this.getMessageFriendFrom(user.uuid, message.from)
+                    const item = {
+                        _id: message.uuid,
+                        uuid: message.uuid,
+                        username: user.username,
+                        avatar: user.avatar,
+                        type: message.type,
+                        content: message.content,
+                        from: user,
+                        to: message.to,
+                        createTime: message.createTime,
+                        deleted: message.deleted,
+                        nickname: friend ? friend.nickname : ''
+                    }
+                    items.push(item)
+                }
+            } catch (e) {}
+        })
+        return items
     },
 
     async getDataByFriend(friends: FriendDocument[]) {
