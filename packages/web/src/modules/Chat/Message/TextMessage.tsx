@@ -10,7 +10,7 @@ interface TextMessageProps {
 
 function TextMessage(props: TextMessageProps) {
     // eslint-disable-next-line react/destructuring-assignment
-    const content = props.content
+    const content = (props.content || '')
         .replace(
             /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}(\.[a-z]{2,6})?\b(:[0-9]{2,5})?([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
             (r) =>
