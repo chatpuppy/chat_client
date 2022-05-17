@@ -3,12 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { gun } from "../initGundb";
 import { MessageDocument } from './message';
 import friend, { FriendDocument } from './friend';
-
-function delay(ms: number) {
-    return new Promise((res, rej) => {
-        setTimeout(res, ms);
-    })
-}
+require('gun/lib/then.js')
 
 var user_gun = gun.get('users')
 
@@ -17,7 +12,7 @@ const User = {
     async createUser(user: UserDocument) {
         const linkId = uuid()
         user_gun.get(user.address).put({
-            uuid: linkId,
+            uuid: user.address,
             address: user.address,
             lastLoginIp: user.lastLoginIp,
             username: user.username,
@@ -26,15 +21,7 @@ const User = {
             // expressions: user.expressions,
             avatar: user.avatar
         })
-
-        // gun.get("users").get(user.address).once((data, key) => {
-        //     if (data) {
-        //         // @ts-ignore
-        //         user = data
-        //     }
-        //     // return data
-        // })
-        user.uuid = linkId
+        user.uuid = user.address
         return user
     },
 
@@ -55,40 +42,49 @@ const User = {
 
     async get_one(uuid: string) {
         let current_user = {} as UserDocument
-        user_gun.map().once( async (user) => {
-            if(user){
-                if (user.uuid == uuid){
-                    user._id = user.uuid
-                current_user = user as UserDocument
+
+        let promies = new Promise<void>((resolve, reject) => {
+            user_gun.get(uuid).once(data => {
+                if (data) {
+                    current_user = data as UserDocument
+                    current_user._id = current_user.uuid
+                    resolve()
                 }
-                
-            }
+            })
         })
-        await delay(200)
+        await promies
         return current_user
     },
 
     async getUserName(address: string) {
         const users = [] as Array<UserDocument>
-        user_gun.map(async user => {
-            if(user.address === address) {
-                user._id = user.uuid
-                users.push(user)
-            }
+        logger.info("bbbbb")
+        let promies = new Promise<void>((resolve, reject) => {
+            user_gun.map().on(data => {
+                if (data.address === address) {
+                    users.push(data as UserDocument)
+                }
+                resolve()
+            })
         })
+        await promies
+        logger.info("bbbbb")
+        await Promise.allSettled(users)
         return users
     },
 
     async auth(address: string) {
         let current_user = {} as  UserDocument
-        user_gun.get(address).once(async (user) => {
-            if (user) {
-                user._id = user.uuid
-                current_user = user as UserDocument
-            }
+        let promies = new Promise<void>((resolve, reject) => {
+            user_gun.get(address).once(data => {
+                if (data) {
+                    current_user = data as UserDocument
+                    current_user._id = current_user.uuid
+                }
+                resolve()
+            })
         })
-        await delay(200)
-
+        await promies
         return current_user
     },
 
@@ -105,15 +101,22 @@ const User = {
 
     // TODO: 改善方案，gundb.map.on(callback) / gundb.map(callback) 替换使用 Map 维护一个全局的参数，当用户注册登入的时候通过gundb的subscribe进行[时序锁]更新维护
     // getUsersMap 获取所有用户
-    async getUsersMap(): Promise<Map<string, UserDocument>> {
+    async getUsersMap(): Promise<Map<string,UserDocument>> {
         const users: Map<string, UserDocument> = new Map<string, UserDocument>()
         const array: Array<UserDocument> = []
-        gun.get('users').map((user: UserDocument) => {
-            return new Promise<void>(resolve => { 
-                array.push(user)
+        let promise = new Promise<void>((resolve, reject) => {
+            user_gun.map().on((data: UserDocument) => {
+                array.push(data)
                 resolve()
             })
         })
+        // gun.get('users').map((user: UserDocument) => {
+        //     return new Promise<void>(resolve => {
+        //         array.push(user)
+        //         resolve()
+        //     })
+        // })
+        await promise
         await Promise.allSettled(array)
         array.forEach(user => {
             users.set(user.uuid, user)
@@ -145,11 +148,13 @@ const User = {
     async getUserMessage(messages: Array<MessageDocument>): Promise<Array<any>> {
         const items: Array<any> = []
         const users = await this.getUsersMap()
-        messages.forEach(async message => {
+        for (const message of messages) {
             try {
+                // @ts-ignore
                 const user = users.get(message.from)
                 if (user) {
                     user._id = user.uuid
+                    // const friend = await this.getMessageFriendFrom(user.uuid, message.from)
                     // const friend = await this.getMessageFriendFrom(user.uuid, message.from) // ###### Cancel this line to save time for mapping
                     const item = {
                         _id: message.uuid,
@@ -162,12 +167,15 @@ const User = {
                         to: message.to,
                         createTime: message.createTime,
                         deleted: message.deleted,
-                        nickname: '',// friend ? friend.nickname : ''
+                        nickname: ''
                     }
+                    // logger.info("item", item)
                     items.push(item)
                 }
-            } catch (e) {}
-        })
+            } catch (e) {
+            }
+        }
+        // logger.info("items", items)
         return items
     },
 

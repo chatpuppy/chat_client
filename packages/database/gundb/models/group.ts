@@ -20,6 +20,7 @@ const Group = {
         }, (ack) => {
 
         })
+        const index = new Date().toISOString()
         return group
     },
 
@@ -58,7 +59,9 @@ const Group = {
         group.uuid = linkId
         group._id = linkId
         defaultGroup = group
-
+        const index = new Date().toISOString()
+        // @ts-ignore
+        // gun.get('messages').get(group.uuid).get(index).put(null)
         return defaultGroup
     },
 
@@ -71,26 +74,27 @@ const Group = {
     },
 
     async getGroupByUuid(uuid: string) {
-        let group = {} as GroupDocument
-        gun.get('groups').map().on((data, key) => {
-            if (data){
-                if (data.uuid === uuid){
-                    group = data
-                }
-            }
+        let current_group = {} as GroupDocument
+        let promises = new Promise<void>((resolve, reject) => {
+            gun.get('groups').map().on((data: GroupDocument) => {
+                if(data.uuid == uuid) current_group = data
+                resolve()
+            })
         })
-        await delay(500);
-        return group
+        await promises
+        return current_group
     },
 
     async getDefaultGroup() {
         let defaultGroup = {} as GroupDocument
+        logger.info("bbbbb")
         await gun.get('groups').get("defaultGroup").once((data) => {
             if (data){
                 defaultGroup = data as GroupDocument
                 defaultGroup._id = data.uuid
             }
         })
+        
         return defaultGroup
     },
 
@@ -101,53 +105,79 @@ const Group = {
                 count ++
             }
         })
+        let promises = new Promise<void>((resolve, reject) => {
+            gun.get('groups').map().on(data => {
+                if(data.creator === uuid) {
+                    count++
+                }
+                resolve()
+            })
+        })
+        await promises
         return count
     },
 
     async checkName(name: string) {
         const groupList = [] as string[]
-        gun.get('groups').map(group => group && group.name == name ? group : undefined).on((group) =>  {
-            groupList.push(group.name)
+        // gun.get('groups').map(group => group && group.name == name ? group : undefined).on((group) =>  {
+        //     groupList.push(group.name)
+        // })
+        let promises = new Promise<void>((resolve, reject) => {
+            gun.get('groups').map().on(data => {
+                logger.info(data)
+                if(data.name === name) {
+                    groupList.push(data)
+                }
+                resolve()
+            })
         })
+        await promises
         if (groupList.length > 0) {
             return true
         }
         return false
     },
 
-    async getGroupByMember(user: UserDocument) {
-        const groupList: GroupDocument[] = []
-        let check_group = ''
-        gun.get('groups').map().on( group => {
-            if (group) {
-                if (group.hasOwnProperty('members') && typeof group.members == "string" && group.members.includes(user.uuid) && typeof group.uuid !== 'undefined') {
-                    if (!check_group.includes(group.uuid)) {
-                        check_group = check_group + ',' + group.uuid
-                        group._id = group.uuid
-                        groupList.push(group)
+    async getGroupByMember(user: UserDocument): Promise<Array<GroupDocument>> {
+        let array: Array<GroupDocument> = []
+        array = await this.getGroups(user.uuid)
+        logger.info("groups", array)
+        return Promise.all(array)
+    },
 
-                    }
-
-                } else {
-
+    async getGroups(user_uuid: string): Promise<Array<GroupDocument>> {
+        const groups: Array<GroupDocument> = []
+        let promies = new Promise<void>((resolve, reject) => {
+            gun.get('groups').map().on((group: GroupDocument) => {
+                if (group.hasOwnProperty('members') && group.members.includes(user_uuid)) {
+                    groups.push(group)
                 }
-            }
+                resolve()
+            })
         })
-        await delay(1500)
-
-        return groupList
+        await promies
+        logger.info(groups)
+        if (groups.length > 0) {
+            await Promise.allSettled(groups)
+        }
+        return groups
     },
 
     async getGroupName(name: string) {
-        const groupList: GroupDocument[] = []
-        gun.get('groups').map( group => {
-            if (group){
-                if (group.hasOwnProperty('name') && group.name.includes(name)) {
+        const groupList: Array<GroupDocument> = []
+        let promise = new Promise<void>((resolve, reject) => {
+            gun.get('groups').map().on((group: GroupDocument) => {
+                if (group.hasOwnProperty('name') && group.name.includes(name)){
                     groupList.push(group)
+                    
                 }
-            }
+                resolve()
+            })
         })
-        await delay(1000)
+        await promise
+        if (groupList.length > 0) {
+            await Promise.allSettled(groupList)
+        }
         return groupList
     },
 
@@ -155,22 +185,19 @@ const Group = {
     async saveGroup( group: GroupDocument, avatar: string) {
         // @ts-ignore
         gun.get('groups').get(group.name).get('avatar').put(avatar)
-        // logger.info("save success")
-        // gun.get('groups').get(group.name).put(null)
-        // group.avatar = avatar
-        // gun.get('groups').get(group.name).set(group as GroupDocument)
         return group
     },
 
 
     async getGroup(name: string) {
         let group = {} as GroupDocument
-        gun.get('groups').get(name).on((data) => {
-            if (data) {
-                group = data as GroupDocument
-                group._id = data.uuid
-            }
+        let promise = new Promise((resolve, reject) => {
+            gun.get('groups').get(name).on((data: GroupDocument) => {
+                data._id = data.uuid
+                group = data
+            })
         })
+        await promise
         return group
     },
 

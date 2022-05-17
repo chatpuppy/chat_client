@@ -1880,6 +1880,11 @@ responselike@^1.0.2:
   dependencies:
     lowercase-keys "^1.0.0"
 
+reticle@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/reticle/-/reticle-0.3.0.tgz#6005ff6ec9ef8ef995a36e7736ce73c8c4c9c2ca"
+  integrity sha1-YAX/bsnvjvmVo253Ns5zyMTJwso=
+
 rimraf@^2.6.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.7.1.tgz#35797f13a7fdadc566142c29d4f07ccad483e3ec"

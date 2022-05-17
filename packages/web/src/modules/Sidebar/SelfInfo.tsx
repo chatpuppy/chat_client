@@ -25,12 +25,8 @@ function SelfInfo(props: SelfInfoProps) {
   const Web3Api = useMoralisWeb3Api();
   const { user } = useMoralis();
 
-  const action = useAction();
-  const userAddresssss = useSelector((state: State) => (state.user) || "");
   const userNameInfo = useSelector((state: State) => (state.user &&  state.user.username) || "");
   const userAddress = useSelector((state: State) => (state.user && state.user.address) || "");
-  const avatar = useSelector((state: State) => state.user?.avatar);
-  const primaryColor = useSelector((state: State) => state.status.primaryColor);
   const [loading, setLoading] = useState(false);
   const [nfts, setNfts] = useState([]);
   const [selected, setSelected] = useState("");
@@ -59,7 +55,7 @@ function SelfInfo(props: SelfInfoProps) {
     const isSuccess = await changeAvatar(avatarNFT, userAddress);
     if (isSuccess) {
       onClose();
-      reLogin("Avatar update successfully, sign in again");
+      reLogin("Avatar update successfully");
     }
   }
 
@@ -71,7 +67,7 @@ function SelfInfo(props: SelfInfoProps) {
     const isSuccess = await changeUsername(username, userAddress);
     if (isSuccess) {
       onClose();
-      reLogin("Username update successfully, sign in again");
+      reLogin("Username update successfully");
     }
   }
 
@@ -89,7 +85,8 @@ function SelfInfo(props: SelfInfoProps) {
       address: userAddress,
     };
     const { result } = await Web3Api.account.getNFTs(options);
-    setNfts(result);
+    const convertResult =  result && result.filter( i => i.token_uri)
+    setNfts(convertResult);
     setLoading(false);
   }
 

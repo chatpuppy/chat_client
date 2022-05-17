@@ -2,7 +2,6 @@
   "name": "@chatpuppy/database",
   "version": "1.0.0",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "@chatpuppy/config": "^1.0.0",
     "@chatpuppy/utils": "^1.0.0",

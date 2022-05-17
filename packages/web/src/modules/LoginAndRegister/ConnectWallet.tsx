@@ -20,16 +20,19 @@ const blockies = require('../../lib/blockies.js');
 
 const Chains = [
   {
-    chain: "Ethereum",
+    label: "Ethereum",
     value: "eth",
+    chain: '0x1'
   },
   {
-    chain: "Binance Smart Chain",
+    label: "Binance Smart Chain",
     value: "bsc",
+    chain: '0x38'
   },
   {
-    chain: "Polygon (Matic)",
+    label: "Polygon (Matic)",
     value: "matic",
+    chain: '0x89'
   },
 ];
 
@@ -48,17 +51,20 @@ function ConnectWallet(props:ConnectWalletProps) {
   const Web3Api = useMoralisWeb3Api();
 
   const {loading, setLoading} = props;
-  const { authenticate, isAuthenticated, setUserData } = useMoralis();
+  const { authenticate, isAuthenticated, setUserData, Moralis, isWeb3Enabled } = useMoralis();
+
+
 
   async function onConnectWallet() {
+    
     setLoading(true);
     await authenticate({
       signingMessage: "ChatPuppy Authentication",
       onSuccess: async (result) => {
-        const address = result.get("ethAddress");
-        Message.success("Connect Wallet Successfully");       
+        const address = result.get("ethAddress");   
         const avatar = await getAvatarFromAddress(address);
         await handleRegister(address, avatar);
+        Message.success("Connect Wallet Successfully");    
       },
       onError: (error) => {
         Message.error(error.message);
@@ -70,27 +76,17 @@ function ConnectWallet(props:ConnectWalletProps) {
 
   async function getAvatarFromAddress(address: string) {
     let nfts;
-    const chain = Chains.find((i) => i.chain === netWork)?.value || Chains[0].value;
+    const chain = Chains.find((i) => i.label === netWork)?.value || Chains[0].value;
     let options = {
       chain: chain,
       address: address,
     };
- 
-
-    const { result } = (address && chain) && await Web3Api.account.getNFTs(options); 
-
+    const { result } = await Web3Api.account.getNFTs(options); 
     nfts = result
 
-    if(result.length > 0 && !result[0].token_uri ) {
-      setTimeout( async ()=>  await Web3Api.token.reSyncMetadata({...options, flag:'uri' , token_id: result[0].token_id}), 1000 )
-      setTimeout( async ()=> {      
-        const { result } = await Web3Api.account.getNFTs(options);
-        nfts = result;
-      },1000)
-    }
-
-    const image = nfts.length > 0 ? await getImgNFT(nfts[0].token_uri) : "";
-
+    const dataNFT = nfts.find( (i: { token_uri: any; })=> i.token_uri) || {}
+    const image = Object.keys(dataNFT).length > 0 ? await getImgNFT(dataNFT.token_uri) : "";
+    
     setOptionsRequest({ ...optionsRequest,...options})
     setListNFT([...listNFT, ...nfts]);
 
@@ -141,6 +137,26 @@ function ConnectWallet(props:ConnectWalletProps) {
     setUserData({ chain: chain });
   }, [isAuthenticated]);
 
+  useEffect(()=> {
+    if (!isAuthenticated || !isWeb3Enabled) return;
+
+    Moralis.onAccountChanged((account) => {
+      console.log('account', account);
+    });
+
+    Moralis.onChainChanged((chain) => {
+      const chainSupport = Chains.find((i) => i.chain === chain) || {}
+      if(Object.keys(chainSupport).length > 0) {
+        console.log('chainSupport', chainSupport)
+        setUserData({ chain: chain });
+      } else {
+        Message.warning("This Chain No Support");
+      }
+    
+    });
+
+  }, [isAuthenticated, isWeb3Enabled])
+
   return (
     <div className={Style.loginRegister}>
       {!loading && (
@@ -148,12 +164,12 @@ function ConnectWallet(props:ConnectWalletProps) {
           <h3 className={Style.title}>Choose Chains:</h3>
           <Select
             className={Style.network}
-            defaultValue={Chains[0].chain}
+            defaultValue={Chains[0].label}
             // @ts-ignore
             onSelect={(value: object) => setNetWork(value)}
           >
             {Chains.map((item, index) => (
-              <Option key={index} value={item.chain}>{item.chain}</Option>
+              <Option key={index} value={item.label}>{item.label}</Option>
             ))}
           </Select>
         </>

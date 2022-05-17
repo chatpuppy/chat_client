@@ -39,6 +39,7 @@ export async function createGroup(ctx: Context<{ name: string }>) {
     assert(name, 'Group name cannot be empty');
 
     const group = await Group.checkName(name);
+    logger.info("group", group)
     assert(!group, 'Group is exist')
 
     let newGroup = {} as GroupDocument;

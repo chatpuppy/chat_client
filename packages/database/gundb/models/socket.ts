@@ -40,7 +40,6 @@ const Socket = {
         //         }
         //     }
         // })
-        await delay(1000)
         return sockets
     },
 

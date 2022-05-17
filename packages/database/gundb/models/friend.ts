@@ -50,7 +50,6 @@ const  Friend = {
             })
         } catch (e) {
         }
-        // await delay(200)
         return friends
     },
 
@@ -73,9 +72,3 @@ export interface FriendDocument extends Document {
 }
 
 export default Friend;
-
-function delay(ms: number) {
-    return new Promise((res, rej) => {
-        setTimeout(res, ms);
-    })
-}

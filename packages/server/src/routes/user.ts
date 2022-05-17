@@ -64,6 +64,7 @@ export async function register(
     }
     else {
         groups = await Group.getGroupByMember(newUser)
+        logger.info(groups)
     }
     // eslint-disable-next-line no-use-before-define
     const token = generateToken(newUser.address, environment);
@@ -118,14 +119,16 @@ export async function guest(ctx: Context<Environment>) {
         throw new AssertionError({ message: 'Default group is not exist' });
     }
 
-
+    logger.info(defaultGroup)
     ctx.socket.join(defaultGroup._id);
     let  messages = await Message.getToGroup(defaultGroup.uuid, 0);
     // messages.sort((a, b)=> (new Date(a.createTime).getTime() >  new Date(b.createTime).getTime()) ? -1 : 1)
-
-    messages = await User.getUserMessage(messages)
-    messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
-    await handleInviteV2Messages(messages);
+    if (messages.length > 0){
+        messages = await User.getUserMessage(messages)
+        await handleInviteV2Messages(messages);
+    }
+    // messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
+    
     const data = { messages, ...defaultGroup }
     return data;
 }

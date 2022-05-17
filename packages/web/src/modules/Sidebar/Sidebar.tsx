@@ -238,11 +238,11 @@ function Sidebar() {
                         )}
                 </div>
 
-                {isLogin && selfInfoDialogVisible && (
-                    <SelfInfoAsync
-                        visible={selfInfoDialogVisible}
-                        onClose={() => toggleSelfInfoDialogVisible(false)}
-                    />
+                { isLogin  &&  (
+                        <SelfInfoAsync
+                            visible={selfInfoDialogVisible}
+                            onClose={() => toggleSelfInfoDialogVisible(false)}
+                        />
                 )}
                 {isLogin && isAdmin && (
                     <Admin

@@ -27,11 +27,13 @@ export async function search(ctx: Context<{ keywords: string }>) {
             groups: [],
         };
     }
+    logger.info(keywords)
 
     const escapedKeywords = RegexEscape(keywords);
     const users = await User.getUserName(escapedKeywords);
     const groups = await Group.getGroupName(escapedKeywords);
-
+    logger.info(groups)
+    logger.info(users)
     return {
         users,
         groups: groups.map((group) => ({

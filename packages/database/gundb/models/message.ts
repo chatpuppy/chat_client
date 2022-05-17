@@ -1,8 +1,9 @@
-    import logger from '@chatpuppy/utils/logger';
+import logger from '@chatpuppy/utils/logger';
 import { v4 as uuid } from 'uuid';
 import { gun } from "../initGundb";
 import Group from './group';
-import User from './user';
+import User, { UserDocument } from './user'
+require('gun/lib/then.js')
 import group from "./group";
 
 function delay(ms: number) {
@@ -27,9 +28,8 @@ const Message = {
         return messages
     },
 
-		// Get group messages
-    async getToGroup(groupId: string, existCount: number = 0, createTime: string = '') {
-        let messages = [] as Array<MessageDocument>;
+    async getToGroup(groupId: string, existCount: number = 0): Promise<Array<MessageDocument>> {
+        // let messages = [] as Array<MessageDocument>;
 
         // var match = {
         //     '-': 1
@@ -41,12 +41,12 @@ const Message = {
             previous = existCount
             existCount = previous + 15
         }else {
-            existCount = 60
+            existCount = 100
         }
         logger.info("previous", previous)
         logger.info("count", count)
         logger.info("existCount", existCount) // Max messages count
-				logger.info('groupId', groupId)
+        logger.info('groupId', groupId)
         // @ts-ignore
         // message_gun.get(groupId).once(async (data, key) => {
             
@@ -100,35 +100,71 @@ const Message = {
             
         // logger.info(match)
         // @ts-ignore
-        message_gun.get(groupId).map().once(async (data, key) => {
-            // logger.info(data)
-            // logger.info(key)
-            // if(data) {
-            //     if (previous <= count && count < existCount) {
-            //         messages.push(data as MessageDocument)
-            //     }
-            // }
-            // count++
-            if(data){
-                // if (previous <= count && count < existCount) {
-                    // @ts-ignore
-                    messages = [...messages.slice(-(existCount - 1)), data as MessageDocument].sort((a, b) => a.createTime - b.createTime);
-                // }
-            }
-            // count++
-            
-        })
-				
-        await delay(3000)
+        // message_gun.get(groupId).map().on(async (data, key) => {
+        //     // logger.info(data)
+        //     // logger.info(key)
+        //     // if(data) {
+        //     //     if (previous <= count && count < existCount) {
+        //     //         messages.push(data as MessageDocument)
+        //     //     }
+        //     // }
+        //     // count++
+        //     if(data){
+        //         // if (previous <= count && count < existCount) {
+        //             // @ts-ignore
+        //             messages = [...messages.slice(-(existCount - 1)), data as MessageDocument].sort((a, b) => a.createTime - b.createTime);
+        //         // }
+        //     }
+        //     // count++
+        //
+        // })
+        // message_gun.get(groupId).map()
+        const messages = await this.getMessages(groupId)
+                
         // if (existCount != 15){
         //     messages.slice()
         // }
         // console.log(existCount)
-        if (previous> 0) {
-            messages = [...messages.slice(-existCount, -previous )]
-        }
+        // logger.info(messages)
+
+        // if (previous> 0) {
+        //     messages = [...messages.slice(-existCount, -previous )]
+        // }
         // logger.info("messages", messages.length)
+        // logger.info("messages", messages)
         return messages
+    },
+
+    // TODO: Messages map
+    async getMessages(groupId: string): Promise<Array<MessageDocument>> {
+        const messages: Map<string, MessageDocument> = new Map<string, MessageDocument>()
+        const array: Array<MessageDocument> = []
+       
+        let is_check_message = false
+        logger.info("aaaaaa")
+        //@ts-ignore
+        await message_gun.get(groupId).once(data => data ? is_check_message = true : false).then()
+        if (is_check_message){
+            logger.info("is_check_message true")
+            let promies = new Promise<void>((resolve, reject) => {
+                try{
+                    message_gun.get(groupId).map().on((data: MessageDocument) => {
+                        array.push(data)
+                        resolve()
+                    })
+                } catch(e) {
+                    logger.error(e)
+                    logger.info("bbbbbbb")
+                    reject()
+                }
+            })
+            await promies
+            await Promise.allSettled(array)
+        }else {
+            logger.info("is_check_message false")
+        }
+        
+        return array
     },
 
     async get_one(uuid: string) {

@@ -80,6 +80,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
     let uuid: string = '';
     if (to.length === 36) {
         toGroup = await Group.getGroupByUuid(to);
+        logger.info("toGroup", toGroup)
         uuid = toGroup.uuid
         assert(toGroup, 'Group not found');
     } else {
@@ -138,7 +139,7 @@ export async function sendMessage(ctx: Context<SendMessageData>) {
             group: shareTargetGroup.uuid,
         });
     }
-    const user = await User.get_one(ctx.socket.user);
+    const user = await User.auth(ctx.socket.user);
     if (!user) {
         throw new AssertionError({ message: '用户不存在' });
     }
@@ -228,8 +229,8 @@ export async function getLinkmansLastMessagesV2(
     const linkmansMessages = await Promise.all(
         linkmans.map(async (linkmanId) => {
             let messages = await Message.getToGroup(linkmanId, 0)
-            messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
-						console.log("getLinkmansLastMessagesV2 total messages: " + messages.length)
+            // messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
+			// 			console.log("getLinkmansLastMessagesV2 total messages: " + messages.length)
             messages = await User.getUserMessage(messages)
             
             
@@ -268,7 +269,7 @@ export async function getLinkmansLastMessagesV2(
         },
         {},
     );
-    // logger.info("responseData", responseData)
+    logger.info("responseData", responseData)
     return responseData
 }
 
@@ -285,7 +286,7 @@ export async function getDefaultGroupHistoryMessages(
     if (Object.keys(group).length === 0) {
         throw new AssertionError({ message: '默认群组不存在' });
     }
-    const messages = await Message.getToGroup(group.uuid, existCount, '')
+    const messages = await Message.getToGroup(group.uuid, existCount)
     await handleInviteV2Messages(messages);
     // const result = messages.slice(existCount).reverse();
     return messages;
@@ -301,13 +302,8 @@ export async function getLinkmanHistoryMessages(
 ) {
     const { linkmanId, existCount, createTime } = ctx.data;
     logger.info(ctx.data)
-    // let create_time = new Date(Date.parse(createTime)  - 1 * 1000 * 60 * 5)
-    // logger.info(create_time.toISOString())
-    let messages = await Message.getToGroup(linkmanId, existCount, createTime)
-		console.log('getLinkmanHistoryMessages total messages: ', messages.length)
+    let messages = await Message.getToGroup(linkmanId, existCount)
     messages = await User.getUserMessage(messages)
     await handleInviteV2Messages(messages);
-    // messages.sort((a,b) =>  (new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) ? -1 : 1 )
-    // const result = messages.slice(existCount);
     return messages;
 }
